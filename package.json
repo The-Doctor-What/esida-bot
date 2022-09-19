@@ -1,0 +1,23 @@
+{
+  "main": "dist/index.js",
+  "name": "esidalite",
+  "scripts": {
+    "dev": "tsc && node .",
+    "build": "tsc",
+    "deploy": "tsc && flyctl deploy",
+    "run": "node ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^1.35.6",
+    "@vk-io/hear": "^1.1.0",
+    "dedent-js": "^1.0.1",
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.1",
+    "moment": "^2.29.4",
+    "prequest": "^1.0.0",
+    "vk-io": "^4.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.3"
+  }
+}
