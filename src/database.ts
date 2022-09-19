@@ -100,3 +100,17 @@ export async function deleteUser(user, table = "users") {
     }
     return error
 }
+
+export async function getRankData(rank) {
+    const isNum = !isNaN(Number(rank))
+    const {data, error} = await supabase
+        .from("ranksData")
+        .select("*")
+        .eq(isNum ? 'id' : 'name', rank).maybeSingle()
+    if (error) {
+        console.error(`Logs » Не удалось получить информацию о должности:`)
+        console.error(error)
+    } else {
+        return data
+    }
+}

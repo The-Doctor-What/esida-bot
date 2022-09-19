@@ -17,9 +17,9 @@ export async function stats(msg, args) {
     } else {
         let access: number
         if (data.access > 0) access = data.access
-        else{
+        else {
             access = data.oldaccess
-            if (!await getAccess(msg.senderId, 4)) return msg.send("🚫 У вас нет доступа к архивным данным! 🚫")
+            if (!await getAccess(msg.senderId, 4) && data.vk_id != msg.senderId) return msg.send("🚫 У вас нет доступа к архивным данным! 🚫")
         }
         let postStart = moment(data.post)
         let postEnd = moment(postStart).add(data.term, 'days')

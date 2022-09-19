@@ -1,7 +1,6 @@
-import {fractions, getFraction, userid} from "./database";
+import {getRankData, userid} from "./database";
 import {vkUser} from "./bots";
 import dedent from "dedent-js";
-import {ranksData} from "./Esida/personnel";
 
 export function random(min, max) {
     min = Math.ceil(min);
@@ -38,10 +37,11 @@ export function getID(msg) {
 
 export async function chatsActions(msg, user, action = "add") {
     let tag: string
-    if (ranksData[user.rank].chatTag) tag = ranksData[user.rank].chatTag
+    const rank = await getRankData(user.rank)
+    if (rank.chatTag) tag = rank.chatTag
     else if (action == "kick") tag = "Agos_0"
     else if (user.fraction > 0 && user.fraction < 30) tag = `leader_${user.fraction}`
-    await commandSend(`!f${action} @id${msg.senderId} ${tag} ${ranksData[user.rank].rank} 16`)
+    await commandSend(`!f${action} @id${msg.senderId} ${tag} ${rank.name} 16`)
 }
 
 export async function sendMessage(id, msg) {

@@ -1,6 +1,5 @@
-import {getFraction, getFullData} from "../../database";
+import {getFraction, getFullData, getRankData} from "../../database";
 import moment from "moment";
-import {ranksData} from "../personnel";
 
 export async function listUsers(msg, args) {
     let group = "all"
@@ -16,7 +15,8 @@ export async function listUsers(msg, args) {
         const data = await getFullData("candidates")
         if (!data) return msg.send({ message: `🚫 Не найдено ни одного кандидата! 🚫`, disable_mentions: 1 })
         for (const user of data) {
-            text += `🔹 ${ranksData[user.rank].rank} @id${user.vk_id} [${user.rank}]`
+            const rank = await getRankData(user.rank)
+            text += `🔹 ${rank.name} @id${user.vk_id} [${user.rank}]`
             text += ` "${await getFraction(user.fraction, "tag")}"`
             text += `\n`
         }

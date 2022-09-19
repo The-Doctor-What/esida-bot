@@ -1,9 +1,20 @@
 import {user} from "../bots";
-import {deleteUser, devId, getAccess, getFraction, getUserData, getVkId, saveUser, supabase, userid} from "../database";
+import {
+    deleteUser,
+    devId,
+    getAccess,
+    getFraction,
+    getRankData,
+    getUserData,
+    getVkId,
+    saveUser,
+    supabase,
+} from "../database";
 import moment from "moment";
 import dedent from "dedent-js";
-import {chatsActions, commandSend, getShortURL, isURL, sendMessage} from "../utils";
+import {chatsActions, commandSend, getShortURL, sendMessage} from "../utils";
 import {works} from "./commands/commandProject";
+
 moment.locale('ru')
 
 export const congressRanks = {
@@ -12,97 +23,6 @@ export const congressRanks = {
     "2": "Конгрессмен",
     "3": "Вице Спикер",
     "4": "Спикер",
-}
-export const ranksData = {
-    '9': {
-        access: 1,
-        term: 10,
-        rank: 'Заместитель',
-        admAccess: 4,
-    },
-    '1': {
-        access: 1,
-        term: 0,
-        rank: 'Судья',
-        admAccess: 3,
-        chatTag: 'Syd',
-    },
-    '7': {
-        access: 3,
-        term: 35,
-        rank: 'Верховный судья',
-        admAccess: 4,
-        report: true,
-        chatTag: 'V_Syd',
-    },
-    '8': {
-        access: 1,
-        term: 0,
-        rank: 'Советник',
-        admAccess: 4,
-        chatTag: 'zam_6',
-    },
-    '2': {
-        access: 1,
-        term: 0,
-        rank: 'Прокурор',
-        admAccess: 3,
-        chatTag: 'Prok',
-    },
-    '10': {
-        access: 2,
-        term: 30,
-        rank: 'Лидер',
-        admAccess: 4,
-        report: true,
-    },
-    '11': {
-        access: 3,
-        term: 45,
-        rank: 'Министр',
-        admAccess: 4,
-        report: true,
-    },
-    '12': {
-        access: 3,
-        term: 45,
-        rank: 'Генеральный прокурор',
-        admAccess: 4,
-        report: true,
-        chatTag: 'minister_32',
-    },
-    '13': {
-        access: 3,
-        term: 30,
-        rank: 'Губернатор',
-        admAccess: 4,
-        report: true,
-        chatTag: 'leader_6'
-    },
-    '20': {
-        access: 4,
-        term: 0,
-        rank: 'Следящий',
-        admAccess: 5,
-    },
-    '21': {
-        access: 5,
-        term: 0,
-        rank: 'Главный следящий',
-        admAccess: 6,
-    },
-    '99': {
-        access: 6,
-        term: 0,
-        rank: 'Руководитель',
-        admAccess: 6,
-    },
-    'dev': {
-        access: 666,
-        term: 0,
-        rank: 'Разработчик',
-        admAccess: 666,
-    },
 }
 
 export function addText(msg) {
@@ -210,8 +130,9 @@ user.hear(/^ВК кандидата: (.*)/i, async msg => {
     if (!frac) return msg.send('🚫 Введите id фракции /fracks! 🚫')
     let status = msg.text.split('Должность: ')[1].split('\n')[0].trim()
     if (!status) return msg.send('🚫 Введите должность! 🚫')
-    if (!ranksData[status]) return msg.send('🚫 Такой должности не существует! 🚫')
-    if (!await getAccess(msg.senderId, ranksData[status].admAccess)) {
+    const rank = await getRankData(status)
+    if (!rank) return msg.send('🚫 Такой должности не существует! 🚫')
+    if (!await getAccess(msg.senderId, rank.admAccess)) {
         return msg.send(`🚫 | У вас нет доступа к назначению на данную должность!`)
     }
     id = await getVkId(id)
@@ -230,16 +151,15 @@ user.hear(/^ВК кандидата: (.*)/i, async msg => {
         .from("candidates")
         .insert({
             vk_id: id,
-            access: ranksData[status].access,
+            access: rank.access,
             fraction: frac,
             rank: status
         })
     if (error) {
         console.error(`Logs » Не удалось добавить пользователя в базу данных!`)
         console.error(error)
-        return  msg.send(`🚫 Не удалось добавить пользователя в базу данных! 🚫`)
-    }
-    else console.log(`Logs » Новый кандидат добавлен в базу данных!`)
+        return msg.send(`🚫 Не удалось добавить пользователя в базу данных! 🚫`)
+    } else console.log(`Logs » Новый кандидат добавлен в базу данных!`)
     await sendMessage(id, msg)
 })
 
@@ -257,22 +177,23 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
         let discord = msg.text.split('Дискорд: ')[1].split('\n')[0].trim()
         if (!discord) return msg.send('🚫 Введите id Discord аккаунта! 🚫')
         let forum = msg.text.split('Форум: ')[1].split('\n')[0].trim()
-        console.log(`"${forum}"`)
         forum = await getShortURL(forum)
-        console.log(`"${forum}"`)
+        const data = await getUserData(nick)
+        if (data) return msg.send('🚫 Данный ник уже занят! 🚫')
         if (!forum) return msg.send('🚫 Введите url форума! 🚫')
+        const rank = await getRankData(user.rank)
         const {error} = await supabase
             .from("users")
             .insert({
                 vk_id: msg.senderId,
-                term: ranksData[user.rank].term,
+                term: rank.term,
                 access: user.access,
                 nick,
                 age,
                 type_add,
                 discord,
                 frac: user.fraction,
-                rank: ranksData[user.rank].rank,
+                rank: rank.name,
                 forum,
             })
         if (error) {
@@ -327,8 +248,8 @@ export async function removedCandidate(msg, args) {
 export async function promotion(msg, args, sender) {
     let user = await getVkId(args[0])
     if (!user) user = (args[0])
-    let rank = args[1]
-    if (!ranksData[rank]) return msg.send(`🚫 Такой должности не существует! 🚫`)
+    let rank = await getRankData(args[1])
+    if (!rank) return msg.send(`🚫 Такой должности не существует! 🚫`)
     let type = args[2]
     let data = await getUserData(user)
     if (!data) return msg.send({
@@ -344,18 +265,24 @@ VK: @id${data.vk_id}
 Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
         await commandSend(dedent`!remleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
     }
-    data.access = ranksData[rank].access
-    data.term = ranksData[rank].term
+    data.access = rank.access
+    data.term = rank.term
     data.type_add = type
     data.post = new Date()
-    data.rank = ranksData[rank].rank
-    data.history.data.push({user: msg.senderId, time: moment(), action: "set", count: "Должность", reason: `Новая должность: ${data.rank}`})
+    data.rank = rank.name
+    data.history.data.push({
+        user: msg.senderId,
+        time: moment(),
+        action: "set",
+        count: "Должность",
+        reason: `Новая должность: ${data.rank}`
+    })
     let text = `${sender.rank} @id${msg.senderId} (${sender.nick}) изменил должность @id${data.vk_id} (${data.nick}) на ${data.rank}!`
     text += `\n\n🔸 Изменен уровень доступа на: ${data.access}!`
     text += `\n🔸 Изменено количество дней до срока на: ${data.term}!`
     text += `\n🔸 Изменен тип постановления на: ${data.type_add}!`
     text += `\n🔸 Изменена дата постановления на: ${moment(data.post).format("LL")}!`
-    if (ranksData[rank].report) {
+    if (rank.report) {
         text += `\n🔸 Отчет о постановлении: отправлен!`
         text += `\n🔸 Пользователь отправлен на проверку в технический отдел!`
     }
@@ -396,7 +323,10 @@ VK: @id${data.vk_id}
     data.access = 0
     await commandSend(`!fkick @id${data.vk_id} Agos_0 ${data.rank} 16`)
     await saveUser(data)
-    msg.send({message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${data.vk_id} (${data.nick})!`, disable_mentions: 1})
+    msg.send({
+        message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${data.vk_id} (${data.nick})!`,
+        disable_mentions: 1
+    })
 }
 
 export async function recovery(msg, args) {
