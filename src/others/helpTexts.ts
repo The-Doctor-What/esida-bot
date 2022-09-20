@@ -79,5 +79,4 @@ export const helpEsida = dedent`
         - stop (Выключить проект)
         - pause (Остановить прием комманд)
         - upfraction (Обновить фракции)
-        - restart (Перезагрузить проект)
         `

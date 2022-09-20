@@ -1,4 +1,4 @@
-import {devId, getUserData, getVkId, userid} from "../../database";
+import {devId, getUserData, getVkId, saveUser, userid} from "../../database";
 import moment from "moment";
 
 moment.locale('ru')
@@ -33,4 +33,5 @@ export async function addHistory(user, type, count, reason, action, sender = use
         count: count,
         reason: reason
     })
+    await saveUser(user)
 }

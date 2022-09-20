@@ -63,7 +63,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     if (action == "set") data[type.tag] = count
     else if (action == "+") data[type.tag] += count
     else if (action == "-") data[type.tag] -= count
-    await addHistory(user, type.tag, count, reason, action, sender.vk_id)
+    await addHistory(data, type.tag, count, reason, action, sender.vk_id)
     text += await checkData(data)
     text += `🔸 Причина: ${reason}\n🔸 Время: ${time.format("DD.MM.YYYY HH:mm:ss")}\n🔸 Пользователю: @id${data.vk_id} (${data.nick})\n\n`
     await saveUser(data)
