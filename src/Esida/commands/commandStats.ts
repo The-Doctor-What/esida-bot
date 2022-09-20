@@ -2,7 +2,10 @@ import {devId, getAccess, getFraction, getUserData, getVkId} from "../../databas
 import moment from "moment";
 import {getAdminInfo} from "../../others/aliensAPI";
 import {congressRanks} from "../personnel";
+import {getGender} from "../../utils";
+
 moment.locale('ru')
+
 export async function stats(msg, args) {
     let user = msg.senderId
     if (args.length > 0) user = await getVkId(args[0])
@@ -34,8 +37,7 @@ export async function stats(msg, args) {
             if (info) {
                 text += `🔹 Уровень администратора: ${info.lvl}\n`
                 text += `🔹 Префикс: ${info.prefix}\n`
-            }
-            else warning += `🔸 Пользователь не найден в базе администраторов!\n`
+            } else warning += `🔸 Пользователь не найден в базе администраторов!\n`
         }
         text += `🔹 Предупреждения: ${data.warns}/3\n`
         if (access <= 3) {
@@ -54,7 +56,7 @@ export async function stats(msg, args) {
             text += `🔹 Тип постановления: ${data.type_add}\n`
         }
         text += `🔹 Дата назначение: ${postStart.format("DD MMM YYYY")}\n`
-        text += `🔹 Отстоял: ${moment().diff(postStart, "days")} дней\n`
+        text += `🔹 Отстоял${await getGender(data.vk_id, "", "а")}: ${moment().diff(postStart, "days")} дней\n`
         if (access <= 3 && access >= 2) {
             text += `🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}\n`
             text += `🔹 Осталось: ${postEnd.diff(moment(), "days")} дней\n`
@@ -66,11 +68,11 @@ export async function stats(msg, args) {
         if (data.forum && data.forum != "{}") text += `🔹 Форум: ${data.forum}\n`
         if (data.access == 0) {
             text += `\n📚 Архивные данные: \n`
-            text += `\n🔸 Снят по причине: ${data.reason}\n`
+            text += `\n🔸 Снят${await getGender(data.vk_id, "", "а")} по причине: ${data.reason}\n`
             text += `🔸 Дата снятия: ${moment(data.dateUval).format("DD MMMM YYYY")}\n`
-            text += `🔸 Снял: @id${data.uvalUser}\n`
+            text += `🔸 Снял${await getGender(data.uvalUser, "", "а")}: @id${data.uvalUser}\n`
         }
         text += `\n${warning}`
-        msg.send({ message: text, disable_mentions: 1 })
+        msg.send({message: text, disable_mentions: 1})
     }
 }

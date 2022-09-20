@@ -1,6 +1,7 @@
 {
   "main": "dist/index.js",
   "name": "esidalite",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "tsc && node .",
     "build": "tsc",

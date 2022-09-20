@@ -66,3 +66,9 @@ export async function sendMessage(id, msg) {
         msg.send('✅ | Отправила форму на пост руководителя!')
     }
 }
+
+export async function getGender(id, male, girl) {
+    const user = await vkUser.api.users.get({user_ids: id, fields: ["sex"]})
+    if (user[0].sex == 1) return girl
+    else return male
+}

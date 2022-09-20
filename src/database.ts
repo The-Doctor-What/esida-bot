@@ -28,7 +28,7 @@ export async function loadFracs() {
 }
 
 const mentionRegex = /\[id(\d+)\|.+]/
-const idUrlRegex = /vk.com\/id(\d+)/ // /vk\.(com|ru)\/id(\d+)/mg
+const idUrlRegex = /vk.com\/id(\d+)/
 const nickUrlRegex = /vk.com\/([a-zA-Z0-9_]+)/
 
 export async function getVkId(data)

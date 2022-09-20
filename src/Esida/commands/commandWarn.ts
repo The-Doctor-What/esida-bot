@@ -2,6 +2,7 @@ import {devId, getFraction, getUserData, getVkId, saveUser} from "../../database
 import moment from "moment";
 import {vkGroup} from "../../bots";
 import {addHistory} from "./commandHistory";
+import {getGender} from "../../utils";
 
 moment.locale('ru')
 
@@ -56,7 +57,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     if (action == "+") actionText = "Выдал"
     else if (action == "-") actionText = "Снял"
     if (data.access >= sender.access) return msg.send(`🚫 Вы не можете использовать это на пользователя с таким же или большим уровнем доступа! 🚫`)
-    text += `🔹 ${actionText} ${count} ${type.name}\n`
+    text += `🔹 ${actionText}${await getGender(msg.senderId, "", "а")} ${count} ${type.name}\n`
     if (type.tag == "score" && action == "+") {
         data.litrbol += count
     }
@@ -69,19 +70,13 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     await saveUser(data)
     msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
     let chat = await getFraction(data.frac, "chat")
-    if (data.access < 4 && chat != msg.chatId) await vkGroup.api.messages.send({
-        chat_id: chat,
-        message: text,
-        dont_parse_links: 1,
-        disable_mentions: 1,
-        random_id: 0
-    })
+    if (data.access < 4 && chat != msg.chatId) await vkGroup.api.messages.send({chat_id: chat, message: text, dont_parse_links: 1, disable_mentions: 1, random_id: 0})
 }
 
 export async function checkScores(data, limit) {
     data.score = limit
     await addHistory(data, "score", limit, `Больше ${limit} баллов`, "set")
-    return `🔹 Установил ${limit} баллов (Лимит баллов)\n`
+    return `🔹 Эвелина установила ${limit} баллов (Лимит баллов)\n`
 }
 
 export async function checkWarns(data, mode, count = 3, name = "предупреждения", _name = "выговор", type = "warns", _type = "vigs") {
@@ -90,13 +85,13 @@ export async function checkWarns(data, mode, count = 3, name = "предупре
         data.vigs += 1
         await addHistory(data, type, count, `${count}/${count} ${name}`, "-")
         await addHistory(data, _type, count, `${count}/${count} ${name}`, "+")
-        return `🔹 Снял 3 ${name} и выдал ${_name}\n`
+        return `🔹 Эвелина сняла 3 ${name} и выдала ${_name}\n`
     } else {
         data.warns += count
         data.vigs -= 1
         await addHistory(data, type, count, `-1/${count} ${name}`, "+")
-        await addHistory(data, _type, count, `-1/${count} ${name}`, "-")
-        return `🔹 Выдал 3 ${name} и снял ${_name}\n`
+        await addHistory(data, _type, count, `-1/${count} ${name} `, "-")
+        return `🔹 Эвелина выдала 3 ${name} и сняла ${_name} (-1/${count} ${name})\n`
     }
 }
 

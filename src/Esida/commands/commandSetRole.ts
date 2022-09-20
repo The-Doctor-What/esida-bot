@@ -1,5 +1,6 @@
 import {getUserData, getVkId, saveUser} from "../../database";
 import moment from "moment";
+import {getGender} from "../../utils";
 moment.locale('ru')
 
 export async function setRole(msg, args, sender) {
@@ -18,5 +19,5 @@ export async function setRole(msg, args, sender) {
         reason: "Установка роли"
     })
     await saveUser(data)
-    msg.send(`@id${sender.vk_id} (${sender.nick}) установил роль @id${data.vk_id} (${data.nick}) на ${role}`)
+    msg.send(`@id${sender.vk_id} (${sender.nick}) установил${await getGender(sender.vk_id, "", "а")} роль @id${data.vk_id} (${data.nick}) на ${role}`)
 }

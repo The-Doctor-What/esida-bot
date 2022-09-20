@@ -1,7 +1,7 @@
 import {getFraction, getFullData, getRankData} from "../../database";
 import moment from "moment";
 
-export async function listUsers(msg, args) {
+export async function listUsers(msg, args, sender) {
     let group = "all"
     let groups = [-1]
     if (args[0]) group = args[0]
@@ -9,9 +9,9 @@ export async function listUsers(msg, args) {
     else if (group == "leaders") groups = [3, 2]
     else if (group == "zams") groups = [1]
     else if (group == "admins") groups = [666, 9, 8, 7, 6, 5, 4]
-    else if (group == "archive") groups = [0]
+    else if (group == "archive" && sender.access > 3) groups = [0]
     let text = `📊 Список пользователей: 📊\n\n`
-    if (group == "candidates") {
+    if (group == "candidates" && sender.access > 3) {
         const data = await getFullData("candidates")
         if (!data) return msg.send({ message: `🚫 Не найдено ни одного кандидата! 🚫`, disable_mentions: 1 })
         for (const user of data) {

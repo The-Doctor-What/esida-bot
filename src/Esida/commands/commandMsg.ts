@@ -1,4 +1,4 @@
-import {chats, getFullData, getUserData} from "../../database";
+import {chats, getFullData} from "../../database";
 import {vkGroup, vkUser} from "../../bots";
 import {helpMsg} from "../../others/helpTexts";
 
@@ -23,7 +23,7 @@ export async function msgCommand(msg, args, sender) {
             for (const user of allUsers) {
                 for (const data of usersData) {
                     if (data.vk_id == user) {
-                        if (data.access < 4) users += ` @id${user} (👤)`
+                        if (data.access < sender.access && data.access < 6) users += ` @id${user} (👤)`
                     }
                 }
             }

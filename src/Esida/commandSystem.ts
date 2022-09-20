@@ -5,7 +5,7 @@ import {help} from "./commands/commandHelp";
 import {justallCommand} from "../others/justall";
 import {stats} from "./commands/commandStats";
 import {listUsers} from "./commands/commandList";
-import {getUserData} from "../database";
+import {chats, getUserData} from "../database";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./commands/commandWarn";
 import {getHistory} from "./commands/commandHistory";
 import {setRole} from "./commands/commandSetRole";
@@ -17,13 +17,13 @@ import {helpCongress, helpEsida, helpHistory, helpJustall, helpList, helpMsg, he
 import {msgCommand} from "./commands/commandMsg";
 import {congressSetAccess} from "./commands/commandCongress";
 
-group.hear(/^\//i, async msg=> {
+group.hear(/^\//i, async msg => {
     await commandSystem(msg)
 })
 
-user.hear(/^\//i, async msg=> {
+user.hear(/^\//i, async msg => {
     if (!checkCooldown(msg.senderId)) return
-    await commandSystem(msg, commandsUser)
+    await commandSystem(msg, false, commandsUser)
 })
 
 class Command {
@@ -35,6 +35,7 @@ class Command {
     public minArgs: number
     public usage: string
     public fullHelp: string
+
     constructor(name, access, aliases, func, description, usage = "", args = 0, fullHelp = "") {
         this.name = name
         this.access = access
@@ -50,10 +51,10 @@ class Command {
 export let commands: Command[] = [
     new Command("id", 0, ["chat_id"], getID, "Получить ID беседы",),
     new Command("adduser", 3, ["user_add"], addText, "Добавить пользователя в базу данных"),
-    new Command("help", 0, ["ehelp"], help, "Помощь по командам","[команда]"),
+    new Command("help", 0, ["ehelp"], help, "Помощь по командам", "[команда]"),
     new Command("fracs", 0, [], fracs, "Список фракций"),
     new Command("stats", 0, ["info", "find"], stats, "Статистика пользователя", "[user]"),
-    new Command("list", 0, [], listUsers, "Список пользователей", "[group]",0, helpList),
+    new Command("list", 0, [], listUsers, "Список пользователей", "[group]", 0, helpList),
     new Command("warn", 4, ["setwarn"], setWarn, "Изменить предупреждения пользователю", "[user] +/-[Кол-во] [Причина]", 3),
     new Command("vig", 4, ["setvig"], setVig, "Изменить выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
     new Command("rep", 4, ["setrep"], setRep, "Изменить репутацию пользователя", "[user] +/-[Кол-во] [Причина]", 3),
@@ -81,13 +82,19 @@ export let commandsUser: Command[] = [
     new Command("form", 0, [], form, "Форма для второго этапа регистрации"),
 ]
 
-async function commandSystem(msg, commandGroup = commands) {
+async function commandSystem(msg, group = true, commandGroup = commands) {
     const command = msg.text.split(" ")[0].substring(1)
     const args = msg.text.split(" ").slice(1)
     let access = 0
     const sender = await getUserData(msg.senderId)
     if (sender) access = sender.access
     if (!works && command != "esida") return
+    if (access < 4) {
+        for (const chat of chats) {
+            if (chat.defaultChat === msg.chatId && group) return
+            if (chat.userChat === msg.chatId && !group) return
+        }
+    }
     let cmd = commandGroup.find(x => x.name == command || x.aliases.includes(command))
     if (!cmd) return
     if (cmd.access > access) return msg.send(`🚫 У вас недостаточно прав для использования этой команды, необходимо иметь уровень доступа: ${cmd.access}`)

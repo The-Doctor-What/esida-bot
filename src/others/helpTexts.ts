@@ -56,6 +56,7 @@ export const helpMsg = dedent`
         - Право
         - Прокуратура
         - Суд
+        - sled
 `
 export const helpList = dedent`
         Доступные списки:
