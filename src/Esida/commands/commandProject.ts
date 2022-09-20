@@ -9,7 +9,14 @@ export async function stopProject(msg) {
     process.exit(0)
 }
 
-export async function statusProject(msg) {
+export async function restartProject(msg) {
+    await msg.send(`🔄 Все модули были перезагружены! 🔄`)
+    console.log(`Logs » Все модули были перезагружены`)
+    await pauseProject(msg)
+    process.exit(1)
+}
+
+export async function pauseProject(msg) {
     if (works) {
         await msg.send(`✅ Работа всех модулей приостановлена!`)
         console.log(`Logs » Работа всех модулей приостановлена`)
@@ -30,8 +37,9 @@ export async function reloadFractions(msg) {
 export async function project(msg, args) {
     let actions = {
         "stop": stopProject,
-        "pause": statusProject,
+        "pause": pauseProject,
         "upfraction": reloadFractions,
+        "restart": restartProject
     }
     if (!actions[args[0]]) return msg.send(`🚫 Данное действие не найдено! 🚫\n${helpEsida}`)
     await actions[args[0]](msg)

@@ -1,6 +1,6 @@
 require('dotenv').config()
 import {vkGroup, vkUser} from "./bots";
-import {chats, fractions, loadFracs} from "./database";
+import {loadFracs} from "./database";
 import "./Esida/commandSystem"
 import "./Esida/personnel"
 

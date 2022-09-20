@@ -1,5 +1,6 @@
-import {devId, getUserData, getVkId} from "../../database";
+import {devId, getUserData, getVkId, userid} from "../../database";
 import moment from "moment";
+
 moment.locale('ru')
 
 export async function getHistory(msg, args) {
@@ -21,5 +22,15 @@ export async function getHistory(msg, args) {
         else if (history.action == "-") actionText = "Снял"
         text += `🔹 ${moment(history.time).format("DD.MM.YYYY HH:mm:ss")} @id${history.user} ${actionText} ${history.count} ${type}\n🔸 Причина: ${history.reason}\n`
     }
-    msg.send({ message: text, disable_mentions: 1, dont_parse_links: 1 })
+    msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
+}
+
+export async function addHistory(user, type, count, reason, action, sender = userid) {
+    user.history[type].push({
+        user: sender,
+        time: moment(),
+        action: action,
+        count: count,
+        reason: reason
+    })
 }
