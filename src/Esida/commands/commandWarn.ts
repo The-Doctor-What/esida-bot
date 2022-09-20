@@ -76,22 +76,25 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
 export async function checkScores(data, limit) {
     data.score = limit
     await addHistory(data, "score", limit, `Больше ${limit} баллов`, "set")
+    await saveUser(data)
     return `🔹 Эвелина установила ${limit} баллов (Лимит баллов)\n`
 }
 
 export async function checkWarns(data, mode, count = 3, name = "предупреждения", _name = "выговор", type = "warns", _type = "vigs") {
     if (mode == 1) {
-        data.warns -= count
-        data.vigs += 1
+        data[type] -= count
+        data[_type] += 1
         await addHistory(data, type, count, `${count}/${count} ${name}`, "-")
         await addHistory(data, _type, count, `${count}/${count} ${name}`, "+")
-        return `🔹 Эвелина сняла 3 ${name} и выдала ${_name}\n`
+        await saveUser(data)
+        return `🔹 Эвелина сняла ${count} ${name} и выдала ${_name}\n`
     } else {
-        data.warns += count
-        data.vigs -= 1
+        data[type] += 1
+        data[_type] -= count
         await addHistory(data, type, count, `-1/${count} ${name}`, "+")
         await addHistory(data, _type, count, `-1/${count} ${name} `, "-")
-        return `🔹 Эвелина выдала 3 ${name} и сняла ${_name} (-1/${count} ${name})\n`
+        await saveUser(data)
+        return `🔹 Эвелина выдала ${count} ${_name} и сняла ${name} (-1/${count} ${name})\n`
     }
 }
 
@@ -101,8 +104,9 @@ export async function checkData(data) {
         if (data.access < 4) {
             if (data.warns >= 3) text += await checkWarns(data, 1)
             else if (data.warns <= -1 && data.vigs >= 1) text += await checkWarns(data, 2)
-            else if (data.fwarns >= 2) text += await checkWarns(data, 1, 2, "федеральных выговоров", "предупреждения")
-            else if (data.fwarns <= -1) text += await checkWarns(data, 2, 2, "федеральных выговоров", "предупреждения")
+            else if (data.fwarns >= 2) text += await checkWarns(data, 1, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
+            else if (data.fwarns <= -1) text += await checkWarns(data, 2, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
+            else if (data.vigs <= -1) text += await checkWarns(data, 2, 3, "выговоров", "предупреждения", "vigs", "warns")
             else if (data.score > 70 && data.access == 1) text += await checkScores(data, 70)
             else if (data.score > 140 && (data.access == 2 || (data.frac == 6 && data.access == 3))) text += await checkScores(data, 140)
             else if (data.score > 160 && data.access == 3 && data.frac != 6) text += await checkScores(data, 160)

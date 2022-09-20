@@ -55,7 +55,7 @@ export async function stats(msg, args) {
             }
             text += `🔹 Тип постановления: ${data.type_add}\n`
         }
-        text += `🔹 Дата назначение: ${postStart.format("DD MMM YYYY")}\n`
+        text += `🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}\n`
         text += `🔹 Отстоял${await getGender(data.vk_id, "", "а")}: ${moment().diff(postStart, "days")} дней\n`
         if (access <= 3 && access >= 2) {
             text += `🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}\n`
