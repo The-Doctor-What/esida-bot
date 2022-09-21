@@ -1,6 +1,6 @@
-import {checkUser, saveUser} from "../../database";
+import {checkUser, saveUser} from "../database";
 import moment from "moment";
-import {getGender} from "../../utils";
+import {getGender} from "../others/utils";
 moment.locale('ru')
 
 export async function setRole(msg, args, sender) {

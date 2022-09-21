@@ -1,8 +1,8 @@
-import {checkUser, getFraction} from "../../database";
+import {checkUser, getFraction} from "../database";
 import moment from "moment";
-import {getAdminInfo} from "../../others/aliensAPI";
+import {getAdminInfo} from "../others/aliensAPI";
 import {congressRanks} from "../personnel";
-import {getGender} from "../../utils";
+import {getGender} from "../others/utils";
 
 moment.locale('ru')
 

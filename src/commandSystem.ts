@@ -1,21 +1,31 @@
-import {group, user} from "../bots";
+import {group, user} from "./bots";
 import {addText, form, fracs, promotion, recovery, removedCandidate, uval} from "./personnel";
-import {getID} from "../utils";
+import {getID} from "./others/utils";
 import {help} from "./commands/commandHelp";
-import {justallCommand} from "../others/justall";
+import {justallCommand} from "./others/justall";
 import {stats} from "./commands/commandStats";
 import {listUsers} from "./commands/commandList";
-import {chats, getUserData} from "../database";
+import {chats, getUserData} from "./database";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./commands/commandWarn";
 import {getHistory} from "./commands/commandHistory";
 import {setRole} from "./commands/commandSetRole";
 import {getOnlineUser} from "./commands/commandOnline";
 import {setDataUser} from "./commands/commandSet";
-import {checkCooldown} from "../others/cooldowns";
+import {checkCooldown} from "./others/cooldowns";
 import {reloadFractions, project, works} from "./commands/commandProject";
-import {helpCongress, helpEsida, helpHistory, helpJustall, helpList, helpMsg, helpSet} from "../others/helpTexts";
+import {
+    helpCongress,
+    helpEsida,
+    helpForum,
+    helpHistory,
+    helpJustall,
+    helpList,
+    helpMsg,
+    helpSet
+} from "./others/helpTexts";
 import {msgCommand} from "./commands/commandMsg";
 import {congressSetAccess} from "./commands/commandCongress";
+import {commandForum, commandForumAccept, commandForumDecline} from "./commands/commandForum";
 
 group.hear(/^\//i, async msg => {
     await commandSystem(msg)
@@ -75,6 +85,9 @@ export let commands: Command[] = [
     new Command("esida", 69, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
     new Command("reloadfracs", 69, [], reloadFractions, "Загрузить фракции из базы данных"),
     new Command("makecongress", 1, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
+    new Command("forum", 2, [], commandForum, "Взаимодействие с форумом", "[action] [url]", 2, helpForum),
+    new Command("facc", 4, [], commandForumAccept, "Принять форму от руководителя", "[id form]", 1),
+    new Command("fdec", 4, [], commandForumDecline, "Отклонить форму от руководителя", "[id form]", 1),
 ]
 
 export let commandsUser: Command[] = [

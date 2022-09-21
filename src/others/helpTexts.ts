@@ -82,3 +82,11 @@ export const helpEsida = dedent`
         - pause (Остановить прием комманд)
         - upfraction (Обновить фракции)
         `
+export const helpForum = dedent`
+        Доступные Действия:
+        - delete (Удалить тему)
+        - close (Закрыть тему)
+        - open (Открыть тему)
+        - pin (Закрепить тему)
+        - unpin (Открепить тему)
+        `

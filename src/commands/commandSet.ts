@@ -1,6 +1,6 @@
-import {checkUser, getAccess, saveUser} from "../../database";
-import {getShortURL} from "../../utils";
-import {helpSet} from "../../others/helpTexts";
+import {checkUser, getAccess, saveUser} from "../database";
+import {getShortURL} from "../others/utils";
+import {helpSet} from "../others/helpTexts";
 
 export async function setDataUser(msg, args, sender) {
     const user = await checkUser(msg, args[0], sender, false)

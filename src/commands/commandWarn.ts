@@ -1,8 +1,8 @@
-import {checkUser, getFraction, saveUser} from "../../database";
+import {checkUser, getFraction, saveUser} from "../database";
 import moment from "moment";
-import {vkGroup} from "../../bots";
+import {vkGroup} from "../bots";
 import {addHistory} from "./commandHistory";
-import {getGender} from "../../utils";
+import {getGender} from "../others/utils";
 
 moment.locale('ru')
 

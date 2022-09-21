@@ -1,5 +1,5 @@
-import {loadFracs} from "../../database";
-import {helpEsida} from "../../others/helpTexts";
+import {loadFracs} from "../database";
+import {helpEsida} from "../others/helpTexts";
 
 export let works = true
 

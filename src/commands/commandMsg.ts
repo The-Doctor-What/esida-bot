@@ -1,6 +1,6 @@
-import {chats, getFullData} from "../../database";
-import {vkGroup, vkUser} from "../../bots";
-import {helpMsg} from "../../others/helpTexts";
+import {chats, getFullData} from "../database";
+import {vkGroup, vkUser} from "../bots";
+import {helpMsg} from "../others/helpTexts";
 
 export async function msgCommand(msg, args, sender) {
     let frac = args[0]

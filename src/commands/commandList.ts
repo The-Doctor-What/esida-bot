@@ -1,4 +1,4 @@
-import {getFraction, getFullData, getRankData} from "../../database";
+import {getFraction, getFullData, getRankData} from "../database";
 import moment from "moment";
 
 export async function listUsers(msg, args, sender) {

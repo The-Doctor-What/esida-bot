@@ -1,5 +1,5 @@
-import {getFraction, getRankData, userid} from "./database";
-import {vkGroup, vkUser} from "./bots";
+import {getFraction, getRankData, userid} from "../database";
+import {vkGroup, vkUser} from "../bots";
 import dedent from "dedent-js";
 
 export function random(min, max) {

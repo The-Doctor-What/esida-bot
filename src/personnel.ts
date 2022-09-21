@@ -1,4 +1,4 @@
-import {user} from "../bots";
+import {user} from "./bots";
 import {
     checkUser,
     deleteUser,
@@ -10,10 +10,10 @@ import {
     getVkId,
     saveUser,
     supabase,
-} from "../database";
+} from "./database";
 import moment from "moment";
 import dedent from "dedent-js";
-import {chatsActions, commandSend, endMessage, getShortURL, sendMessage, startMessage} from "../utils";
+import {chatsActions, commandSend, endMessage, getShortURL, sendMessage, startMessage} from "./others/utils";
 import {works} from "./commands/commandProject";
 
 moment.locale('ru')
@@ -214,7 +214,7 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
                 await commandSend(dedent`!addleader @id${msg.senderId} ${nick} ${await getFraction(user.fraction)}`, 81)
             }
             if (user.access <= 3) await chatsActions(msg, user)
-            await startMessage(user)
+            await startMessage(await getUserData(msg.senderId))
             const error = await deleteUser(msg.senderId, "candidates")
             if (error) {
                 console.error(`Logs » Не удалось удалить пользователя из базы данных!`)
@@ -323,7 +323,7 @@ VK: @id${user.vk_id}
     user.dateUval = new Date()
     user.uvalUser = msg.senderId
     user.access = 0
-    await commandSend(`!fkick @id${user.vk_id} Agos_0 ${user.rank} 16`)
+    await commandSend(`!fkick @id${user.vk_id} Agos_0 Указано в беседе лидеров/замов 16`)
     await endMessage(user, sender, reason, visable)
     await saveUser(user)
     msg.send({

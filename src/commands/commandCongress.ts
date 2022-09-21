@@ -1,6 +1,6 @@
-import {checkUser, saveUser} from "../../database";
+import {checkUser, saveUser} from "../database";
 import {congressRanks} from "../personnel";
-import {vkUser} from "../../bots";
+import {vkUser} from "../bots";
 
 export async function congressSetAccess(msg, args, sender) {
     if (sender.congressAccess < 4 && sender.access <= 3) return msg.send({message: "🚫 | Доступ к настройке доступа в конгрессе имеет только спикер конгресса! 🚫"})

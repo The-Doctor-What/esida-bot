@@ -1,5 +1,5 @@
-import {getAccess} from "../../database";
-import {getAdminInfo, getOnline} from "../../others/aliensAPI";
+import {getAccess} from "../database";
+import {getAdminInfo, getOnline} from "../others/aliensAPI";
 import moment from "moment";
 moment.locale('ru')
 

@@ -1,8 +1,8 @@
 require('dotenv').config()
 import {vkGroup, vkUser} from "./bots";
 import {loadFracs} from "./database";
-import "./Esida/commandSystem"
-import "./Esida/personnel"
+import "./commandSystem"
+import "./personnel"
 
 export const main = async () => {
     await loadFracs()

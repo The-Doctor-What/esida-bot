@@ -1,6 +1,6 @@
-import {checkUser, saveUser, userid} from "../../database";
+import {checkUser, saveUser, userid} from "../database";
 import moment from "moment";
-import {getGender} from "../../utils";
+import {getGender} from "../others/utils";
 
 moment.locale('ru')
 
