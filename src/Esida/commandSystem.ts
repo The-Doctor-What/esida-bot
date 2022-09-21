@@ -91,8 +91,8 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
     if (!works && command != "esida") return
     if (access < 4) {
         for (const chat of chats) {
-            if (chat.defaultChat === msg.chatId && group) return
-            if (chat.userChat === msg.chatId && !group) return
+            if (chat.defaultChat === msg.chatId && group && chat.blackList) return
+            else if (chat.userChat === msg.chatId && !group && chat.blackList) return
         }
     }
     let cmd = commandGroup.find(x => x.name == command || x.aliases.includes(command))

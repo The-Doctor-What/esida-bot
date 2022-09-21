@@ -1,5 +1,5 @@
-import {getRankData, userid} from "./database";
-import {vkUser} from "./bots";
+import {getFraction, getRankData, userid} from "./database";
+import {vkGroup, vkUser} from "./bots";
 import dedent from "dedent-js";
 
 export function random(min, max) {
@@ -41,7 +41,7 @@ export async function chatsActions(msg, user, action = "add") {
     if (rank.chatTag) tag = rank.chatTag
     else if (action == "kick") tag = "Agos_0"
     else if (user.fraction > 0 && user.fraction < 30) tag = `leader_${user.fraction}`
-    await commandSend(`!f${action} @id${msg.senderId} ${tag} ${rank.name} 16`)
+    await commandSend(`!f${action} @id${msg.senderId} ${tag} Указано в беседе лидеров/замов 16`)
 }
 
 export async function sendMessage(id, msg) {
@@ -67,8 +67,50 @@ export async function sendMessage(id, msg) {
     }
 }
 
-export async function getGender(id, male, girl) {
+export async function getGender(id, male = "", girl = "а") {
     const user = await vkUser.api.users.get({user_ids: id, fields: ["sex"]})
     if (user[0].sex == 1) return girl
     else return male
+}
+
+export async function endMessage(user, sender, reason, visable = true) {
+    let text = `${sender.rank} @id${sender.vk_id} (${sender.nick}) снял${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick})\n`
+    text += `C должности: ${user.rank} `
+    if (user.oldaccess < 3) text += `${await getFraction(user.frac)}`
+    text += `\nПричина: `
+    if (visable) text += `${reason}`
+    else text += `*Скрыто*`
+    await vkGroup.api.messages.send({
+        chat_id: await getFraction(100, "chat"),
+        message: text,
+        random_id: 0,
+        disable_mentions: 1
+    })
+    if (user.oldaccess < 4) {
+        await vkGroup.api.messages.send({
+            chat_id: await getFraction(user.frac, "chat"),
+            message: text,
+            random_id: 0,
+            disable_mentions: 1
+        })
+    }
+}
+
+export async function startMessage(user) {
+    let text = `@id${user.vk_id} (${user.nick})\n назначен${await getGender(user.vk_id)}`
+    text += `На должность: ${user.rank} ${await getFraction(user.frac)}`
+    await vkGroup.api.messages.send({
+        chat_id: await getFraction(100, "chat"),
+        message: text,
+        random_id: 0,
+        disable_mentions: 1
+    })
+    if (user.access < 4) {
+        await vkGroup.api.messages.send({
+            chat_id: await getFraction(user.frac, "chat"),
+            message: text,
+            random_id: 0,
+            disable_mentions: 1
+        })
+    }
 }

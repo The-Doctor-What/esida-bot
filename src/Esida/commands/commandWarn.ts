@@ -49,7 +49,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     if (action == "+") actionText = "Выдал"
     else if (action == "-") actionText = "Снял"
     if (data.access >= sender.access) return msg.send(`🚫 Вы не можете использовать это на пользователя с таким же или большим уровнем доступа! 🚫`)
-    text += `🔹 ${actionText}${await getGender(msg.senderId, "", "а")} ${count} ${type.name}\n`
+    text += `🔹 ${actionText}${await getGender(msg.senderId)} ${count} ${type.name}\n`
     if (type.tag == "score" && action == "+") {
         data.litrbol += count
     }

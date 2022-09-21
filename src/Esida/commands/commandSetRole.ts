@@ -17,5 +17,5 @@ export async function setRole(msg, args, sender) {
         reason: "Установка роли"
     })
     await saveUser(user)
-    msg.send(`@id${sender.vk_id} (${sender.nick}) установил${await getGender(sender.vk_id, "", "а")} роль @id${user.vk_id} (${user.nick}) на ${role}`)
+    msg.send(`@id${sender.vk_id} (${sender.nick}) установил${await getGender(sender.vk_id)} роль @id${user.vk_id} (${user.nick}) на ${role}`)
 }

@@ -13,7 +13,7 @@ import {
 } from "../database";
 import moment from "moment";
 import dedent from "dedent-js";
-import {chatsActions, commandSend, getShortURL, sendMessage} from "../utils";
+import {chatsActions, commandSend, endMessage, getShortURL, sendMessage, startMessage} from "../utils";
 import {works} from "./commands/commandProject";
 
 moment.locale('ru')
@@ -214,6 +214,7 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
                 await commandSend(dedent`!addleader @id${msg.senderId} ${nick} ${await getFraction(user.fraction)}`, 81)
             }
             if (user.access <= 3) await chatsActions(msg, user)
+            await startMessage(user)
             const error = await deleteUser(msg.senderId, "candidates")
             if (error) {
                 console.error(`Logs » Не удалось удалить пользователя из базы данных!`)
@@ -302,6 +303,8 @@ VK: @id${data.vk_id}
 
 export async function uval(msg, args, sender) {
     let reason = args.slice(1).join(" ")
+    let visable = true
+    if (args[1].startsWith("!")) visable = false
     let user = await checkUser(msg, args[0], sender, false)
     if (!user) return
     if (user.access >= sender.access) return msg.send("🚫 Вы не можете уволить этого человека! 🚫")
@@ -321,6 +324,7 @@ VK: @id${user.vk_id}
     user.uvalUser = msg.senderId
     user.access = 0
     await commandSend(`!fkick @id${user.vk_id} Agos_0 ${user.rank} 16`)
+    await endMessage(user, sender, reason, visable)
     await saveUser(user)
     msg.send({
         message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${user.vk_id} (${user.nick})!`,

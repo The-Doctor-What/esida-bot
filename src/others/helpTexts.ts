@@ -54,6 +54,8 @@ export const helpMsg = dedent`
         - ЦА
         - СМИ
         - Право
+        - Суд
+        - Прокуратура
         - sled
 `
 export const helpList = dedent`

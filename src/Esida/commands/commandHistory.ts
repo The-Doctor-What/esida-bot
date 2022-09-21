@@ -14,7 +14,7 @@ export async function getHistory(msg, args, sender) {
         let actionText = `Установил`
         if (history.action == "+") actionText = `Выдал`
         else if (history.action == "-") actionText = `Снял `
-        text += `🔹 ${moment(history.time).format("DD.MM.YYYY HH:mm:ss")} @id${history.user} ${actionText}${await getGender(history.user, "", "а")} ${history.count} ${type}\n🔸 Причина: ${history.reason}\n`
+        text += `🔹 ${moment(history.time).format("DD.MM.YYYY HH:mm:ss")} @id${history.user} ${actionText}${await getGender(history.user)} ${history.count} ${type}\n🔸 Причина: ${history.reason}\n`
     }
     msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
 }

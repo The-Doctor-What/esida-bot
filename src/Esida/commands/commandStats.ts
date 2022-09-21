@@ -48,7 +48,7 @@ export async function stats(msg, args, sender) {
             text += `🔹 Тип постановления: ${user.type_add}\n`
         }
         text += `🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}\n`
-        text += `🔹 Отстоял${await getGender(user.vk_id, "", "а")}: ${moment().diff(postStart, "days")} дней\n`
+        text += `🔹 Отстоял${await getGender(user.vk_id)}: ${moment().diff(postStart, "days")} дней\n`
         if ((access <= 3 && access >= 2)) {
             text += `🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}\n`
             text += `🔹 Осталось: ${postEnd.diff(moment(), "days")} дней\n`
@@ -60,9 +60,9 @@ export async function stats(msg, args, sender) {
         if (user.forum && user.forum != "{}") text += `🔹 Форум: ${user.forum}\n`
         if (user.access == 0) {
             text += `\n📚 Архивные данные: \n`
-            text += `\n🔸 Снят${await getGender(user.vk_id, "", "а")} по причине: ${user.reason}\n`
+            text += `\n🔸 Снят${await getGender(user.vk_id)} по причине: ${user.reason}\n`
             text += `🔸 Дата снятия: ${moment(user.dateUval).format("DD MMMM YYYY")}\n`
-            text += `🔸 Снял${await getGender(user.uvalUser, "", "а")}: @id${user.uvalUser}\n`
+            text += `🔸 Снял${await getGender(user.uvalUser)}: @id${user.uvalUser}\n`
             text += `🔸 Возраст: ${user.age} лет\n`
         }
         text += `\n${warning}`
