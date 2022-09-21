@@ -1,4 +1,4 @@
-import {devId, getFraction, getUserData, getVkId, saveUser} from "../../database";
+import {checkUser, getFraction, saveUser} from "../../database";
 import moment from "moment";
 import {vkGroup} from "../../bots";
 import {addHistory} from "./commandHistory";
@@ -35,8 +35,6 @@ export async function setRep(msg, args, sender) {
 }
 
 export async function setData(msg, args, sender, type = {tag: "warns", name: "предупреждений"}) {
-    let user = await getVkId(args[0])
-    if (!user) user = (args[0])
     let action = "set"
     if (args[1].startsWith("+")) action = "+"
     else if (args[1].startsWith("-")) action = "-"
@@ -44,15 +42,9 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     count = parseInt(count)
     let reason = args.slice(2).join(" ")
     let time = moment()
-    let data = await getUserData(user)
-    if (!data) {
-        return msg.send({
-            message: `🚫 Пользователь не найден, если вы уверены, что он зарегистрирован, обратитесь к @id${devId} (разработчику)! 🚫`,
-            disable_mentions: 1
-        })
-    }
+    let data = await checkUser(msg, args[0], sender, false)
+    if (!data) return
     let text = `${sender.rank} @id${msg.senderId}(${sender.nick})\n\n`
-    if (!data) return msg.send("🚫 Пользователь не найден! 🚫")
     let actionText = "Установил"
     if (action == "+") actionText = "Выдал"
     else if (action == "-") actionText = "Снял"
@@ -87,7 +79,7 @@ export async function checkWarns(data, mode, count = 3, name = "предупре
         await addHistory(data, type, count, `${count}/${count} ${name}`, "-")
         await addHistory(data, _type, count, `${count}/${count} ${name}`, "+")
         await saveUser(data)
-        return `🔹 Эвелина сняла ${count} ${name} и выдала ${_name}\n`
+        return `🔹 Эвелина сняла ${count} ${name} и выдала ${_name} (${count}/${count} ${name})\n`
     } else {
         data[type] += 1
         data[_type] -= count

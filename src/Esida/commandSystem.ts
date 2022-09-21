@@ -71,9 +71,9 @@ export let commands: Command[] = [
     new Command("uval", 4, [], uval, "Увольнение пользователя", "[user] [Причина]", 2),
     new Command("recovery", 4, [], recovery, "Восстановление пользователя", "[user]", 1),
     new Command("msg", 5, [], msgCommand, "Отравить сообщение в беседу всем пользователям", "[Министерство] [Сообщение]", 2, helpMsg),
-    new Command("justall", 666, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
-    new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
-    new Command("reloadfracs", 666, [], reloadFractions, "Загрузить фракции из базы данных"),
+    new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
+    new Command("esida", 69, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
+    new Command("reloadfracs", 69, [], reloadFractions, "Загрузить фракции из базы данных"),
     new Command("makecongress", 1, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
 ]
 

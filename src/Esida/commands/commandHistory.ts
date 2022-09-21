@@ -1,20 +1,13 @@
-import {devId, getUserData, getVkId, saveUser, userid} from "../../database";
+import {checkUser, saveUser, userid} from "../../database";
 import moment from "moment";
 import {getGender} from "../../utils";
 
 moment.locale('ru')
 
-export async function getHistory(msg, args) {
-    let user = await getVkId(args[0])
-    if (!user) user = (args[0])
+export async function getHistory(msg, args, sender) {
     let type = args[1]
-    let data = await getUserData(user)
-    if (!data) {
-        return msg.send({
-            message: `🚫 Пользователь не найден, если вы уверены, что он зарегистрирован, обратитесь к @id${devId} (разработчику)! 🚫`,
-            disable_mentions: 1
-        })
-    }
+    let data = await checkUser(msg, args[0], sender)
+    if (!data) return
     let text = `📚 История пользователя @id${data.vk_id} (${data.nick}) 📚\n\n`
     if (!data.history[type]) return msg.send("🚫 У пользователя нет истории данного типа! 🚫")
     for (const history of data.history[type]) {

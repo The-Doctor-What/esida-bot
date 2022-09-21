@@ -8,8 +8,9 @@ export async function listUsers(msg, args, sender) {
     if (group == "all") groups = [-1]
     else if (group == "leaders") groups = [3, 2]
     else if (group == "zams") groups = [1]
-    else if (group == "admins") groups = [666, 9, 8, 7, 6, 5, 4]
+    else if (group == "admins") groups = [69, 9, 8, 7, 6, 5, 4]
     else if (group == "archive" && sender.access > 3) groups = [0]
+    else if (group == "dev") groups = [69]
     let text = `📊 Список пользователей: 📊\n\n`
     if (group == "candidates" && sender.access > 3) {
         const data = await getFullData("candidates")
@@ -24,7 +25,7 @@ export async function listUsers(msg, args, sender) {
         const data = await getFullData("users")
         for (const user of data) {
             if (!data)  msg.send({ message: `🚫 Не найдено ни одного пользователя! 🚫`, disable_mentions: 1 })
-            if (((groups.includes(user.access) || groups[0] == -1) && user.frac != -1) && (user.access != 0 || groups[0] == 0)) {
+            if (((groups.includes(user.access) || groups[0] == -1) && (user.frac != -1 || group == "dev")) && (user.access != 0 || groups[0] == 0)) {
                 let postStart = moment(user.post)
                 let postEnd = moment(postStart).add(user.term, 'days')
                 text += `🔹 ${user.rank}`

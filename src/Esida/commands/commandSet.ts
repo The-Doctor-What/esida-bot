@@ -1,10 +1,10 @@
-import {getAccess, getUserData, getVkId, saveUser} from "../../database";
+import {checkUser, getAccess, saveUser} from "../../database";
 import {getShortURL} from "../../utils";
 import {helpSet} from "../../others/helpTexts";
 
-export async function setDataUser(msg, args) {
-    let user = await getVkId(args[0])
-    if (!user) user = (args[0])
+export async function setDataUser(msg, args, sender) {
+    const user = await checkUser(msg, args[0], sender, false)
+    if (!user) return
     let type = args[1].trim()
     let value = args.slice(2).join(' ').trim()
     let checkType = {
@@ -23,10 +23,8 @@ export async function setDataUser(msg, args) {
         value = await getShortURL(value)
         if (!value) return msg.send('🚫 Введите url форума! 🚫')
     }
-    if (type == "access" && !await getAccess(msg.senderId, 666)) return msg.send({message: "🚫 | У вас недостаточно прав для выполнения этой команды!", dont_parse_links: true})
-    let data = await getUserData(user)
-    if (!data) return msg.send({message: "🚫 | Пользователь не найден"})
-    data[checkType[type]] = value
-    await saveUser(data)
+    if (type == "access" && !await getAccess(msg.senderId, 69)) return msg.send({message: "🚫 | У вас недостаточно прав для выполнения этой команды!", dont_parse_links: true})
+    user[checkType[type]] = value
+    await saveUser(user)
     msg.send({message: "✅ | Данные успешно изменены"})
 }

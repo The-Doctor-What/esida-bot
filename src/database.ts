@@ -1,6 +1,7 @@
 import {vkUser} from "./bots";
 import {createClient} from "@supabase/supabase-js";
 import "websocket"
+
 export let fractions: any = {}
 export let chats: any = {}
 export const devId = 236464202;
@@ -31,8 +32,7 @@ const mentionRegex = /\[id(\d+)\|.+]/
 const idUrlRegex = /vk.com\/id(\d+)/
 const nickUrlRegex = /vk.com\/([a-zA-Z0-9_]+)/
 
-export async function getVkId(data)
-{
+export async function getVkId(data) {
     const id = (data.match(mentionRegex) || data.match(idUrlRegex) || [])[1]
     if (!id) {
         const username = (data.match(nickUrlRegex) || [])[1]
@@ -43,6 +43,8 @@ export async function getVkId(data)
         return user[0].id
     }
     return id
+    /*const user = await resolveResource({api, resource: data})
+    return user.id*/
 }
 
 export async function getAccess(id, access) {
@@ -113,4 +115,25 @@ export async function getRankData(rank) {
     } else {
         return data
     }
+}
+
+export async function checkUser(msg, user, sender, archive = true) {
+    let id = await getVkId(user.toString())
+    if (!id) id = user
+    let access = 0
+    if (sender) access = sender.access
+    let data = await getUserData(id)
+    if (!data) {
+        msg.send({
+            message: `🚫 Пользователь не найден, если вы уверены, что он зарегистрирован, обратитесь к @id${devId} (разработчику)! 🚫`,
+            disable_mentions: 1
+        })
+        return undefined
+    } else if (data.access == 0 && access < 4) {
+        msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
+        return undefined
+    } else if (data.access == 0 && !archive) {
+        msg.send({message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`, disable_mentions: 1})
+        return undefined
+    } else return data
 }

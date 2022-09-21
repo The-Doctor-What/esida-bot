@@ -1,6 +1,6 @@
 export const request = require('prequest');
 
-export async function checkUser(nick, server = 16) {
+export async function checkUserStats(nick, server = 16) {
     return await request(`https://api.vprikol.dev/find?nick=${nick}&server=${server}&token=${process.env.VPRIKOL_TOKEN}`);
 }
 

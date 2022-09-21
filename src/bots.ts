@@ -9,6 +9,10 @@ export const vkGroup = new VK({
     token: process.env.VK_GROUP_TOKEN
 })
 
+/*export const api = new API({
+    token: process.env.VK_USER_TOKEN
+})*/
+
 export const user = new HearManager()
 export const group = new HearManager()
 

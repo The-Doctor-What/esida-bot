@@ -54,12 +54,11 @@ export const helpMsg = dedent`
         - ЦА
         - СМИ
         - Право
-        - Прокуратура
-        - Суд
         - sled
 `
 export const helpList = dedent`
         Доступные списки:
+        - dev (разработчики)
         - admins (следящие)
         - leaders (лидеры)
         - zams (заместители)

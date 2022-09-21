@@ -1,5 +1,6 @@
 import {user} from "../bots";
 import {
+    checkUser,
     deleteUser,
     devId,
     getAccess,
@@ -300,31 +301,29 @@ VK: @id${data.vk_id}
 }
 
 export async function uval(msg, args, sender) {
-    let user = await getVkId(args[0])
-    if (!user) user = args[0]
     let reason = args.slice(1).join(" ")
-    let data = await getUserData(user)
-    if (!data) return msg.send({message: `🚫 Пользователь не найден! 🚫`})
-    if (data.access >= sender.access) return msg.send("🚫 Вы не можете уволить этого человека! 🚫")
-    if (data.access >= 2 && data.access <= 3) {
-        if (data.access >= 2 && data.access <= 3) {
-            await commandSend(dedent`Ник снимаемого лидера: ${data.nick}
-Какая фракция: ${await getFraction(data.frac)}
+    let user = await checkUser(msg, args[0], sender, false)
+    if (!user) return
+    if (user.access >= sender.access) return msg.send("🚫 Вы не можете уволить этого человека! 🚫")
+    if (user.access >= 2 && user.access <= 3) {
+        if (user.access >= 2 && user.access <= 3) {
+            await commandSend(dedent`Ник снимаемого лидера: ${user.nick}
+Какая фракция: ${await getFraction(user.frac)}
 За что снят: ${reason}
-VK: @id${data.vk_id}
+VK: @id${user.vk_id}
 Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
-            await commandSend(dedent`!remleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
+            await commandSend(dedent`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
         }
     }
-    data.oldaccess = data.access
-    data.reason = reason
-    data.dateUval = new Date()
-    data.uvalUser = msg.senderId
-    data.access = 0
-    await commandSend(`!fkick @id${data.vk_id} Agos_0 ${data.rank} 16`)
-    await saveUser(data)
+    user.oldaccess = user.access
+    user.reason = reason
+    user.dateUval = new Date()
+    user.uvalUser = msg.senderId
+    user.access = 0
+    await commandSend(`!fkick @id${user.vk_id} Agos_0 ${user.rank} 16`)
+    await saveUser(user)
     msg.send({
-        message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${data.vk_id} (${data.nick})!`,
+        message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${user.vk_id} (${user.nick})!`,
         disable_mentions: 1
     })
 }
