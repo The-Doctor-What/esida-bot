@@ -97,7 +97,7 @@ export async function endMessage(user, sender, reason, visable = true) {
 }
 
 export async function startMessage(user) {
-    let text = `@id${user.vk_id} (${user.nick})\n назначен${await getGender(user.vk_id)}`
+    let text = `@id${user.vk_id} (${user.nick}) назначен${await getGender(user.vk_id)}\n`
     text += `На должность: ${user.rank} ${await getFraction(user.frac)}`
     await vkGroup.api.messages.send({
         chat_id: await getFraction(100, "chat"),
