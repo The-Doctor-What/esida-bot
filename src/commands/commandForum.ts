@@ -29,7 +29,7 @@ export async function commandForum(msg, args, sender) {
             random_id: 0,
             disable_mentions: 1
         })
-        await commandSend(`!fdel ${url}`, 100)
+        await commandSend(`!fdel ${url}`)
     }
 }
 
@@ -44,7 +44,7 @@ export async function commandForumAccept(msg, args) {
     else if (form.action == `unpin`) formCommand += 'zakrep 0 '
     else if (form.action == 'pin') formCommand += 'zakrep 1 '
     formCommand += form.url
-    await commandSend(formCommand, 100)
+    await commandSend(formCommand)
     form.status = true
     form.url = await getShortURL(form.url)
     await saveForm(form)

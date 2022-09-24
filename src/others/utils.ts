@@ -8,7 +8,7 @@ export function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function commandSend(cmd, id = 62) {
+export async function commandSend(cmd, id = 100) {
     await vkUser.api.messages.send({
         chat_id: id,
         message: cmd,
