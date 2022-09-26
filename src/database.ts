@@ -43,8 +43,6 @@ export async function getVkId(data) {
         return user[0].id
     }
     return id
-    /*const user = await resolveResource({api, resource: data})
-    return user.id*/
 }
 
 export async function getAccess(id, access) {
@@ -129,7 +127,7 @@ export async function checkUser(msg, user, sender, archive = true) {
             disable_mentions: 1
         })
         return undefined
-    } else if (data.access == 0 && access < 4) {
+    } else if (data.access == 0 && access < 5) {
         msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
         return undefined
     } else if (data.access == 0 && !archive) {

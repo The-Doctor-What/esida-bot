@@ -13,7 +13,7 @@ import {
 } from "./database";
 import moment from "moment";
 import dedent from "dedent-js";
-import {chatsActions, commandSend, endMessage, getShortURL, sendMessage, startMessage} from "./others/utils";
+import {chatsActions, commandSend, endMessage, getGender, getShortURL, sendMessage, startMessage} from "./others/utils";
 import {works} from "./commands/commandProject";
 
 moment.locale('ru')
@@ -204,7 +204,7 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
         } else {
             console.log(`Logs » Новый руководитель успешно добавлен!`)
             msg.send('✅ | Удачи вам на посту руководителя! <3')
-            if (user.access >= 2 && user.access <= 3) {
+            if (user.access >= 3 && user.access <= 4) {
                 await commandSend(dedent`Ник нового лидера: ${nick}
                                         Какая фракция: ${await getFraction(user.fraction)}
                                         Возраст: ${age}
@@ -213,7 +213,7 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
                                         VK: @id${msg.senderId}`, 73)
                 await commandSend(dedent`!addleader @id${msg.senderId} ${nick} ${await getFraction(user.fraction)}`, 81)
             }
-            if (user.access <= 3) await chatsActions(msg, user)
+            if (user.access <= 4) await chatsActions(msg, user)
             await startMessage(await getUserData(msg.senderId))
             const error = await deleteUser(msg.senderId, "candidates")
             if (error) {
@@ -259,7 +259,7 @@ export async function promotion(msg, args, sender) {
         disable_mentions: 1
     })
     if (data.access >= sender.access) return msg.send("🚫 Вы не можете изменить должность этому человеку! 🚫")
-    if (data.access >= 2 && data.access <= 3) {
+    if (data.access >= 3 && data.access <= 4) {
         await commandSend(dedent`Ник снимаемого лидера: ${data.nick}
 Какая фракция: ${await getFraction(data.frac)}
 За что снят: ${type}
@@ -288,7 +288,7 @@ VK: @id${data.vk_id}
         text += `\n🔸 Отчет о постановлении: отправлен!`
         text += `\n🔸 Пользователь отправлен на проверку в технический отдел!`
     }
-    if (data.access >= 2 && data.access <= 3) {
+    if (data.access >= 3 && data.access <= 4) {
         await commandSend(dedent`Ник нового лидера: ${data.nick}
                                         Какая фракция: ${await getFraction(data.frac)}
                                         Возраст: ${data.age}
@@ -308,15 +308,13 @@ export async function uval(msg, args, sender) {
     let user = await checkUser(msg, args[0], sender, false)
     if (!user) return
     if (user.access >= sender.access) return msg.send("🚫 Вы не можете уволить этого человека! 🚫")
-    if (user.access >= 2 && user.access <= 3) {
-        if (user.access >= 2 && user.access <= 3) {
+    if (user.access >= 3 && user.access <= 4) {
             await commandSend(dedent`Ник снимаемого лидера: ${user.nick}
 Какая фракция: ${await getFraction(user.frac)}
 За что снят: ${reason}
 VK: @id${user.vk_id}
 Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
             await commandSend(dedent`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
-        }
     }
     user.oldaccess = user.access
     user.reason = reason
@@ -343,5 +341,5 @@ export async function recovery(msg, args) {
     data.reason = ""
     data.uvalUser = 0
     await saveUser(data)
-    msg.send({message: `@id${msg.senderId} восстановил @id${data.vk_id} (${data.nick})!`, disable_mentions: 1})
+    msg.send({message: `@id${msg.senderId} восстановил${await getGender(msg.senderId)} @id${data.vk_id} (${data.nick})!`, disable_mentions: 1})
 }

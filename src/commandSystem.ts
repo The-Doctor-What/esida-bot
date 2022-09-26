@@ -12,7 +12,7 @@ import {setRole} from "./commands/commandSetRole";
 import {getOnlineUser} from "./commands/commandOnline";
 import {setDataUser} from "./commands/commandSet";
 import {checkCooldown} from "./others/cooldowns";
-import {reloadFractions, project, works} from "./commands/commandProject";
+import {project, works} from "./commands/commandProject";
 import {
     helpCongress,
     helpEsida,
@@ -46,7 +46,7 @@ class Command {
     public usage: string
     public fullHelp: string
 
-    constructor(name, access, aliases, func, description, usage = "", args = 0, fullHelp = "") {
+    constructor(name, access, aliases, func, description = "", usage = "", args = 0, fullHelp = "") {
         this.name = name
         this.access = access
         this.aliases = aliases
@@ -60,34 +60,33 @@ class Command {
 
 export let commands: Command[] = [
     new Command("id", 0, ["chat_id"], getID, "Получить ID беседы",),
-    new Command("adduser", 3, ["user_add"], addText, "Добавить пользователя в базу данных"),
+    new Command("adduser", 4, ["user_add"], addText, "Добавить пользователя в базу данных"),
     new Command("help", 0, ["ehelp"], help, "Помощь по командам", "[команда]"),
     new Command("fracs", 0, [], fracs, "Список фракций"),
     new Command("stats", 0, ["info", "find"], stats, "Статистика пользователя", "[user]"),
     new Command("list", 0, [], listUsers, "Список пользователей", "[group]", 0, helpList),
-    new Command("warn", 4, ["setwarn"], setWarn, "Изменить предупреждения пользователю", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("vig", 4, ["setvig"], setVig, "Изменить выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("rep", 4, ["setrep"], setRep, "Изменить репутацию пользователя", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("score", 4, ["setscore"], setScore, "Изменить баллы пользователю", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("litrbol", 4, [], setLitrbol, "Изменить основные баллы пользователю", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("fwarn", 3, ["setfwarn"], setFWarn, "Изменить федеральные выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
-    new Command("setday", 4, [], setDays, "Установить количество дней до срока", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("warn", 5, ["setwarn"], setWarn, "Изменить предупреждения пользователю", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("vig", 5, ["setvig"], setVig, "Изменить выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("rep", 5, ["setrep"], setRep, "Изменить репутацию пользователя", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("score", 5, ["setscore"], setScore, "Изменить баллы пользователю", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("litrbol", 5, [], setLitrbol, "Изменить основные баллы пользователю", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("fwarn", 4, ["setfwarn"], setFWarn, "Изменить федеральные выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
+    new Command("setday", 5, [], setDays, "Установить количество дней до срока", "[user] +/-[Кол-во] [Причина]", 3),
     new Command("history", 0, [], getHistory, "Просмотреть историю пользователя", "[user] [type]", 2, helpHistory),
-    new Command("noadd", 4, [], removedCandidate, "Снять пользователя с кандидатов", "[user]", 1),
-    new Command("setrank", 4, [], promotion, "Изменить должность пользователя", "[user] [Должность] [Тип постановления]", 3),
-    new Command("setrole", 4, [], setRole, "Изменить роль пользователя", "[user] [Роль]", 2),
+    new Command("noadd", 5, [], removedCandidate, "Снять пользователя с кандидатов", "[user]", 1),
+    new Command("setrank", 5, [], promotion, "Изменить должность пользователя", "[user] [Должность] [Тип постановления]", 3),
+    new Command("setrole", 5, [], setRole, "Изменить роль пользователя", "[user] [Роль]", 2),
     new Command("online", 1, ["onl"], getOnlineUser, "Получить онлайн игрока", "[nick]", 0),
-    new Command("set", 4, [], setDataUser, "Изменить данные пользователя", "[user] [type] [value]", 3, helpSet),
-    new Command("uval", 4, [], uval, "Увольнение пользователя", "[user] [Причина]", 2),
-    new Command("recovery", 4, [], recovery, "Восстановление пользователя", "[user]", 1),
-    new Command("msg", 5, [], msgCommand, "Отравить сообщение в беседу всем пользователям", "[Министерство] [Сообщение]", 2, helpMsg),
+    new Command("set", 5, [], setDataUser, "Изменить данные пользователя", "[user] [type] [value]", 3, helpSet),
+    new Command("uval", 5, [], uval, "Увольнение пользователя", "[user] [Причина]", 2),
+    new Command("recovery", 5, [], recovery, "Восстановление пользователя", "[user]", 1),
+    new Command("msg", 6, [], msgCommand, "Отравить сообщение в беседу всем пользователям", "[Министерство] [Сообщение]", 2, helpMsg),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 69, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
-    new Command("reloadfracs", 69, [], reloadFractions, "Загрузить фракции из базы данных"),
-    new Command("makecongress", 1, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
-    new Command("forum", 2, [], commandForum, "Взаимодействие с форумом", "[action] [url]", 2, helpForum),
-    new Command("facc", 4, [], commandForumAccept, "Принять форму от руководителя", "[id form]", 1),
-    new Command("fdec", 4, [], commandForumDecline, "Отклонить форму от руководителя", "[id form]", 1),
+    new Command("makecongress", 2, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
+    new Command("forum", 3, [], commandForum, "Взаимодействие с форумом", "[action] [url]", 2, helpForum),
+    new Command("facc", 5, [], commandForumAccept, "Принять форму от руководителя", "[id form]", 1),
+    new Command("fdec", 5, [], commandForumDecline, "Отклонить форму от руководителя", "[id form]", 1),
 ]
 
 export let commandsUser: Command[] = [
@@ -102,7 +101,7 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
     const sender = await getUserData(msg.senderId)
     if (sender) access = sender.access
     if (!works && command != "esida") return
-    if (access < 4) {
+    if (access < 5) {
         for (const chat of chats) {
             if (chat.defaultChat === msg.chatId && group && chat.blackList) return
             else if (chat.userChat === msg.chatId && !group && chat.blackList) return
@@ -114,4 +113,3 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
     if (cmd.minArgs > args.length) return msg.send(`🚫 Недостаточно аргументов для использования команды! 🚫\nИспользование: ${cmd.usage}\n\n${cmd.fullHelp}`)
     await cmd.func(msg, args, sender)
 }
-

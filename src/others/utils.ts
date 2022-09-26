@@ -76,7 +76,7 @@ export async function getGender(id, male = "", girl = "а") {
 export async function endMessage(user, sender, reason, visable = true) {
     let text = `${sender.rank} @id${sender.vk_id} (${sender.nick}) снял${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick})\n`
     text += `C должности: ${user.rank} `
-    if (user.oldaccess < 3) text += `${await getFraction(user.frac)}`
+    if (user.oldaccess < 4) text += `${await getFraction(user.frac)}`
     text += `\nПричина: `
     if (visable) text += `${reason}`
     else text += `*Скрыто*`
@@ -86,7 +86,7 @@ export async function endMessage(user, sender, reason, visable = true) {
         random_id: 0,
         disable_mentions: 1
     })
-    if (user.oldaccess < 4) {
+    if (user.oldaccess < 5) {
         await vkGroup.api.messages.send({
             chat_id: await getFraction(user.frac, "chat"),
             message: text,
@@ -94,6 +94,17 @@ export async function endMessage(user, sender, reason, visable = true) {
             disable_mentions: 1
         })
     }
+}
+
+export async function genCode() {
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const length = 12;
+    let code = "";
+    for (let i = 0; i <= length; i++) {
+        const randomNumber = Math.floor(Math.random() * chars.length);
+        code += chars.substring(randomNumber, randomNumber +1);
+    }
+    return code
 }
 
 export async function startMessage(user) {
@@ -105,7 +116,7 @@ export async function startMessage(user) {
         random_id: 0,
         disable_mentions: 1
     })
-    if (user.access < 4) {
+    if (user.access < 5) {
         await vkGroup.api.messages.send({
             chat_id: await getFraction(user.frac, "chat"),
             message: text,

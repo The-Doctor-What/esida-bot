@@ -24,7 +24,7 @@ export async function stats(msg, args, sender) {
         if (user.access > 0 && user.access != 69) text += ` ${access}]\n`
         else if (user.access == 69) text += ` DEV]\n`
         else if (user.access == 0) text += `0 (До снятия: ${user.oldaccess})]\n`
-        if (user.access >= 4) {
+        if (user.access >= 5) {
             const info = await getAdminInfo(user.nick)
             if (info) {
                 text += `🔹 Уровень администратора: ${info.lvl}\n`
@@ -32,7 +32,7 @@ export async function stats(msg, args, sender) {
             } else warning += `🔸 Пользователь не найден в базе администраторов!\n`
         }
         text += `🔹 Предупреждения: ${user.warns}/3\n`
-        if (access <= 3) {
+        if (access <= 4) {
             if (user.vigs >= 3) warning += `🔸 Пользователь имеет 3 выговора!\n`
             text += `🔹 Выговоров: ${user.vigs}/3\n`
             text += `🔹 Федеральный выговоров: ${user.fwarns}/2\n`
@@ -40,7 +40,7 @@ export async function stats(msg, args, sender) {
             else text += `🔹 РП-биография: ${user.rpbio}\n`
             text += `🔹 Структура: ${await getFraction(user.frac)}\n`
             if (user.congressAccess > 0) text += `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}\n`
-            else if (user.access == 2) warning += `🔸 Пользователь не имеет должности в конгрессе!\n`
+            else if (user.access == 3) warning += `🔸 Пользователь не имеет должности в конгрессе!\n`
             if (user.frac != 30) {
                 text += `🔹 Баллов: ${user.score}\n`
                 text += `🔹 Основных баллов: ${user.litrbol}\n`
@@ -49,7 +49,7 @@ export async function stats(msg, args, sender) {
         }
         text += `🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}\n`
         text += `🔹 Отстоял${await getGender(user.vk_id)}: ${moment().diff(postStart, "days")} дней\n`
-        if ((access <= 3 && access >= 2)) {
+        if ((access >= 3 && access <= 4)) {
             text += `🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}\n`
             text += `🔹 Осталось: ${postEnd.diff(moment(), "days")} дней\n`
             if (!user.characteristic && postEnd.diff(moment(), "days") <= 10) warning += `🔸 На пользователя не написана характеристика!\n`

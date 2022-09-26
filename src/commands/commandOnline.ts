@@ -9,12 +9,12 @@ export async function getOnlineUser(msg, args, sender) {
     if (args[0]) nick = args[0]
     else nick = sender.nick
     if (args[1]) {
-        if (await getAccess(msg.senderId, 4)) server = args[1]
+        if (await getAccess(msg.senderId, 5)) server = args[1]
         else return msg.send({message: `🚫 У вас нет доступа к получению онлайна игрока с другого сервера`})
     }
     let checkAdmin = await getAdminInfo(nick)
     if (checkAdmin != undefined) {
-        if (!await getAccess(msg.senderId, 4)) return msg.send(`🚫 | Вы не можете получить онлайн администратора`)
+        if (!await getAccess(msg.senderId, 5)) return msg.send(`🚫 | Вы не можете получить онлайн администратора`)
     }
     let online = await getOnline(nick, server)
     if (online.error) return msg.send(`🚫 | ${online.msg}`)

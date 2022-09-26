@@ -6,13 +6,14 @@ export async function listUsers(msg, args, sender) {
     let groups = [-1]
     if (args[0]) group = args[0]
     if (group == "all") groups = [-1]
-    else if (group == "leaders") groups = [3, 2]
-    else if (group == "zams") groups = [1]
-    else if (group == "admins") groups = [69, 9, 8, 7, 6, 5, 4]
-    else if (group == "archive" && sender.access > 3) groups = [0]
+    else if (group == "leaders") groups = [3, 4]
+    else if (group == "zams") groups = [2]
+    else if (group == "others") groups = [1]
+    else if (group == "admins") groups = [69, 9, 8, 7, 6, 5]
+    else if (group == "archive" && sender.access > 4) groups = [0]
     else if (group == "dev") groups = [69]
     let text = `📊 Список пользователей: 📊\n\n`
-    if (group == "candidates" && sender.access > 3) {
+    if (group == "candidates" && sender.access > 4) {
         const data = await getFullData("candidates")
         if (!data) return msg.send({ message: `🚫 Не найдено ни одного кандидата! 🚫`, disable_mentions: 1 })
         for (const user of data) {
@@ -31,7 +32,7 @@ export async function listUsers(msg, args, sender) {
                 text += `🔹 ${user.rank}`
                 if (user.access < 4) text += ` "${await getFraction(user.frac, "tag")}"`
                 text += ` @id${user.vk_id} (${user.nick})`
-                if (user.access >= 2 && user.access <= 3) text += ` до срока осталось ${postEnd.diff(moment(), "days")} дней`
+                if (user.access >= 3 && user.access <= 4) text += ` до срока осталось ${postEnd.diff(moment(), "days")} дней`
                 text += `\n`
             }
         }
