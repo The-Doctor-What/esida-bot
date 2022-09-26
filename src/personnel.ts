@@ -13,7 +13,16 @@ import {
 } from "./database";
 import moment from "moment";
 import dedent from "dedent-js";
-import {chatsActions, commandSend, endMessage, getGender, getShortURL, sendMessage, startMessage} from "./others/utils";
+import {
+    chatsActions,
+    commandSend,
+    endMessage,
+    genCode,
+    getGender,
+    getShortURL,
+    sendMessage,
+    startMessage
+} from "./others/utils";
 import {works} from "./commands/commandProject";
 
 moment.locale('ru')
@@ -145,16 +154,18 @@ user.hear(/^ВК кандидата: (.*)/i, async msg => {
         if (user.access > 0) return msg.send('🚫 Данный пользователь уже является руководителем! 🚫')
         else {
             await deleteUser(user.vk_id)
-            msg.send(`✅ | Удален ранее составленый архив на пользователя!`)
+            msg.send(`✅ | Удален ранее составленный архив на пользователя!`)
         }
     }
+    const code = await genCode()
     const {error} = await supabase
         .from("candidates")
         .insert({
             vk_id: id,
             access: rank.access,
             fraction: frac,
-            rank: status
+            rank: status,
+            code: code,
         })
     if (error) {
         console.error(`Logs » Не удалось добавить пользователя в базу данных!`)
