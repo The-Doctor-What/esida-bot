@@ -93,15 +93,15 @@ export async function checkWarns(data, mode, count = 3, name = "предупре
 export async function checkData(data) {
     let text = ``
     while (true) {
-        if (data.access < 4) {
+        if (data.access < 5) {
             if (data.warns >= 3) text += await checkWarns(data, 1)
             else if (data.warns <= -1 && data.vigs >= 1) text += await checkWarns(data, 2)
             else if (data.fwarns >= 2) text += await checkWarns(data, 1, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (data.fwarns <= -1) text += await checkWarns(data, 2, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (data.vigs <= -1) text += await checkWarns(data, 2, 3, "выговоров", "предупреждения", "vigs", "warns")
             else if (data.score > 70 && data.access == 1) text += await checkScores(data, 70)
-            else if (data.score > 140 && (data.access == 2 || (data.frac == 6 && data.access == 3))) text += await checkScores(data, 140)
-            else if (data.score > 160 && data.access == 3 && data.frac != 6) text += await checkScores(data, 160)
+            else if (data.score > 140 && (data.access == 3 || (data.frac == 6 && data.access == 3))) text += await checkScores(data, 140)
+            else if (data.score > 160 && data.access == 4 && data.frac != 6) text += await checkScores(data, 160)
             else break
         } else break
     }

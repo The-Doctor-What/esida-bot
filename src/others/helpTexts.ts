@@ -64,6 +64,7 @@ export const helpList = dedent`
         - admins (следящие)
         - leaders (лидеры)
         - zams (заместители)
+        - others (советники, прокуроры, судьи)
         - candidates (кандидаты)
         - archive (архив)
         - all (все)
@@ -81,6 +82,7 @@ export const helpEsida = dedent`
         - stop (Выключить проект)
         - pause (Остановить прием комманд)
         - upfraction (Обновить фракции)
+        - status (Получить состояние проекта)
         `
 export const helpForum = dedent`
         Доступные Действия:

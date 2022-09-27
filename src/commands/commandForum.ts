@@ -113,3 +113,24 @@ export async function saveForm(form) {
         return data
     }
 }
+
+export async function getFullForum(msg) {
+    const {data, error} = await supabase
+        .from("forms")
+        .select("*")
+    if (error) {
+        console.error(`Logs » Не удалось получить информацию о форме:`)
+        console.error(error)
+    } else {
+        let text = ``
+        for (const form of data) {
+            if (!form.status) text += `📝 ${form.id}. ${form.url}\n`
+        }
+        if (text == ``) return msg.send(`🚫 Нет заявок! 🚫`)
+        else {
+            text += `\n✅ Для одобрения заявки введите: /facc [id]`
+            text += `\n🚫 Для отказа заявки введите: /fdec [id]`
+            msg.send(`📝 Список заявок на форуме: 📝\n\n` + text)
+        }
+    }
+}

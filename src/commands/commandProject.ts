@@ -27,11 +27,15 @@ export async function reloadFractions(msg) {
     console.log(`Logs » Фракции успешно перезагружены`)
 }
 
+export async function statusProject(msg) {
+    await msg.send({message: `📊 Состояние модулей: ${works ? "✅ Включены" : "🚫 Выключены"}`, dont_parse_links: true})
+}
 export async function project(msg, args) {
     let actions = {
         "stop": stopProject,
         "pause": pauseProject,
         "upfraction": reloadFractions,
+        "status": statusProject,
     }
     if (!actions[args[0]]) return msg.send(`🚫 Данное действие не найдено! 🚫\n${helpEsida}`)
     await actions[args[0]](msg)

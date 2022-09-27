@@ -25,7 +25,7 @@ import {
 } from "./others/helpTexts";
 import {msgCommand} from "./commands/commandMsg";
 import {congressSetAccess} from "./commands/commandCongress";
-import {commandForum, commandForumAccept, commandForumDecline} from "./commands/commandForum";
+import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./commands/commandForum";
 
 group.hear(/^\//i, async msg => {
     await commandSystem(msg)
@@ -87,6 +87,7 @@ export let commands: Command[] = [
     new Command("forum", 3, [], commandForum, "Взаимодействие с форумом", "[action] [url]", 2, helpForum),
     new Command("facc", 5, [], commandForumAccept, "Принять форму от руководителя", "[id form]", 1),
     new Command("fdec", 5, [], commandForumDecline, "Отклонить форму от руководителя", "[id form]", 1),
+    new Command("flist", 3, [], getFullForum, "Список всех необработанных форм"),
 ]
 
 export let commandsUser: Command[] = [
