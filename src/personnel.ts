@@ -290,7 +290,7 @@ VK: @id${data.vk_id}
         count: "Должность",
         reason: `Новая должность: ${data.rank}`
     })
-    let text = `${sender.rank} @id${msg.senderId} (${sender.nick}) изменил должность @id${data.vk_id} (${data.nick}) на ${data.rank}!`
+    let text = `${sender.rank} @id${msg.senderId} (${sender.nick}) изменил${await getGender(msg.senderId)} должность @id${data.vk_id} (${data.nick}) на ${data.rank}!`
     text += `\n\n🔸 Изменен уровень доступа на: ${data.access}!`
     text += `\n🔸 Изменено количество дней до срока на: ${data.term}!`
     text += `\n🔸 Изменен тип постановления на: ${data.type_add}!`
@@ -336,7 +336,7 @@ VK: @id${user.vk_id}
     await endMessage(user, sender, reason, visable)
     await saveUser(user)
     msg.send({
-        message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил @id${user.vk_id} (${user.nick})!`,
+        message: `${sender.rank} @id${msg.senderId} (${sender.nick}) уволил${await getGender(msg.senderId)} @id${user.vk_id} (${user.nick})!`,
         disable_mentions: 1
     })
 }

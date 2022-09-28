@@ -33,6 +33,7 @@ export const helpSet = dedent`
         - harakter (характеристика)
         - age (возраст)
         - frac (фракция)
+        - type_add (тип постановления)
         - access (доступ) - доступно только для разработчиков
 `
 export const helpHistory = dedent`

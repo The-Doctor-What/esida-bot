@@ -9,9 +9,9 @@ export async function listUsers(msg, args, sender) {
     else if (group == "leaders") groups = [3, 4]
     else if (group == "zams") groups = [2]
     else if (group == "others") groups = [1]
-    else if (group == "admins") groups = [69, 9, 8, 7, 6, 5]
+    else if (group == "admins") groups = [666, 9, 8, 7, 6, 5]
     else if (group == "archive" && sender.access > 4) groups = [0]
-    else if (group == "dev") groups = [69]
+    else if (group == "dev") groups = [69, 666]
     let text = `📊 Список пользователей: 📊\n\n`
     if (group == "candidates" && sender.access > 4) {
         const data = await getFullData("candidates")
