@@ -81,12 +81,12 @@ export async function checkWarns(data, mode, count = 3, name = "предупре
         await saveUser(data)
         return `🔹 Эвелина сняла ${count} ${name} и выдала ${_name} (${count}/${count} ${name})\n`
     } else {
-        data[type] += 1
-        data[_type] -= count
+        data[type] += count
+        data[_type] -= 1
         await addHistory(data, type, count, `-1/${count} ${name}`, "+")
         await addHistory(data, _type, count, `-1/${count} ${name} `, "-")
         await saveUser(data)
-        return `🔹 Эвелина выдала ${count} ${_name} и сняла ${name} (-1/${count} ${name})\n`
+        return `🔹 Эвелина выдала ${count} ${name} и сняла ${_name} (-1/${count} ${name})\n`
     }
 }
 
