@@ -9,7 +9,7 @@ export async function stopProject(msg, args, sender) {
     console.log(`Logs » Все модули были выключены`)
     await vkGroup.api.messages.send(
         {
-            peer_id: 3,
+            chat_id: 3,
             message: `${sender.rank} @id${sender.vk_id}(${sender.nick}) выключил все модули!`,
             random_id: 0
         }
