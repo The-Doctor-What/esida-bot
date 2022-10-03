@@ -23,7 +23,7 @@ export async function msgCommand(msg, args, sender) {
             for (const user of allUsers) {
                 for (const data of usersData) {
                     if (data.vk_id == user) {
-                        if (data.access < sender.access && data.access < 7) users += ` @id${user} (👤)`
+                        if (data.access < sender.access && data.access < 7) users += `@id${user} (ᅠ) `
                     }
                 }
             }

@@ -18,12 +18,29 @@ export async function getOnlineUser(msg, args, sender) {
     }
     let online = await getOnline(nick, server)
     if (online.error) return msg.send(`🚫 | ${online.msg}`)
-    let text = `📊 Онлайн игрока ${nick}:\n\n`
+    let text = `📊 Онлайн игрока ${nick}:`
+    text += `\n🔸 Сервер: ${server}\n\n`
     let time = moment()
-    let reports = 0;
-    let onlineTime
+    text += `\n\n🔸 Онлайн за последние 7 дней\n\n`
+    text += await getOnlineText(time, online)
+    time = moment().startOf('week').add(6, 'days')
+    text += `\n\n🔸 Онлайн за текущую неделю\n\n`
+    text += await getOnlineText(time, online, "dddd")
+    text += `\nПока что общий онлайн за неделю не работает корректно`
+    msg.send(text)
+}
+
+export async function getOnlineText(time, online, format = "DD MMM") {
+    let text = ``
+    let reports = 0
+    let onlineTime: any
     for (let c = 0; c < 7; c++) {
-        text += `🔹 ${time.format("DD MMM")} ${online.online[time.format("YYYY-MM-DD")]}`
+        if (!online.online[time.format("YYYY-MM-DD")]) {
+            text += `🔹 ${time.format(format)} 00:00:00\n`
+            time.subtract(1, "days")
+            continue
+        }
+        text += `🔹 ${time.format(format)} ${online.online[time.format("YYYY-MM-DD")]}`
         if (online.report[time.format("YYYY-MM-DD")] > 0) {
             text += ` [R: ${online.report[time.format("YYYY-MM-DD")]}]`
             reports += online.report[time.format("YYYY-MM-DD")]
@@ -40,9 +57,7 @@ export async function getOnlineUser(msg, args, sender) {
             }
         }
     }
-    text += `\n🔸 Онлайн за последние 7 дней\n`
-    text += `🔸 Отыгранно: ${onlineTime[0]}:${onlineTime[1]}:${onlineTime[2]}`
+    text += `🔸 Общее: ${onlineTime[0]}:${onlineTime[1]}:${onlineTime[2]}`
     if (reports > 0) text += ` [R: ${reports}]`
-    text += `\n🔸 Сервер: ${server}`
-    msg.send(text)
+    return text
 }

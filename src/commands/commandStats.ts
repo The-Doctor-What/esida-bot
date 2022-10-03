@@ -21,7 +21,7 @@ export async function stats(msg, args, sender) {
         let warning = ``
         text = `📊 Статистика пользователя: @id${user.vk_id} (${user.nick}) 📊\n\n`
         text += `🔹 Должность: ${user.rank} [D: `
-        if (user.access > 0 && user.access <= 69) text += ` ${access}]\n`
+        if (user.access > 0 && user.access < 69) text += ` ${access}]\n`
         else if (user.access >= 69) text += ` DEV]\n`
         else if (user.access == 0) text += `0 (До снятия: ${user.oldaccess})]\n`
         if (user.access >= 5) {
@@ -31,10 +31,11 @@ export async function stats(msg, args, sender) {
                 text += `🔹 Префикс: ${info.prefix}\n`
             } else warning += `🔸 Пользователь не найден в базе администраторов!\n`
         }
-        text += `🔹 Предупреждения: ${user.warns}/3\n`
+        text += `🔹 Выговоров: ${user.vigs}/`
+        text += access >= 5 ? `5\n` : `3\n`
         if (access <= 4) {
             if (user.vigs >= 3) warning += `🔸 Пользователь имеет 3 выговора!\n`
-            text += `🔹 Выговоров: ${user.vigs}/3\n`
+            text += `🔹 Предупреждения: ${user.warns}/3\n`
             text += `🔹 Федеральный выговоров: ${user.fwarns}/2\n`
             if (!user.rpbio) warning += `🔸 Пользователь не имеет РП-биографии!\n`
             else text += `🔹 РП-биография: ${user.rpbio}\n`

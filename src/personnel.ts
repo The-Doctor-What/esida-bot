@@ -183,7 +183,7 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
         let nick = msg.text.split('Игровой ник: ')[1].split('\n')[0].trim()
         if (!nick) return msg.send('🚫 Введите корректный ник 🚫')
         let age = msg.text.split('Возраст: ')[1].split('\n')[0].trim()
-        if (!age) return msg.send('🚫 Введите id фракции /fracks! 🚫')
+        if (!age) return msg.send('🚫 Не корректный возраст! 🚫')
         let type_add = msg.text.split('Тип назначения: ')[1].split('\n')[0].trim()
         if (!type_add) return msg.send('🚫 Введите тип назначения! 🚫')
         let discord = msg.text.split('Дискорд: ')[1].split('\n')[0].trim()
@@ -341,7 +341,7 @@ VK: @id${user.vk_id}
     })
 }
 
-export async function recovery(msg, args) {
+export async function recovery(msg, args, sender) {
     let user = await getVkId(args[0])
     if (!user) user = args[0]
     let data = await getUserData(user)
@@ -352,5 +352,5 @@ export async function recovery(msg, args) {
     data.reason = ""
     data.uvalUser = 0
     await saveUser(data)
-    msg.send({message: `@id${msg.senderId} восстановил${await getGender(msg.senderId)} @id${data.vk_id} (${data.nick})!`, disable_mentions: 1})
+    msg.send({message: `${sender.rank} @id${msg.senderId} (${sender.nick}) восстановил${await getGender(msg.senderId)} @id${data.vk_id} (${data.nick})!`, disable_mentions: 1})
 }

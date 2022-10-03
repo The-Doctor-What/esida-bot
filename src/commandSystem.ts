@@ -27,6 +27,7 @@ import {msgCommand} from "./commands/commandMsg";
 import {congressSetAccess} from "./commands/commandCongress";
 import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./commands/commandForum";
 import {changePassword} from "./commands/commandPassword";
+import {commandShop} from "./commands/commandShop";
 
 group.hear(/^\//i, async msg => {
     await commandSystem(msg)
@@ -89,7 +90,8 @@ export let commands: Command[] = [
     new Command("facc", 5, [], commandForumAccept, "Принять форму от руководителя", "[id form]", 1),
     new Command("fdec", 5, [], commandForumDecline, "Отклонить форму от руководителя", "[id form]", 1),
     new Command("flist", 3, [], getFullForum, "Список всех необработанных форм"),
-    new Command("changepassword", 1, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
+    new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
+    new Command("shop", 69, [], commandShop, "Обменник баллов"),
 ]
 
 export let commandsUser: Command[] = [

@@ -40,6 +40,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     else if (args[1].startsWith("-")) action = "-"
     let count = args[1].replace(/[^0-9]/g, "")
     count = parseInt(count)
+    if(!count) return msg.send("🚫 Неверное количество! 🚫")
     let reason = args.slice(2).join(" ")
     let time = moment()
     let data = await checkUser(msg, args[0], sender, false)
@@ -62,7 +63,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     await saveUser(data)
     msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
     let chat = await getFraction(data.frac, "chat")
-    if (data.access < 4 && chat != msg.chatId) await vkGroup.api.messages.send({chat_id: chat, message: text, dont_parse_links: 1, disable_mentions: 1, random_id: 0})
+    if (data.access < 5 && chat != msg.chatId) await vkGroup.api.messages.send({chat_id: chat, message: text, dont_parse_links: 1, disable_mentions: 1, random_id: 0})
 }
 
 export async function checkScores(data, limit) {

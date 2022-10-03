@@ -15,21 +15,6 @@ export async function help(msg, args, sender) {
         }
         msg.send(text)
     }
-    else if (command == "all") {
-        let text = `📚 Список команд: 📚\n\n`
-        for (const cmd of commands) {
-            if (access >= cmd.access && cmd.description != "") {
-                text += `🔹 ${cmd.usage} - ${cmd.description}\n`
-                if (cmd.aliases.length > 0) {
-                    text += `🔸 Альтернативные варианты: ${cmd.aliases.join(", ")}\n`
-                }
-                if (cmd.access > 0) {
-                    text += `🔸 Требуемый уровень доступа: ${cmd.access}\n`
-                }
-            }
-        }
-        msg.send(text)
-    }
     else {
         let cmd = commands.find(x => x.name == command || x.aliases.includes(command))
         if (!cmd) return msg.send("🚫 Такой команды не существует! 🚫")
