@@ -1,5 +1,5 @@
 import {checkUser, saveUser} from "../database";
-import {vkUser} from "../bots";
+import {vkGroup, vkUser} from "../bots";
 import {commandSend, getGender} from "../others/utils";
 import dedent from "dedent-js";
 
@@ -30,7 +30,7 @@ export async function commandMakeAdmin(msg, args, sender) {
     await commandSend(`!padm @id${user.vk_id}`)
     await commandSend(dedent(`Logs:
     ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!
-    `))
+    `), 41, vkGroup)
     user.adminInfo.userPost = sender.vk_id
     await saveUser(user)
     await msg.send(`🎉 Пользователь @id${user.vk_id} (${user.nick}) успешно стал кандидатом в администрацию! 🎉`)

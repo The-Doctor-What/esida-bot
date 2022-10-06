@@ -1,9 +1,9 @@
 require('dotenv').config()
 import {vkGroup, vkUser} from "./bots";
 import {loadFracs} from "./database";
+import "./events/eventSystem"
 import "./commandSystem"
 import "./personnel"
-import "./events/eventSystem"
 
 export const main = async () => {
     await loadFracs()

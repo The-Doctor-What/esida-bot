@@ -80,7 +80,6 @@ export const commandsForum: Command[] = [
 
 export const commandsDev: Command[] = [
     new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
-    new Command("shop", 69, [], commandShop, "Обменник баллов"),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
 ]
@@ -99,6 +98,7 @@ export const commandsOthers: Command[] = [
     new Command("msg", 4, [], msgCommand, "Отравить сообщение в беседу всем пользователям", "[Министерство] [Сообщение]", 2, helpMsg),
     new Command("adminblock", 6, [], commandAdminBlock, "Разрешить или запретить пользователю занимать пост администратора", "[user]", 1),
     new Command("makeadmin", 7, [], commandMakeAdmin, "Сделать пользователя кандидатом на пост администратора", "[user]", 1),
+    new Command("shop", 1, [], commandShop, "Обменник баллов"),
 ]
 
 export const commands: Command[] = [

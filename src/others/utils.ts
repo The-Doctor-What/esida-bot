@@ -2,14 +2,14 @@ import {getFraction, getRankData, userid} from "../database";
 import {vkGroup, vkUser} from "../bots";
 import dedent from "dedent-js";
 
-export function random(min, max) {
+export async function random(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function commandSend(cmd, id = 100) {
-    await vkUser.api.messages.send({
+export async function commandSend(cmd, id = 100, vk = vkUser) {
+    await vk.api.messages.send({
         chat_id: id,
         message: cmd,
         random_id: 0

@@ -2,6 +2,7 @@ import {getUserData} from "../database";
 import {works} from "../commands/commandProject";
 import {events} from "./events";
 import {vkGroup} from "../bots";
+
 vkGroup.updates.on('message_event', async msg => await eventSystem(msg))
 
 export async function eventSystem(msg) {
@@ -12,13 +13,12 @@ export async function eventSystem(msg) {
             const commandSender = msg.payload.payload.sender
             if (commandSender != msg.userId) return await show_snackbar(msg, "🚫 Вы не можете использовать чужие кнопки! 🚫")
         }
-        let access = 0
-        const sender = await getUserData(msg.userId)
-        if (sender) access = sender.access
+        let sender = await getUserData(msg.userId)
+        if (!sender) sender = {vk_id: msg.userId, access: 0}
         if (!works && command != "esida") return
         const event = events.find(x => x.name == command)
         if (!event) return await show_snackbar(msg, "🚫 Не найдено событие с таким названием! 🚫")
-        if (event.access > access) return await show_snackbar(msg, `🚫 У вас недостаточно прав для использования этого события`)
+        if (event.access > sender.access) return await show_snackbar(msg, `🚫 У вас недостаточно прав для использования этого события`)
         await event.func(msg, args, sender)
     } catch (error) {
         console.log(error)

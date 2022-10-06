@@ -61,7 +61,7 @@ export async function stats(msg, args, sender) {
         text += `🔹 Форум: `
         text += user.forum && user.forum != "{}" ? `${user.forum}\n` : `Не привязан\n`
         text += `🔹 Telegram: `
-        text += user.telegram ? `${user.telegram}\n` : `Не привязан\n`
+        text += user.telegramTag ? `t.me/${user.telegramTag}\n` : `Не привязан\n`
         warning += user.adminInfo.block ? `🔸 Данному пользователю запрещено занимать пост администратора!\n` : ``
         if (user.access == 0) {
             text += `\n📚 Архивные данные: \n`
