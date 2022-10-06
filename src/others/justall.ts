@@ -5,7 +5,7 @@ const supabaseJA = createClient(process.env.SUPABASE_URL_JA, process.env.SUPABAS
 
 async function justallReloadCommand(msg) {
     await justallReload()
-    msg.send("✅ База данных JustAll была обновлена!")
+    await msg.send("✅ База данных JustAll была обновлена!")
 }
 
 export async function justallReload() {
@@ -17,7 +17,7 @@ export async function justallReload() {
 
 export async function justallCommand(msg) {
     if (msg.text.split(' ').length < 2) {
-        return msg.send({message: helpJustall, dont_parse_links: true})}
+        return await msg.send({message: helpJustall, dont_parse_links: true})}
     let command = msg.text.split(' ')[1]
     let args = msg.text.split(' ').slice(2)
     let checkCommand = {
@@ -33,7 +33,7 @@ export async function justallCommand(msg) {
         await checkCommand[command](msg, args)
     }
     else {
-        msg.send({message: helpJustall, dont_parse_links: true})
+        await msg.send({message: helpJustall, dont_parse_links: true})
     }
 }
 
@@ -46,26 +46,26 @@ async function justallDelete(msg, args) {
     if (error) {
         console.error(`Logs » Не удалось удалить проект с id ${id}!`)
         console.error(error)
-        msg.send(`🚫 Не удалось удалить проект с id ${id}!`)
+        await msg.send(`🚫 Не удалось удалить проект с id ${id}!`)
     }
     else {
         console.log(`Logs » Удаление проекта с id ${id} прошло успешно!`)
-        msg.send(`✅ Удаление проекта проекта с id ${id} прошло успешно!`)
+        await msg.send(`✅ Удаление проекта проекта с id ${id} прошло успешно!`)
         await justallReload()
     }
 }
 
 async function justallAdd(msg) {
     let name = msg.text.split('Название: ')[1].split('\n')[0].trim()
-    if (!name) return msg.send('🚫 Введите корректное имя 🚫')
+    if (!name) return await msg.send('🚫 Введите корректное имя 🚫')
     let link = msg.text.split('Ссылка: ')[1].split('\n')[0].trim()
-    if (!link) return msg.send('🚫 Введите корректную ссылку 🚫')
+    if (!link) return await msg.send('🚫 Введите корректную ссылку 🚫')
     let description = msg.text.split('Описание: ')[1].split('\n')[0].trim()
-    if (!description) return msg.send('🚫 Введите корректное описание 🚫')
+    if (!description) return await msg.send('🚫 Введите корректное описание 🚫')
     let icon = msg.text.split('Иконка: ')[1].split('\n')[0].trim()
-    if (!icon) return msg.send('🚫 Введите корректную иконку 🚫')
+    if (!icon) return await msg.send('🚫 Введите корректную иконку 🚫')
     let tags = msg.text.split('Теги: ')[1].split('\n')[0]
-    if (!tags) return msg.send('🚫 Введите корректные теги 🚫')
+    if (!tags) return await msg.send('🚫 Введите корректные теги 🚫')
     tags = tags.trim().split(',').map(t => Number(t.trim()))
 
     const {error} = await supabaseJA
@@ -80,11 +80,11 @@ async function justallAdd(msg) {
     if (error) {
         console.error(`Logs » Не удалось создать новый проект "${name}"!`)
         console.error(error)
-        msg.send(`🚫 Не удалось создать новый проект "${name}"!`)
+        await msg.send(`🚫 Не удалось создать новый проект "${name}"!`)
     }
     else {
         console.log(`Logs » Создание нового проекта "${name}" прошло успешно!`)
-        msg.send(`✅ Создание нового проекта "${name}" прошло успешно!`)
+        await msg.send(`✅ Создание нового проекта "${name}" прошло успешно!`)
         await justallReload()
     }
 }
@@ -102,11 +102,11 @@ async function justallConnect(msg, args) {
     if (error) {
         console.error(`Logs » Не удалось привязать новую социальную сеть!`)
         console.error(error)
-        msg.send(`🚫 Не удалось привязать новую социальную сеть!`)
+        await msg.send(`🚫 Не удалось привязать новую социальную сеть!`)
     }
     else {
         console.log(`Logs » Подключение новой социальной сети прошло успешно!`)
-        msg.send(`✅ Подключение новой социальной сети прошло успешно!`)
+        await msg.send(`✅ Подключение новой социальной сети прошло успешно!`)
         await justallReload()
     }
 }
@@ -121,11 +121,11 @@ async function justallDisconnect(msg, args) {
     if (error) {
         console.error(`Logs » Не удалось отключить социальную сеть!`)
         console.error(error)
-        msg.send(`🚫 Не удалось отключить социальную сеть!`)
+        await msg.send(`🚫 Не удалось отключить социальную сеть!`)
     }
     else {
         console.log(`Logs » Отключение социальной сети прошло успешно!`)
-        msg.send(`✅ Отключение социальной сети прошло успешно!`)
+        await msg.send(`✅ Отключение социальной сети прошло успешно!`)
         await justallReload()
     }
 }

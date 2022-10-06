@@ -8,7 +8,7 @@ export async function msgCommand(msg, args, sender) {
     let error = true
     for (let c = chats.length - 1; c >= 0; c--) {
         if (chats[c].name == frac) {
-            if (chats[c].access > sender.access) return msg.send({
+            if (chats[c].access > sender.access) return await msg.send({
                 message: "🚫 | У вас недостаточно прав для отправки сообщения в эту фракцию!",
                 dont_parse_links: true
             })
@@ -37,6 +37,6 @@ export async function msgCommand(msg, args, sender) {
             break
         }
     }
-    if (error) return msg.send(`🚫 | Чат не найден!\n\n${helpMsg}`)
-    else msg.send("✅ | Сообщение успешно отправлено!")
+    if (error) return await msg.send(`🚫 | Чат не найден!\n\n${helpMsg}`)
+    else await msg.send("✅ | Сообщение успешно отправлено!")
 }

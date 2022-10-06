@@ -4,12 +4,12 @@ import {vkGroup} from "../bots";
 
 export async function commandForum(msg, args, sender) {
     const action = args[0]
-    if (action != 'delete' && action != 'close' && action != 'pin' && action != 'unpin' && action != 'open') return msg.send({message: `🚫 Неверный аргумент! 🚫`, disable_mentions: 1})
+    if (action != 'delete' && action != 'close' && action != 'pin' && action != 'unpin' && action != 'open') return await msg.send({message: `🚫 Неверный аргумент! 🚫`, disable_mentions: 1})
     const url = args[1]
-    if (!isURL(url)) return msg.send("🚫 Неверный формат ссылки! 🚫")
+    if (!isURL(url)) return await msg.send("🚫 Неверный формат ссылки! 🚫")
     const formCheck = await getForm(url)
-    if (formCheck) return msg.send({message: `🚫 Нельзя сразу отправить 2 форму без ответа по первой! 🚫`, disable_mentions: 1})
-    msg.send(`📝 Заявка на ${action} отправлена! 📝`)
+    if (formCheck) return await msg.send({message: `🚫 Нельзя сразу отправить 2 форму без ответа по первой! 🚫`, disable_mentions: 1})
+    await msg.send(`📝 Заявка на ${action} отправлена! 📝`)
     if (action != 'delete') {
         await formSend(sender, url, action)
         const id = await getForm(url)
@@ -36,8 +36,8 @@ export async function commandForum(msg, args, sender) {
 export async function commandForumAccept(msg, args) {
     const id = args[0]
     const form = await getForm(id)
-    if (!form) return msg.send("🚫 Заявка не найдена! 🚫")
-    else if (form.status) return msg.send("🚫 Заявка уже обработана! 🚫")
+    if (!form) return await msg.send("🚫 Заявка не найдена! 🚫")
+    else if (form.status) return await msg.send("🚫 Заявка уже обработана! 🚫")
     let formCommand = '!f'
     if (form.action == `open`) formCommand += 'close 0 '
     else if (form.action == 'close') formCommand += 'close 1 '
@@ -56,14 +56,14 @@ export async function commandForumAccept(msg, args) {
         random_id: 0,
         disable_mentions: 1
     })
-    msg.send("📝 Заявка успешно обработана! 📝")
+    await msg.send("📝 Заявка успешно обработана! 📝")
 }
 
 export async function commandForumDecline(msg, args) {
     const id = args[0]
     const form = await getForm(id)
-    if (!form) return msg.send("🚫 Заявка не найдена! 🚫")
-    else if (form.status) return msg.send("🚫 Заявка уже обработана! 🚫")
+    if (!form) return await msg.send("🚫 Заявка не найдена! 🚫")
+    else if (form.status) return await msg.send("🚫 Заявка уже обработана! 🚫")
     form.status = true
     form.url = await getShortURL(form.url)
     await saveForm(form)
@@ -75,7 +75,7 @@ export async function commandForumDecline(msg, args) {
         random_id: 0,
         disable_mentions: 1
     })
-    msg.send("📝 Заявка отклонена! 📝")
+    await msg.send("📝 Заявка отклонена! 📝")
 }
 
 export async function formSend(sender, url, action) {
@@ -126,11 +126,11 @@ export async function getFullForum(msg) {
         for (const form of data) {
             if (!form.status) text += `📝 ${form.id}. ${form.url}\n`
         }
-        if (text == ``) return msg.send(`🚫 Нет заявок! 🚫`)
+        if (text == ``) return await msg.send(`🚫 Нет заявок! 🚫`)
         else {
             text += `\n✅ Для одобрения заявки введите: /facc [id]`
             text += `\n🚫 Для отказа заявки введите: /fdec [id]`
-            msg.send(`📝 Список заявок на форуме: 📝\n\n` + text)
+            await msg.send(`📝 Список заявок на форуме: 📝\n\n` + text)
         }
     }
 }

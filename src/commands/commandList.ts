@@ -15,7 +15,7 @@ export async function listUsers(msg, args, sender) {
     let text = `📊 Список пользователей: 📊\n\n`
     if (group == "candidates" && sender.access > 4) {
         const data = await getFullData("candidates")
-        if (!data) return msg.send({ message: `🚫 Не найдено ни одного кандидата! 🚫`, disable_mentions: 1 })
+        if (!data) return await msg.send({ message: `🚫 Не найдено ни одного кандидата! 🚫`, disable_mentions: 1 })
         for (const user of data) {
             const rank = await getRankData(user.rank)
             text += `🔹 ${rank.name} @id${user.vk_id} [${user.rank}]`
@@ -25,7 +25,7 @@ export async function listUsers(msg, args, sender) {
     } else {
         const data = await getFullData("users")
         for (const user of data) {
-            if (!data)  msg.send({ message: `🚫 Не найдено ни одного пользователя! 🚫`, disable_mentions: 1 })
+            if (!data)  await msg.send({ message: `🚫 Не найдено ни одного пользователя! 🚫`, disable_mentions: 1 })
             if (((groups.includes(user.access) || groups[0] == -1) && (user.frac != -1 || group == "dev")) && (user.access != 0 || groups[0] == 0)) {
                 let postStart = moment(user.post)
                 let postEnd = moment(postStart).add(user.term, 'days')
@@ -37,5 +37,5 @@ export async function listUsers(msg, args, sender) {
             }
         }
     }
-    msg.send({message: text, disable_mentions: 1})
+    await msg.send({message: text, disable_mentions: 1})
 }

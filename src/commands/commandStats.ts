@@ -67,6 +67,6 @@ export async function stats(msg, args, sender) {
             text += `🔸 Возраст: ${user.age} лет\n`
         }
         text += `\n${warning}`
-        msg.send({message: text, disable_mentions: 1})
+        await msg.send({message: text, disable_mentions: 1})
     }
 }

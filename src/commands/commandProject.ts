@@ -19,7 +19,7 @@ export async function stopProject(msg, args, sender) {
 
 export async function pauseProject(msg) {
     const text = works ? `Работа всех модулей приостановлена!` : `Работа всех модулей возобновлена!`
-    msg.send(`✅ ${text}`)
+    await msg.send(`✅ ${text}`)
     console.log(`Logs » ${text}`)
     works = !works
 }
@@ -40,6 +40,6 @@ export async function project(msg, args, sender) {
         "upfraction": reloadFractions,
         "status": statusProject,
     }
-    if (!actions[args[0]]) return msg.send(`🚫 Данное действие не найдено! 🚫\n${helpEsida}`)
+    if (!actions[args[0]]) return await msg.send(`🚫 Данное действие не найдено! 🚫\n${helpEsida}`)
     await actions[args[0]](msg, args, sender)
 }

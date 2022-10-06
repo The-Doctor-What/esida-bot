@@ -10,14 +10,14 @@ export async function getOnlineUser(msg, args, sender) {
     else nick = sender.nick
     if (args[1]) {
         if (await getAccess(msg.senderId, 5)) server = args[1]
-        else return msg.send({message: `🚫 У вас нет доступа к получению онлайна игрока с другого сервера`})
+        else return await msg.send({message: `🚫 У вас нет доступа к получению онлайна игрока с другого сервера`})
     }
     let checkAdmin = await getAdminInfo(nick)
     if (checkAdmin != undefined) {
-        if (!await getAccess(msg.senderId, 5)) return msg.send(`🚫 | Вы не можете получить онлайн администратора`)
+        if (!await getAccess(msg.senderId, 5)) return await msg.send(`🚫 | Вы не можете получить онлайн администратора`)
     }
     let online = await getOnline(nick, server)
-    if (online.error) return msg.send(`🚫 | ${online.msg}`)
+    if (online.error) return await msg.send(`🚫 | ${online.msg}`)
     let text = `📊 Онлайн игрока ${nick}:`
     text += `\n🔸 Сервер: ${server}\n\n`
     let time = moment()
@@ -27,7 +27,7 @@ export async function getOnlineUser(msg, args, sender) {
     text += `\n\n🔸 Онлайн за текущую неделю\n\n`
     text += await getOnlineText(time, online, "dddd")
     text += `\nПока что общий онлайн за неделю не работает корректно`
-    msg.send(text)
+    await msg.send(text)
 }
 
 export async function getOnlineText(time, online, format = "DD MMM") {

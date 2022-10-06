@@ -31,8 +31,8 @@ export async function getShortURL(url) {
     return `vk.cc/${short.key}`
 }
 
-export function getID(msg) {
-    msg.send(`ID чата: ${msg.chatId}`)
+export async function getID(msg) {
+    await msg.send(`ID чата: ${msg.chatId}`)
 }
 
 export async function chatsActions(msg, user, action = "add") {
@@ -45,7 +45,7 @@ export async function chatsActions(msg, user, action = "add") {
 }
 
 export async function sendMessage(id, msg) {
-    if (userid == id) return msg.send('🚫 | Вы не можете отправить сообщение боту!')
+    if (userid == id) return await msg.send('🚫 | Вы не можете отправить сообщение боту!')
     let message = dedent`Приветик я Эвелина, давай сразу на ты! Я рада за тебя так как ты возможно будущий руководитель гос. организации, но если ты видишь, это сообщение, значит ты был одобрен.
 Сначала тебе надо будет добавить меня в друзья,
 Потом просто заполни форму - /form`
@@ -55,7 +55,7 @@ export async function sendMessage(id, msg) {
             user_id: id,
             text: message,
         })
-        msg.send('🚫 | У пользователя закрыты личные сообщения, поэтому я отправила ему заявку в друзья!')
+        await msg.send('🚫 | У пользователя закрыты личные сообщения, поэтому я отправила ему заявку в друзья!')
         return
     } else {
         await vkUser.api.messages.send({
@@ -63,7 +63,7 @@ export async function sendMessage(id, msg) {
             message: message,
             random_id: 0
         })
-        msg.send('✅ | Отправила форму на пост руководителя!')
+        await msg.send('✅ | Отправила форму на пост руководителя!')
     }
 }
 

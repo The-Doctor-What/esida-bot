@@ -5,7 +5,7 @@ export const helpJustall = dedent`
         Для получения списка тегов: /justall tags
         Для получения списка проектов: /justall projects
         Для удаление проекта: /justall delete [ID]
-        Для полключения социальной сети: /justall connect [icon] [url]
+        Для подключения социальной сети: /justall connect [icon] [url]
         Для отключения социальной сети: /justall disconnect [url]
         
         Для добавления проекта: 

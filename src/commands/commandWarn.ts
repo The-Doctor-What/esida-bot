@@ -40,7 +40,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     else if (args[1].startsWith("-")) action = "-"
     let count = args[1].replace(/[^0-9]/g, "")
     count = parseInt(count)
-    if(!count) return msg.send("🚫 Неверное количество! 🚫")
+    if(!count) return await msg.send("🚫 Неверное количество! 🚫")
     let reason = args.slice(2).join(" ")
     let time = moment()
     let data = await checkUser(msg, args[0], sender, false)
@@ -49,7 +49,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     let actionText = "Установил"
     if (action == "+") actionText = "Выдал"
     else if (action == "-") actionText = "Снял"
-    if (data.access >= sender.access) return msg.send(`🚫 Вы не можете использовать это на пользователя с таким же или большим уровнем доступа! 🚫`)
+    if (data.access >= sender.access) return await msg.send(`🚫 Вы не можете использовать это на пользователя с таким же или большим уровнем доступа! 🚫`)
     text += `🔹 ${actionText}${await getGender(msg.senderId)} ${count} ${type.name}\n`
     if (type.tag == "score" && action == "+") {
         data.litrbol += count
@@ -61,7 +61,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     text += await checkData(data)
     text += `🔸 Причина: ${reason}\n🔸 Время: ${time.format("DD.MM.YYYY HH:mm:ss")}\n🔸 Пользователю: @id${data.vk_id} (${data.nick})\n\n`
     await saveUser(data)
-    msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
+    await msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
     let chat = await getFraction(data.frac, "chat")
     if (data.access < 5 && chat != msg.chatId) await vkGroup.api.messages.send({chat_id: chat, message: text, dont_parse_links: 1, disable_mentions: 1, random_id: 0})
 }

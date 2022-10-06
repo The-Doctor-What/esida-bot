@@ -18,13 +18,13 @@ export async function setDataUser(msg, args, sender) {
         "access": "access",
         "type_add": "type_add",
     }
-    if (!checkType[type]) return msg.send({message: helpSet, dont_parse_links: true})
+    if (!checkType[type]) return await msg.send({message: helpSet, dont_parse_links: true})
     if (checkType[type] == "rpbio" || checkType[type] == "characteristic" || checkType[type] == "forum") {
         value = await getShortURL(value)
-        if (!value) return msg.send('🚫 Введите url форума! 🚫')
+        if (!value) return await msg.send('🚫 Введите url форума! 🚫')
     }
-    if (type == "access" && !await getAccess(msg.senderId, 69)) return msg.send({message: "🚫 | У вас недостаточно прав для выполнения этой команды!", dont_parse_links: true})
+    if (type == "access" && !await getAccess(msg.senderId, 69)) return await msg.send({message: "🚫 | У вас недостаточно прав для выполнения этой команды!", dont_parse_links: true})
     user[checkType[type]] = value
     await saveUser(user)
-    msg.send({message: "✅ | Данные успешно изменены"})
+    await msg.send({message: "✅ | Данные успешно изменены"})
 }

@@ -122,16 +122,16 @@ export async function checkUser(msg, user, sender, archive = true) {
     if (sender) access = sender.access
     let data = await getUserData(id)
     if (!data) {
-        msg.send({
+        await msg.send({
             message: `🚫 Пользователь не найден, если вы уверены, что он зарегистрирован, обратитесь к @id${devId} (разработчику)! 🚫`,
             disable_mentions: 1
         })
         return undefined
     } else if (data.access == 0 && access < 5) {
-        msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
+        await msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
         return undefined
     } else if (data.access == 0 && !archive) {
-        msg.send({message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`, disable_mentions: 1})
+        await msg.send({message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`, disable_mentions: 1})
         return undefined
     } else return data
 }
