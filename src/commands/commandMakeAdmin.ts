@@ -1,4 +1,4 @@
-import {checkUser} from "../database";
+import {checkUser, saveUser} from "../database";
 import {vkUser} from "../bots";
 import {commandSend, getGender} from "../others/utils";
 import dedent from "dedent-js";
@@ -6,6 +6,7 @@ import dedent from "dedent-js";
 export async function commandMakeAdmin(msg, args, sender) {
     const user = await checkUser(msg, args[0], sender)
     if (!user) return
+    if (user.adminInfo.block) return await msg.send("🚫 Данному пользователю запрещено занимать пост администратора!")
     const message = dedent(`Приветик, ${user.nick} поздравляю тебе, ты стал${await getGender(user.vk_id)} кандидатом на пост администратора!
     
     Для того что бы встать на пост администратора, тебе нужно выполнить несколько действий
@@ -27,5 +28,21 @@ export async function commandMakeAdmin(msg, args, sender) {
         random_id: 0
     })
     await commandSend(`!padm @id${user.vk_id}`)
+    await commandSend(dedent(`Logs:
+    ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!
+    `))
+    user.adminInfo.userPost = sender.vk_id
+    await saveUser(user)
     await msg.send(`🎉 Пользователь @id${user.vk_id} (${user.nick}) успешно стал кандидатом в администрацию! 🎉`)
+}
+
+export async function commandAdminBlock(msg, args, sender) {
+    const user = await checkUser(msg, args[0], sender, false)
+    if (!user) return
+    let text = `Пользователю @id${user.vk_id} (${user.nick}) теперь `
+    text += user.adminInfo.block ? `разрешено ` : `запрещено `
+    text += `занимать пост администратора!`
+    await msg.send(`✅ ${text}`)
+    user.adminInfo.block = !user.adminInfo.block
+    await saveUser(user)
 }

@@ -58,7 +58,11 @@ export async function stats(msg, args, sender) {
         }
         if (user.frac == 30) text += `🔹 Репутация: ${user.rep}\n`
         text += `🔹 Discord: ${user.discord}\n`
-        if (user.forum && user.forum != "{}") text += `🔹 Форум: ${user.forum}\n`
+        text += `🔹 Форум: `
+        text += user.forum && user.forum != "{}" ? `${user.forum}\n` : `Не привязан\n`
+        text += `🔹 Telegram: `
+        text += user.telegram ? `${user.telegram}\n` : `Не привязан\n`
+        warning += user.adminInfo.block ? `🔸 Данному пользователю запрещено занимать пост администратора!\n` : ``
         if (user.access == 0) {
             text += `\n📚 Архивные данные: \n`
             text += `\n🔸 Снят${await getGender(user.vk_id)} по причине: ${user.reason}\n`
