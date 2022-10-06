@@ -1,6 +1,6 @@
 import {getID} from "../others/utils";
 import {addText, form, fracs, promotion, recovery, removedCandidate, uval} from "../personnel";
-import {help, newHelp} from "./commandHelp";
+import {helpCommand} from "./commandHelp";
 import {stats} from "./commandStats";
 import {listUsers} from "./commandList";
 import {
@@ -52,7 +52,7 @@ export class Command {
 
 export const commandsInfo: Command[] = [
     new Command("id", 0, ["chat_id"], getID, "Получить ID беседы",),
-    new Command("help", 0, ["ehelp"], help, "Помощь по командам", "[команда]"),
+    new Command("help", 0, ["ehelp"], helpCommand, "Помощь по командам", "[команда]"),
     new Command("fracs", 0, [], fracs, "Список фракций"),
     new Command("stats", 0, ["info", "find"], stats, "Статистика пользователя", "[user]"),
     new Command("list", 0, [], listUsers, "Список пользователей", "[group]", 0, helpList),
@@ -80,7 +80,6 @@ export const commandsForum: Command[] = [
 
 export const commandsDev: Command[] = [
     new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
-    new Command("newhelp", 69, [], newHelp, "Помощь по командам", "[команда]"),
     new Command("shop", 69, [], commandShop, "Обменник баллов"),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
