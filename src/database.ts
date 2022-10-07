@@ -66,10 +66,12 @@ export async function getUserData(user, table = "users") {
     }
 }
 
-export async function getFullData(table = "users") {
+export async function getFullData(table = "users", order = "id") {
     const {data, error} = await supabase
         .from(table)
-        .select("*").order('access', {ascending: false})
+        .select("*")
+        .order('access', {ascending: false})
+        .order(order)
     if (error || !data) {
         console.error(`Logs » Не удалось получить информацию о пользователе:`)
         console.error(error)

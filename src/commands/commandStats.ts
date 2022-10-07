@@ -10,17 +10,16 @@ moment.locale('ru')
 export async function stats(msg, args, sender) {
     let user = msg.senderId
     if (args.length > 0) user = args[0]
-    let text = ``
     user = await checkUser(msg, user, sender)
     if (user == undefined) return
     else {
         let access: number
         if (user.access > 0) access = user.access
         else access = user.oldaccess
-        let postStart = moment(user.post)
-        let postEnd = moment(postStart).add(user.term, 'days')
+        const postStart = moment(user.post)
+        const postEnd = moment(postStart).add(user.term, 'days')
         let warning = ``
-        text = `📊 Статистика пользователя: @id${user.vk_id} (${user.nick}) 📊\n\n`
+        let text = `📊 Статистика пользователя: @id${user.vk_id} (${user.nick}) 📊\n\n`
         text += `🔹 Должность: ${user.rank} [D: `
         if (user.access > 0 && user.access < 69) text += ` ${access}]\n`
         else if (user.access >= 69) text += ` DEV]\n`

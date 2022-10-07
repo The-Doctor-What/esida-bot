@@ -23,7 +23,7 @@ export async function listUsers(msg, args, sender) {
             text += `\n`
         }
     } else {
-        const data = await getFullData("users")
+        const data = await getFullData("users", "frac")
         for (const user of data) {
             if (!data)  await msg.send({ message: `🚫 Не найдено ни одного пользователя! 🚫`, disable_mentions: 1 })
             if (((groups.includes(user.access) || groups[0] == -1) && (user.frac != -1 || group == "dev")) && (user.access != 0 || groups[0] == 0)) {
