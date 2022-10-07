@@ -2,6 +2,8 @@ import {getUserData} from "../database";
 import {works} from "../commands/commandProject";
 import {events} from "./events";
 import {vkGroup} from "../bots";
+import {Keyboard} from "vk-io";
+import {getError} from "../commands/commandSystem";
 
 vkGroup.updates.on('message_event', async msg => await eventSystem(msg))
 
@@ -15,13 +17,23 @@ export async function eventSystem(msg) {
         }
         let sender = await getUserData(msg.userId)
         if (!sender) sender = {vk_id: msg.userId, access: 0}
-        if (!works && command != "esida") return
+        if (!works) return
         const event = events.find(x => x.name == command)
         if (!event) return await show_snackbar(msg, "🚫 Не найдено событие с таким названием! 🚫")
         if (event.access > sender.access) return await show_snackbar(msg, `🚫 У вас недостаточно прав для использования этого события`)
         await event.func(msg, args, sender)
     } catch (error) {
-        console.log(error)
+        try {
+            const {keyboard} = await getError(error, "eventSystem")
+            await vkGroup.api.messages.send({
+                chat_id: 41,
+                message: `🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`,
+                keyboard: keyboard,
+                random_id: 0
+            })
+        } catch {
+            console.log(error)
+        }
         await show_snackbar(msg, "Произошла ошибка при выполнении события!")
     }
 }
@@ -35,5 +47,17 @@ export async function show_snackbar(event, text) {
             type: "show_snackbar",
             text: `${text}`
         })
+    })
+}
+
+export async function getHomeButton(command, sender) {
+    return Keyboard.callbackButton({
+        label: 'Вернуться в главное меню',
+        color: `primary`,
+        payload: {
+            command: command,
+            args: ["main"],
+            sender: sender.vk_id
+        }
     })
 }

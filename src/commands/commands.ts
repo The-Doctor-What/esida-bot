@@ -98,7 +98,7 @@ export const commandsOthers: Command[] = [
     new Command("msg", 4, [], msgCommand, "Отравить сообщение в беседу всем пользователям", "[Министерство] [Сообщение]", 2, helpMsg),
     new Command("adminblock", 6, [], commandAdminBlock, "Разрешить или запретить пользователю занимать пост администратора", "[user]", 1),
     new Command("makeadmin", 7, [], commandMakeAdmin, "Сделать пользователя кандидатом на пост администратора", "[user]", 1),
-    new Command("shop", 1, [], commandShop, "Обменник баллов"),
+    new Command("shop", 2, [], commandShop, "Обменник баллов"),
 ]
 
 export const commands: Command[] = [

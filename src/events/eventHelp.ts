@@ -9,6 +9,7 @@ import {
 import {vkGroup} from "../bots";
 import {helpGroup, helpMain} from "../commands/commandHelp";
 import {Keyboard} from "vk-io";
+import {getHomeButton} from "./eventSystem";
 
 export async function eventHelp(event, args, sender) {
     let access = 0
@@ -22,7 +23,7 @@ export async function eventHelp(event, args, sender) {
     else if (args[0] == "dev") group = commandsDev
     else if (args[0] == "main") {
         const {text, keyboard} = await helpMain(sender)
-        await vkGroup.api.messages.edit({
+        return await vkGroup.api.messages.edit({
             peer_id: event.peerId,
             message: text,
             keyboard: keyboard,
@@ -33,15 +34,7 @@ export async function eventHelp(event, args, sender) {
     const keyboard = Keyboard
         .keyboard([
                 [
-                    Keyboard.callbackButton({
-                        label: 'Вернуться на главную',
-                        color: `primary`,
-                        payload: {
-                            command: "help",
-                            args: ["main"],
-                            sender: sender.vk_id
-                        }
-                    }),
+                    await getHomeButton("help",sender)
                 ],
             ]
         ).inline(true)
