@@ -55,17 +55,15 @@ export async function eventShopBuy(event, args, sender) {
             })
         }
     } else if (section == "unpunish") {
-        if (value == "vigs" && (await checkBuy(event, sender, price, 1, "vigs"))) {
+        if (value == "vigs" && sender.vigs >= 1) {
             sender[value]--
             await addHistory(sender, value, 1, `Покупка в магазине`, `-`, userid)
-        } else if (value == "warns") {
-            if (sender.warns >= 1 || sender.vigs >= 1){
-                sender[value]--
-                await addHistory(sender, value, 1, `Покупка в магазине`, `-`, userid)
-            } else {
-                sender.score += price
-                await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
-            }
+        } else if (value == "warns" && (sender.warns >= 1 || sender.vigs >= 1)) {
+            sender[value]--
+            await addHistory(sender, value, 1, `Покупка в магазине`, `-`, userid)
+        } else {
+            sender.score += price
+            await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
         }
     } else if (section == "litrbol") {
         const count = await random(100, 200)
