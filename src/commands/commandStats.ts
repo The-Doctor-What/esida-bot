@@ -2,7 +2,8 @@ import {checkUser, getFraction} from "../database";
 import moment from "moment";
 import {getAdminInfo} from "../others/aliensAPI";
 import {congressRanks} from "../personnel";
-import {getGender} from "../others/utils";
+import {getGender, isURL} from "../others/utils";
+import {Keyboard} from "vk-io";
 
 moment.locale('ru')
 
@@ -58,10 +59,19 @@ export async function stats(msg, args, sender) {
         }
         if (user.frac == 30) text += `🔹 Репутация: ${user.rep}\n`
         text += `🔹 Discord: ${user.discord}\n`
-        text += `🔹 Форум: `
-        text += user.forum && user.forum != "{}" ? `${user.forum}\n` : `Не привязан\n`
-        text += `🔹 Telegram: `
-        text += user.telegramTag ? `t.me/${user.telegramTag}\n` : `Не привязан\n`
+        let keyboard = undefined
+        try {
+            keyboard = Keyboard
+                .keyboard([
+                    [
+                        await checkUrlButton(`https://${user.forum}`, "Форум"),
+                        await checkUrlButton(`https://t.me/${user.telegramTag}`, "Telegram")
+                    ]
+                ]).inline(true)
+        } catch {
+            text += user.forum && user.forum != "{}" ? `🔹 Форум: ${user.forum}\n` : `🔹 Форум: Не привязан\n`
+            text += user.telegramTag ? `🔹 Telegram: t.me/${user.telegramTag}\n` : `🔹 Telegram: Не привязан\n`
+        }
         warning += user.adminInfo.block ? `🔸 Данному пользователю запрещено занимать пост администратора!\n` : ``
         if (user.access == 0) {
             text += `\n📚 Архивные данные: \n`
@@ -71,6 +81,17 @@ export async function stats(msg, args, sender) {
             text += `🔸 Возраст: ${user.age} лет\n`
         }
         text += `\n${warning}`
-        await msg.send({message: text, disable_mentions: 1})
+        if (keyboard) await msg.send({message: text, disable_mentions: 1, keyboard: keyboard})
+        else await msg.send({message: text, disable_mentions: 1})
+
+    }
+}
+
+export async function checkUrlButton(link, text) {
+    if (isURL(link)) {
+        return Keyboard.urlButton({
+            url: link.toString(),
+            label: text
+        })
     }
 }

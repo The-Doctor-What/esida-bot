@@ -5,6 +5,7 @@ import {show_snackbar} from "../events/eventSystem";
 import {products} from "./products";
 import {purchase} from "../events/eventShop";
 import {getPrice} from "../commands/commandShop";
+import {commandSend} from "../others/utils";
 
 export async function shopSystem(event, sender, name) {
     try {
@@ -19,12 +20,7 @@ export async function shopSystem(event, sender, name) {
     } catch (error) {
         try {
             const {keyboard} = await getError(error, "shopSystem")
-            await vkGroup.api.messages.send({
-                chat_id: 41,
-                message: `🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`,
-                keyboard: keyboard,
-                random_id: 0
-            })
+            await commandSend(`🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`, 41, vkGroup, keyboard)
         } catch {
             console.log(error)
         }

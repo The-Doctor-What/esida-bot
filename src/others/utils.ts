@@ -8,10 +8,17 @@ export async function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function commandSend(cmd, id = 100, vk = vkUser) {
-    await vk.api.messages.send({
+export async function commandSend(cmd, id = 100, vk = vkUser, keyboard: any = undefined) {
+    if (keyboard == undefined) {
+        await vk.api.messages.send({
+            chat_id: id,
+            message: cmd,
+            random_id: 0
+        })
+    } else await vk.api.messages.send({
         chat_id: id,
         message: cmd,
+        keyboard: keyboard,
         random_id: 0
     })
 }
@@ -102,7 +109,7 @@ export async function genCode() {
     let code = "";
     for (let i = 0; i <= length; i++) {
         const randomNumber = Math.floor(Math.random() * chars.length);
-        code += chars.substring(randomNumber, randomNumber +1);
+        code += chars.substring(randomNumber, randomNumber + 1);
     }
     return code
 }

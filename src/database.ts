@@ -131,7 +131,10 @@ export async function checkUser(msg, user, sender, archive = true) {
         await msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
         return undefined
     } else if (data.access == 0 && !archive) {
-        await msg.send({message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`, disable_mentions: 1})
+        await msg.send({
+            message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`,
+            disable_mentions: 1
+        })
         return undefined
     } else return data
 }

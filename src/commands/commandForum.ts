@@ -2,6 +2,7 @@ import {commandSend, getShortURL, isURL} from "../others/utils";
 import {getFraction, getUserData, supabase} from "../database";
 import {vkGroup} from "../bots";
 import {Keyboard} from "vk-io";
+import {checkUrlButton} from "./commandStats";
 
 export async function commandForum(msg, args, sender) {
     const action = args[0]
@@ -22,6 +23,9 @@ export async function commandForum(msg, args, sender) {
         const id = await getForm(url)
         const keyboard = Keyboard
             .keyboard([
+                    [
+                        await checkUrlButton(url, 'Перейти к теме')
+                    ],
                     [
                         Keyboard.callbackButton({
                             label: 'Принять',
