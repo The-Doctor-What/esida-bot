@@ -3,7 +3,9 @@ import {vkGroup} from "../bots";
 import {show_snackbar} from "./eventSystem";
 import {commandSend, random} from "../others/utils";
 import dedent from "dedent-js";
-import {getFraction, saveUser} from "../database";
+import {getFraction, saveUser, userid} from "../database";
+import {checkData} from "../commands/commandWarn";
+import {addHistory} from "../commands/commandHistory";
 
 export async function eventShop(event, args, sender) {
     const {text, keyboard} = await getShopMenu(sender, args[0])
@@ -40,41 +42,38 @@ export async function eventShopBuy(event, args, sender) {
                 random_id: 0
             })
         } else if (value == "term") {
-            if (sender.limitShop.days >= 1) sender.term--
-            else {
-                sender.score += price
-                await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
-            }
+            if (await checkBuy(event, sender, price, 1, "days")) sender.term--
         } else if (value == "term-2") {
-            if (sender.limitShop.days >= 2) sender.term -= 2
-            else {
-                sender.score += price
-                await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
-            }
+            if (await checkBuy(event, sender, price, 2, "days")) sender.term -= 2
         } else if (value == "norm") {
-            if (sender.limitShop.norm >= 1) await vkGroup.api.messages.send({
+            if (await checkBuy(event, sender, price, 1, "norm")) await vkGroup.api.messages.send({
                 chat_id: chat,
                 message: `${sender.rank} @id${sender.vk_id} (${sender.nick}) приобрел -3 часа к норме за баллы!`,
                 dont_parse_links: 1,
                 disable_mentions: 1,
                 random_id: 0
             })
-            else {
+        }
+    } else if (section == "unpunish") {
+        if (value == "vigs" && (await checkBuy(event, sender, price, 1, "vigs"))) {
+            sender[value]--
+            await addHistory(sender, value, 1, `Покупка в магазине`, `-`, userid)
+        } else if (value == "warns") {
+            if (sender.warns >= 1 || sender.vigs >= 1){
+                sender[value]--
+                await addHistory(sender, value, 1, `Покупка в магазине`, `-`, userid)
+            } else {
                 sender.score += price
                 await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
             }
         }
-    } else if (section == "unpunish") {
-        if (sender.warns >= 1 || sender.vigs >= 1) {
-            sender[value]--
-        } else {
-            sender.score += price
-            await show_snackbar(event, "У вас нет ни одного предупреждения или выговора!")
-        }
     } else if (section == "litrbol") {
-        sender.litrbol += await random(100, 200)
+        const count = await random(100, 200)
+        sender.litrbol += count
+        await addHistory(sender, `litrbol`, count, `Покупка в магазине`, `+`, userid)
     }
     await saveUser(sender)
+    if (sender.access < 5) await checkData(sender)
     await show_snackbar(event, "Покупка прошла успешно!")
 }
 
@@ -90,7 +89,17 @@ export async function purchase(event, sender, price) {
         return false
     } else {
         sender.score -= price
+        await addHistory(sender, `score`, price, `Покупка в магазине`, `-`, userid)
         await saveUser(sender)
         return true
+    }
+}
+
+export async function checkBuy(event, sender, price, limit, value) {
+    if (sender.limitShop[value] >= limit) return true
+    else {
+        sender.score += price
+        await show_snackbar(event, "Вы больше не можете приобрести этот предмет!")
+        return false
     }
 }

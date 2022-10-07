@@ -8,7 +8,6 @@ import {
 } from "../commands/commands";
 import {vkGroup} from "../bots";
 import {helpGroup, helpMain} from "../commands/commandHelp";
-import {show_snackbar} from "./eventSystem";
 import {Keyboard} from "vk-io";
 
 export async function eventHelp(event, args, sender) {
@@ -29,7 +28,6 @@ export async function eventHelp(event, args, sender) {
             keyboard: keyboard,
             conversation_message_id: event.conversationMessageId
         })
-        return await show_snackbar(event, "Вы находитесь в главном меню помощи!")
     }
     const text = await helpGroup(group, access)
     const keyboard = Keyboard
@@ -53,5 +51,4 @@ export async function eventHelp(event, args, sender) {
         keyboard: keyboard,
         conversation_message_id: event.conversationMessageId
     })
-    await show_snackbar(event, "Список команд отправлен в личные сообщения!")
 }
