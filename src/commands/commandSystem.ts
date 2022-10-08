@@ -2,7 +2,7 @@ import {group, user} from "../bots";
 import {chats, getUserData} from "../database";
 import {checkCooldown} from "../others/cooldowns";
 import {works} from "./commandProject";
-import {commands, commandsUser} from "./commands";
+import commands, {commandsUser} from ".";
 import {paste} from "../others/aliensAPI";
 import moment from "moment";
 import {Keyboard} from "vk-io";

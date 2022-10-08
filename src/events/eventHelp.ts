@@ -5,7 +5,7 @@ import {
     commandsInfo,
     commandsOthers,
     commandsPost
-} from "../commands/commands";
+} from "../commands";
 import {vkGroup} from "../bots";
 import {helpGroup, helpMain} from "../commands/commandHelp";
 import {Keyboard} from "vk-io";

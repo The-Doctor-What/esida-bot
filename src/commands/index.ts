@@ -27,7 +27,6 @@ import {justallCommand} from "../others/justall";
 import {project} from "./commandProject";
 import {commandAdminBlock, commandMakeAdmin} from "./commandMakeAdmin";
 
-
 export class Command {
     public access: number;
     public name: string;
@@ -101,7 +100,7 @@ export const commandsOthers: Command[] = [
     new Command("shop", 2, [], commandShop, "Обменник баллов"),
 ]
 
-export const commands: Command[] = [
+export default [
     ...commandsInfo,
     ...commandsData,
     ...commandsForum,

@@ -1,5 +1,5 @@
 import dedent from "dedent-js";
-import {commands} from "./commands";
+import commands from ".";
 import {Keyboard} from "vk-io";
 
 export async function helpCommand(msg, args, sender) {
