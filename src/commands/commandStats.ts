@@ -58,19 +58,16 @@ export async function stats(msg, args, sender) {
         }
         if (user.frac == 30) text += `🔹 Репутация: ${user.rep}\n`
         text += `🔹 Discord: ${user.discord}\n`
+        text += user.telegramTag ? `🔹 Telegram: t.me/${user.telegramTag}\n` : `🔹 Telegram: Не привязан\n`
         let keyboard = undefined
-        try {
+        if (user.forum && user.forum != `{}`) {
             keyboard = Keyboard
                 .keyboard([
                     [
-                        await checkUrlButton(`https://${user.forum}`, "Форум"),
-                        await checkUrlButton(`https://t.me/${user.telegramTag}`, "Telegram")
+                        await checkUrlButton(`https://${user.forum}`, "Форум")
                     ]
                 ]).inline(true)
-        } catch {
-            text += user.forum && user.forum != "{}" ? `🔹 Форум: ${user.forum}\n` : `🔹 Форум: Не привязан\n`
-            text += user.telegramTag ? `🔹 Telegram: t.me/${user.telegramTag}\n` : `🔹 Telegram: Не привязан\n`
-        }
+        } else text += `🔹 Форум: Не привязан\n`
         warning += user.adminInfo.block ? `🔸 Данному пользователю запрещено занимать пост администратора!\n` : ``
         if (user.access == 0) {
             text += `\n📚 Архивные данные: \n`
