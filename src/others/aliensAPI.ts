@@ -1,12 +1,5 @@
+import {getPasteUrl, PrivateBinClient} from "@agc93/privatebin";
 export const request = require('prequest');
-import Pastebin from 'pastebin-ts';
-
-const pastebin = new Pastebin({
-    'api_dev_key' : process.env.PASTEBIN_KEY,
-    'api_user_name' : process.env.PASTEBIN_NAME,
-    'api_user_password' : process.env.PASTEBIN_PASS
-});
-
 
 export async function getOnline(nick, server = 16) {
     return await request(`https://admin-tools.ru/vkbot/handler_log.php?func=check_onl&p=${process.env.ADMIN_TOOLS_TOKEN}&server=${server}&name=${nick}`)
@@ -19,8 +12,8 @@ export async function getAdminInfo(nick) {
 }
 
 export async function paste(text, header) {
-    return await pastebin.createPaste({
-        text: text,
-        title: header,
-    });
+    const eo = "```"
+    const client = new PrivateBinClient("https://privatebin.net/");
+    const result = await client.uploadContent(`#${header}\n\n${eo}bash\n${text}\n${eo}`, {uploadFormat: 'markdown', expiry: '1day'});
+    return getPasteUrl(result);
 }

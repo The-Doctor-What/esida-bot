@@ -49,7 +49,7 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
 
 export async function getError(error, name) {
     const header = `Error in ${name}.ts ${moment().format("DD.MM.YYYY HH:mm:ss")}`
-    const link = await paste(error.stack.toString(), header)
+    const link = await paste(`${error.message.toString()}\n\n${error.stack.toString()}`, header)
     const keyboard = Keyboard
         .keyboard([
             Keyboard.urlButton({

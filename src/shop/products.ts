@@ -27,6 +27,6 @@ export const products: Products[] = [
     new Products("norm", "-3 часа к норме", [70, 60, -1], weekendBuy),
     new Products("term-1", "-1 день к сроку", [90, 100, -1], termBuy),
     new Products("term-2", "-2 дня к сроку", [160, -1, -1], termBuy),
-    new Products("unwarns", "Снять предупреждения", [160, -1, -1], unpunishBuy),
-    new Products("unvigs", "Снять выговор", [160, -1, -1], unpunishBuy),
+    new Products("unwarns", "Снять предупреждения", [40, 40, 30], unpunishBuy),
+    new Products("unvigs", "Снять выговор", [90, 100, 70], unpunishBuy),
 ]

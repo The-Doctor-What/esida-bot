@@ -1,6 +1,7 @@
 import {getAccess} from "../database";
 import {getAdminInfo, getOnline} from "../others/aliensAPI";
 import moment from "moment";
+
 moment.locale('ru')
 
 export async function getOnlineUser(msg, args, sender) {
@@ -26,14 +27,14 @@ export async function getOnlineUser(msg, args, sender) {
     time = moment().startOf('week').add(6, 'days')
     text += `\n\n🔸 Онлайн за текущую неделю\n\n`
     text += await getOnlineText(time, online, "dddd")
-    text += `\nПока что общий онлайн за неделю не работает корректно`
+    text += `\nИДЕТ ТЕСТИРОВАНИЕ ИСПРАВЛЕНИЕ ОНЛАЙНА ВЕРИТЬ ЕМУ ПОКА ЧТО НЕЛЬЗЯ`
     await msg.send(text)
 }
 
 export async function getOnlineText(time, online, format = "DD MMM") {
     let text = ``
     let reports = 0
-    let onlineTime: any
+    let onlineTime = moment("00:00:00", "HH:mm:SS")
     for (let c = 0; c < 7; c++) {
         if (!online.online[time.format("YYYY-MM-DD")]) {
             text += `🔹 ${time.format(format)} 00:00:00\n`
@@ -47,17 +48,12 @@ export async function getOnlineText(time, online, format = "DD MMM") {
         }
         text += `\n`
         time.subtract(1, "days")
-        onlineTime = online.allonline.split(":")
-        let onl = online.online[time.format("YYYY-MM-DD")].split(":")
-        for (let i = 0; i < 3; i++) {
-            onlineTime[i] = Number(onlineTime[i]) - Number(onl[i])
-            if (onlineTime[i] < 0) {
-                onlineTime[i] += 60
-                onlineTime[i - 1] -= 1
-            }
-        }
+        let onl = moment(online.online[time.format("YYYY-MM-DD")], "HH:mm:SS")
+        onlineTime.add(Number(onl.format("HH")), "hours")
+        onlineTime.add(Number(onl.format("mm")), "minutes")
+        onlineTime.add(Number(onl.format("SS")), "seconds")
     }
-    text += `🔸 Общее: ${onlineTime[0]}:${onlineTime[1]}:${onlineTime[2]}`
+    text += `🔸 Общее: ${onlineTime.format("LTS")}`
     if (reports > 0) text += ` [R: ${reports}]`
     return text
 }
