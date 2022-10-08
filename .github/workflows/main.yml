@@ -15,6 +15,7 @@ jobs:
           username: ${{ secrets.deploy_username }}
           password: ${{ secrets.deploy_password }}
           server-dir: /home/esida/bot/
+          dangerous-clean-slate: true
 
       - name: 🏗️ Build and run node app
         uses: appleboy/ssh-action@master
