@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "tsc && node .",
     "build": "tsc",
-    "deploy": "tsc && flyctl deploy",
     "run": "node ."
   },
   "dependencies": {

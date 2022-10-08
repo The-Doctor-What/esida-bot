@@ -32,16 +32,16 @@ export class Command {
     public name: string;
     public aliases: string[];
     public description: string;
-    public func: (msg, args, sender: any) => void;
+    public execute: (msg, args, sender: any) => void;
     public minArgs: number
     public usage: string
     public fullHelp: string
 
-    constructor(name, access, aliases, func, description = "", usage = "", args = 0, fullHelp = "") {
+    constructor(name, access, aliases, execute, description = "", usage = "", args = 0, fullHelp = "") {
         this.name = name
         this.access = access
         this.aliases = aliases
-        this.func = func
+        this.execute = execute
         this.description = description
         this.minArgs = args
         this.usage = `/${name} ${usage}`

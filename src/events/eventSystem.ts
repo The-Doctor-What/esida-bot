@@ -9,15 +9,12 @@ vkGroup.updates.on('message_event', async msg => await eventSystem(msg))
 
 export async function eventSystem(msg) {
     try {
-        const command = msg.payload.payload.command
-        const args = msg.payload.payload.args
-        if (msg.payload.payload.sender != undefined) {
-            const commandSender = msg.payload.payload.sender
+        if (!works) return
+        const {command, args, sender: commandSender} = msg.payload.payload
+        if (commandSender != undefined) {
             if (commandSender != msg.userId) return await show_snackbar(msg, "🚫 Вы не можете использовать чужие кнопки! 🚫")
         }
-        let sender = await getUserData(msg.userId)
-        if (!sender) sender = {vk_id: msg.userId, access: 0}
-        if (!works) return
+        const sender = await getUserData(msg.userId) || {vk_id: msg.userId, access: 0}
         const event = events.find(x => x.name == command)
         if (!event) return await show_snackbar(msg, "🚫 Не найдено событие с таким названием! 🚫")
         if (event.access > sender.access) return await show_snackbar(msg, `🚫 У вас недостаточно прав для использования этого события`)

@@ -10,12 +10,15 @@ import {commandSend} from "../others/utils";
 export async function shopSystem(event, sender, name) {
     try {
         if (!works) return
+
         const product = products.find(x => x.id == name)
         if (!product) return await show_snackbar(event, "🚫 Не найден товар с таким названием! 🚫")
+
         const price = await getPrice(product, sender)
         const payment = await purchase(event, sender, price)
         if (!payment) return
-        product.func(product, sender, price, event)
+
+        await product.func(product, sender, price, event)
         await show_snackbar(event, `🛒 Вы успешно купили ${product.name} за ${price}$! 🛒`)
     } catch (error) {
         try {

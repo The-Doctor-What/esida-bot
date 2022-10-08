@@ -14,7 +14,7 @@ jobs:
           server: ${{ secrets.deploy_host }}
           username: ${{ secrets.deploy_username }}
           password: ${{ secrets.deploy_password }}
-          server-dir: /home/esida/bot
+          server-dir: /home/esida/bot/
 
       - name: 🏗️ Build and run node app
         uses: appleboy/ssh-action@master

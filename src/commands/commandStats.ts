@@ -4,48 +4,57 @@ import {getAdminInfo} from "../others/aliensAPI";
 import {congressRanks} from "../personnel";
 import {getGender, isURL} from "../others/utils";
 import {Keyboard} from "vk-io";
+import dedent from "dedent-js";
 
 moment.locale('ru')
 
 export async function stats(msg, args, sender) {
-    let user = msg.senderId
-    if (args.length > 0) user = args[0]
-    user = await checkUser(msg, user, sender)
-    if (user == undefined) return
-    else {
-        let access: number
-        if (user.access > 0) access = user.access
-        else access = user.oldaccess
-        const postStart = moment(user.post)
-        const postEnd = moment(postStart).add(user.term, 'days')
-        let {text, warning} = await getStatsHeader(user, access)
-        text += `🔹 Выговоров: ${user.vigs}/`
-        text += access >= 5 ? `5\n` : `3\n`
-        if (access <= 4) {
-            warning += await getWarnings(user, access, postEnd)
-            text += `🔹 Предупреждения: ${user.warns}/3\n`
-            text += `🔹 Федеральный выговоров: ${user.fwarns}/2\n`
-            if (user.rpbio) text += `🔹 РП-биография: ${user.rpbio}\n`
-            text += `🔹 Структура: ${await getFraction(user.frac)}\n`
-            if (user.congressAccess > 0) text += `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}\n`
-            text += await getScores(user)
-            text += `🔹 Тип постановления: ${user.type_add}\n`
-        }
-        text += `🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}\n`
-        text += `🔹 Отстоял${await getGender(user.vk_id)}: ${moment().diff(postStart, "days")} дней\n`
-        if ((access >= 3 && access <= 4)) {
-            text += `🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}\n`
-            text += `🔹 Осталось: ${postEnd.diff(moment(), "days")} дней\n`
-            if (user.characteristic) text += `🔹 Характеристика: ${user.characteristic}\n`
-        }
-        text += `🔹 Discord: ${user.discord}\n`
-        let keyboard = await checkLinks(user)
-        if (user.access == 0) await archive(user)
-        text += `\n${warning}`
-        if (keyboard) await msg.send({message: text, disable_mentions: 1, keyboard: keyboard})
-        else await msg.send({message: text, disable_mentions: 1})
+    const user = await checkUser(msg, args[0] || msg.senderId, sender)
+    if (!user) return;
 
-    }
+    const access = user.access > 0 ? user.access : user.oldaccess
+
+    const postStart = moment(user.post)
+    const postEnd = moment(postStart).add(user.term, 'days')
+
+    const {text: header, warning} = await getStatsHeader(user, access)
+    const text = dedent`
+        ${header}
+        🔹 Выговоров: ${user.vigs}/${access >= 5 ? `5` : `3`}
+        ${access <= 4 ? dedent`
+            🔹 Предупреждения: ${user.warns}/3
+            🔹 Федеральный выговоров: ${user.fwarns}/2
+            ${user.rpbio ? `🔹 РП-биография: ${user.rpbio}` : ''}
+            🔹 Структура: ${await getFraction(user.frac)}
+            ${user.congressAccess > 0 ? `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}` : ''}
+            ${await getScores(user)}
+            🔹 Тип постановления: ${user.type_add}
+        ` : ''}
+        🔹 Discord: ${user.discord}
+        🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}
+        🔹 Отстоял${await getGender(user.vk_id)}: ${moment().diff(postStart, "days")} дней
+        ${access >= 3 && access <= 4 ? dedent`
+            🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}
+            🔹 Осталось: ${postEnd.diff(moment(), "days")} дней
+            ${user.characteristic ? `🔹 Характеристика: ${user.characteristic}` : ''}
+        ` : ''}
+        
+        ${user.access == 0 ? await archive(user) : ''}
+        
+        ${warning + (access <= 4 ? await getWarnings(user, access, postEnd) : '')}
+    `
+
+    const keyboard = await checkLinks(user)
+    await msg.send(keyboard ?
+        {
+            message: text,
+            disable_mentions: 1,
+            keyboard: keyboard
+        } : {
+            message: text,
+            disable_mentions: 1
+        }
+    )
 }
 
 export async function urlButton(link, text) {
@@ -58,72 +67,78 @@ export async function urlButton(link, text) {
 }
 
 async function checkLinks(user) {
-    const buttons = {
-        buttons:
-            [
-                [],
-            ],
-        inline: true
-    }
+    const buttons = []
+
     if (isURL(`https://${user.forum}`) && user.forum != "{}") {
-        buttons.buttons[0].push(
+        buttons.push(
             {
-                action: {
-                    type: "open_link",
-                    link: `https://${user.forum}`,
-                    label: "Форум"
-                },
-            })
+                type: "open_link",
+                link: `https://${user.forum}`,
+                label: "Форум"
+            }
+        )
     }
-    if (user.telegramTag != null) {
-        buttons.buttons[0].push(
+
+    if (user.telegramTag) {
+        buttons.push(
             {
-                action: {
-                    type: "open_link",
-                    link: `https://t.me/${user.telegramTag}`,
-                    label: "Telegram"
-                },
-            })
+                type: "open_link",
+                link: `https://t.me/${user.telegramTag}`,
+                label: "Telegram"
+            }
+        )
     }
-    if (!buttons.buttons[0][0]) {
+
+    if (buttons.length === 0) {
         return
     }
-    return JSON.stringify(buttons)
+
+    return JSON.stringify({
+        buttons:
+            [
+                buttons.map(action => ({action})),
+            ],
+        inline: true
+    })
 }
 
 async function archive(user) {
-    let text = `\n📚 Архивные данные: \n`
-    text += `\n🔸 Снят${await getGender(user.vk_id)} по причине: ${user.reason}\n`
-    text += `🔸 Дата снятия: ${moment(user.dateUval).format("DD MMMM YYYY")}\n`
-    text += `🔸 Снял${await getGender(user.uvalUser)}: @id${user.uvalUser}\n`
-    text += `🔸 Возраст: ${user.age} лет\n`
-    return text
+    return dedent`
+        📚 Архивные данные:
+        
+        🔸 Снят${await getGender(user.vk_id)} по причине: ${user.reason}
+        🔸 Дата снятия: ${moment(user.dateUval).format("DD MMMM YYYY")}
+        🔸 Снял${await getGender(user.uvalUser)}: @id${user.uvalUser}
+        🔸 Возраст: ${user.age} лет
+    `
 }
 
 async function getStatsHeader(user, access) {
-    let warning = ``
-    let text = `📊 Статистика пользователя: @id${user.vk_id} (${user.nick}) 📊\n\n`
-    text += `🔹 Должность: ${user.rank} [D: `
-    if (user.access > 0 && user.access < 69) text += ` ${access}]\n`
-    else if (user.access >= 69) text += ` DEV]\n`
-    else if (user.access == 0) text += `0 (До снятия: ${user.oldaccess})]\n`
-    if (user.access >= 5) {
-        const info = await getAdminInfo(user.nick)
-        if (info) {
-            text += `🔹 Уровень администратора: ${info.lvl}\n`
-            text += `🔹 Префикс: ${info.prefix}\n`
-        } else warning += `🔸 Пользователь не найден в базе администраторов!\n`
-    }
+    const info = user.access >= 5 && await getAdminInfo(user.nick)
+
+    const warning = !info && user.access >= 5 ? '🔸 Пользователь не найден в базе администраторов!\n' : ''
+    const text = dedent`
+        📊 Статистика пользователя: @id${user.vk_id} (${user.nick})
+        
+        🔹 Должность: ${user.rank} [D: ${
+            access <= 0 ? 
+                `0 (До снятия: ${user.oldaccess})` :
+                access < 69 ? access : 'DEV'
+        }]
+        ${info ? dedent`
+            🔹 Уровень администратора: ${info.lvl}
+            🔹 Префикс: ${info.prefix}
+        ` : ''}
+    `
     return {text, warning}
 }
 
 async function getScores(user) {
-    let text = ""
-    if (user.frac != 30) {
-        text += `🔹 Баллов: ${user.score}\n`
-        text += `🔹 Основных баллов: ${user.litrbol}\n`
-    } else text += `🔹 Репутация: ${user.rep}\n`
-    return text
+    if (user.frac == 30) return `🔹 Репутация: ${user.rep}`
+    return dedent`
+        🔹 Баллов: ${user.score}
+        🔹 Основных баллов: ${user.litrbol}
+    `
 }
 
 async function getWarnings(user, access, postEnd) {
@@ -131,7 +146,7 @@ async function getWarnings(user, access, postEnd) {
     if (user.vigs >= 3) warning += `🔸 Пользователь имеет 3 выговора!\n`
     if (!user.rpbio) warning += `🔸 Пользователь не имеет РП-биографии!\n`
     if (access == 3 && user.congressAccess <= 0) warning += `🔸 Пользователь не имеет должности в конгрессе!\n`
-    if ((!user.characteristic && postEnd.diff(moment(), "days") <= 10) && (access >= 3 || access <= 4)) warning += `🔸 На пользователя не написана характеристика!\n`
+    if ((!user.characteristic && postEnd.diff(moment(), "days") <= 10) && (access >= 3 && access <= 4)) warning += `🔸 На пользователя не написана характеристика!\n`
     if (user.adminInfo.block) warning += `🔸 Данному пользователю запрещено занимать пост администратора!\n`
     return warning
 }

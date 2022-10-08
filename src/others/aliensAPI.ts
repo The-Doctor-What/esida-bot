@@ -1,5 +1,6 @@
 import {getPasteUrl, PrivateBinClient} from "@agc93/privatebin";
-export const request = require('prequest');
+import request from 'prequest'
+import dedent from "dedent-js";
 
 export async function getOnline(nick, server = 16) {
     return await request(`https://admin-tools.ru/vkbot/handler_log.php?func=check_onl&p=${process.env.ADMIN_TOOLS_TOKEN}&server=${server}&name=${nick}`)
@@ -14,6 +15,15 @@ export async function getAdminInfo(nick) {
 export async function paste(text, header) {
     const eo = "```"
     const client = new PrivateBinClient("https://privatebin.net/");
-    const result = await client.uploadContent(`#${header}\n\n${eo}bash\n${text}\n${eo}`, {uploadFormat: 'markdown', expiry: '1day'});
+    const result = await client.uploadContent(dedent`
+        #${header}
+        
+        ${eo}bash
+        ${text}
+        ${eo}
+    `, {
+        uploadFormat: 'markdown',
+        expiry: '1day'
+    });
     return getPasteUrl(result);
 }

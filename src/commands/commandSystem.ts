@@ -18,11 +18,12 @@ user.hear(/^\//i, async msg => {
 
 async function commandSystem(msg, group = true, commandGroup = commands) {
     try {
-        const command = msg.text.split(" ")[0].substring(1)
-        const args = msg.text.split(" ").slice(1)
-        let access = 0
+        let [command, ...args] = msg.text.split(" ");
+        command = command.substring(1)
+        args = args || []
+
         const sender = await getUserData(msg.senderId)
-        if (sender) access = sender.access
+        const access = sender ? sender.access : 0
         if (!works && command != "esida") return
         if (access < 5) {
             for (const chat of chats) {
@@ -34,7 +35,7 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
         if (!cmd) return
         if (cmd.access > access) return await msg.send(`🚫 У вас недостаточно прав для использования этой команды, необходимо иметь уровень доступа: ${cmd.access}`)
         if (cmd.minArgs > args.length) return await msg.send(`🚫 Недостаточно аргументов для использования команды! 🚫\nИспользование: ${cmd.usage}\n\n${cmd.fullHelp}`)
-        await cmd.func(msg, args, sender)
+        await cmd.execute(msg, args, sender)
     } catch (error) {
         try {
             const {link, keyboard} = await getError(error, "commandSystem")

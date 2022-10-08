@@ -1,5 +1,5 @@
 import {createClient} from "@supabase/supabase-js";
-import {request} from "./aliensAPI";
+import request from 'prequest'
 import {helpJustall} from "./helpTexts";
 const supabaseJA = createClient(process.env.SUPABASE_URL_JA, process.env.SUPABASE_TOKEN_JA)
 

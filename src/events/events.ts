@@ -21,4 +21,3 @@ export const events: Event[] = [
     new Event("shop", 2, eventShop),
     new Event("buy", 2, eventShopBuy),
 ]
-
