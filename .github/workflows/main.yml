@@ -1,0 +1,31 @@
+on: push
+name: 🚀 Deploy bot on push
+jobs:
+  remote-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.2
+        with:
+          server: ${{ secrets.deploy_host }}
+          username: ${{ secrets.deploy_username }}
+          password: ${{ secrets.deploy_password }}
+          server-dir: /home/esida/bot
+
+      - name: 🏗️ Build and run node app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.deploy_host }}
+          username: ${{ secrets.deploy_username }}
+          password: ${{ secrets.deploy_password }}
+          port: 22
+          script: |
+            pkill -f node
+            cd /home/esida/bot
+            yarn install
+            yarn build
+            yarn start
