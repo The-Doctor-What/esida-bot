@@ -14,7 +14,7 @@ jobs:
           server: ${{ secrets.deploy_host }}
           username: ${{ secrets.deploy_username }}
           password: ${{ secrets.deploy_password }}
-          server-dir: /home/esida/bot/
+          server-dir: /esida/
           dangerous-clean-slate: true
 
       - name: 🏗️ Build and run node app
@@ -26,7 +26,7 @@ jobs:
           port: 22
           script: |
             pkill -f node
-            cd /home/esida/bot
+            cd /esida
             yarn install
             yarn build
             yarn start
