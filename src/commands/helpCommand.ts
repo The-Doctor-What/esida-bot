@@ -3,7 +3,7 @@ import commands from ".";
 import {Keyboard} from "vk-io";
 
 export async function helpCommand(msg, args, sender) {
-    let command = args ? args[0] : null
+    const command = args ? args[0] : null
     if (!command) {
         const {text, keyboard} = await helpMain(sender)
         await msg.send({message: text, keyboard})

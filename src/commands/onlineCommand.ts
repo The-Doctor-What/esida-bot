@@ -37,24 +37,31 @@ export async function getOnlineText(time, online, format = "DD MMM") {
     let text = ``
     let reports = 0
     let onlineTime = moment("00:00:00", "HH:mm:SS")
+
     for (let c = 0; c < 7; c++) {
+
         if (!online.online[time.format("YYYY-MM-DD")]) {
             text += `🔹 ${time.format(format)} 00:00:00\n`
             time.subtract(1, "days")
             continue
         }
+
         text += `🔹 ${time.format(format)} ${online.online[time.format("YYYY-MM-DD")]}`
+
         if (online.report[time.format("YYYY-MM-DD")] > 0) {
             text += ` [R: ${online.report[time.format("YYYY-MM-DD")]}]`
             reports += online.report[time.format("YYYY-MM-DD")]
         }
+
         text += `\n`
         time.subtract(1, "days")
+
         let onl = moment(online.online[time.format("YYYY-MM-DD")], "HH:mm:SS")
         onlineTime.add(Number(onl.format("HH")), "hours")
         onlineTime.add(Number(onl.format("mm")), "minutes")
         onlineTime.add(Number(onl.format("SS")), "seconds")
     }
+
     text += `🔸 Общее: ${onlineTime.format("LTS")}`
     if (reports > 0) text += ` [R: ${reports}]`
     return text

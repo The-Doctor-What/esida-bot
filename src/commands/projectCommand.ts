@@ -33,7 +33,7 @@ export async function statusProject(msg) {
     await msg.send(`📊 Состояние модулей: ${works ? "✅ Включены" : "🚫 Выключены"}`)
 }
 export async function project(msg, args, sender) {
-    let actions = {
+    const actions = {
         "stop": stopProject,
         "pause": pauseProject,
         "upfraction": reloadFractions,

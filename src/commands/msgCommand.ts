@@ -4,22 +4,18 @@ import {helpMsg} from "../others/helpTexts";
 import {messageSend} from "../others/utils";
 
 export async function msgCommand(msg, args, sender) {
-    let frac = args[0]
-    let message = msg.text.split(' ').slice(2).join(' ')
+    const frac = args[0].toLowerCase()
+    const message = msg.text.split(' ').slice(2).join(' ')
     let error = true
-    for (let c = chats.length - 1; c >= 0; c--) {
-        if (chats[c].name == frac) {
-            if (chats[c].access > sender.access) return await msg.send({
-                message: "🚫 | У вас недостаточно прав для отправки сообщения в эту фракцию!",
-                dont_parse_links: true
-            })
+    for (const chat of chats) {
+        if (chat.name.toLowerCase() == frac) {
+            if (chat.access > sender.access) return await msg.send("🚫 | У вас недостаточно прав для отправки сообщения в эту фракцию!")
             error = false
+
             // @ts-ignore
-            let allUsers = await vkUser.api.messages.getChat({
-                chat_id: chats[c].userChat,
-            })
-            let usersData = await getFullData()
-            allUsers = allUsers.users
+            const allUsers = await vkUser.api.messages.getChat({chat_id: chat.userChat,}).users
+            const usersData = await getFullData()
+
             let users = ``
             for (const user of allUsers) {
                 for (const data of usersData) {
@@ -28,12 +24,12 @@ export async function msgCommand(msg, args, sender) {
                     }
                 }
             }
+
             await messageSend(
                 `${message}\n\n🗣 @id${msg.senderId} (${sender.nick})\n\n${users}`,
-                chats[c].defaultChat,
+                chat.defaultChat,
                 vkGroup
             )
-            error = false
             break
         }
     }

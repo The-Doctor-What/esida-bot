@@ -33,9 +33,6 @@ export async function purchase(event, sender, price) {
     } else if (sender.score < price) {
         await show_snackbar(event, "У вас недостаточно средств для покупки!")
         return false
-    } else if (sender.access <= 0) {
-        await show_snackbar(event, "Вам запрещено покупать что либо в магазине!")
-        return false
     } else {
         sender.score -= price
         await addHistory(sender, `score`, price, `Покупка в магазине`, `-`, userid)
