@@ -1,9 +1,10 @@
 import {getUserData} from "../database";
-import {works} from "../commands/commandProject";
 import {events} from "./events";
 import {vkGroup} from "../bots";
 import {Keyboard} from "vk-io";
+import {works} from "../commands/projectCommand";
 import {getError} from "../commands/commandSystem";
+import {messageSend} from "../others/utils";
 
 vkGroup.updates.on('message_event', async msg => await eventSystem(msg))
 
@@ -22,12 +23,12 @@ export async function eventSystem(msg) {
     } catch (error) {
         try {
             const {keyboard} = await getError(error, "eventSystem")
-            await vkGroup.api.messages.send({
-                chat_id: 41,
-                message: `🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`,
-                keyboard: keyboard,
-                random_id: 0
-            })
+            await messageSend(
+               `🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`,
+                41,
+                vkGroup,
+                keyboard
+            )
         } catch {
             console.log(error)
         }

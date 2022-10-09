@@ -1,5 +1,5 @@
-import {commandSend} from "../others/utils";
-import {formDelete, getForm, getForumCommand} from "../commands/commandForum";
+import {messageSend} from "../others/utils";
+import {formDelete, getForm, getForumCommand} from "../commands/forumCommand";
 import {show_snackbar} from "./eventSystem";
 
 export async function eventForumAccept(msg, args) {
@@ -8,7 +8,7 @@ export async function eventForumAccept(msg, args) {
     if (!form) return await show_snackbar(msg, "🚫 Заявка не найдена! 🚫")
     else if (form.status) return await show_snackbar(msg, "🚫 Заявка уже обработана! 🚫")
     const formCommand = await getForumCommand(form)
-    await commandSend(formCommand)
+    await messageSend(formCommand)
     await formDelete(form, true)
     await show_snackbar(msg, "📝 Заявка успешно обработана! 📝")
 }

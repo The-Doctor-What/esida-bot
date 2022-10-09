@@ -1,7 +1,7 @@
 import {Keyboard} from "vk-io";
 import dedent from "dedent-js";
-import {getHomeButton} from "../events/eventSystem";
 import {products} from "../shop/products";
+import {getHomeButton} from "../events/eventSystem";
 
 export async function commandShop(msg, args, sender) {
     const {text, keyboard} = await getShopMenu(sender, "main")

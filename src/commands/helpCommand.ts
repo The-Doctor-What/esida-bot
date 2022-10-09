@@ -4,21 +4,20 @@ import {Keyboard} from "vk-io";
 
 export async function helpCommand(msg, args, sender) {
     let command = args ? args[0] : null
-    let access = 0
-    if (sender) access = sender.access
     if (!command) {
         const {text, keyboard} = await helpMain(sender)
         await msg.send({message: text, keyboard})
     } else {
         let cmd = commands.find(x => x.name == command || x.aliases.includes(command))
         if (!cmd) return await msg.send("🚫 Такой команды не существует! 🚫")
-        if (access < cmd.access) return await msg.send("🚫 У вас недостаточно прав для использования этой команды! 🚫")
-        let text = `🔹 ${cmd.usage} - ${cmd.description}\n`
-        if (cmd.aliases.length > 0) text += `🔸 Альтернативные варианты: ${cmd.aliases.join(", ")}\n`
-        text += `🔸 Требуемый уровень доступа: ${cmd.access}\n`
-        text += `🔸 Минимальное количество аргументов: ${cmd.minArgs}`
-        if (cmd.fullHelp != "") text += `\n\n${cmd.fullHelp}`
-        await msg.send(text)
+        if (sender.access < cmd.access) return await msg.send("🚫 У вас недостаточно прав для использования этой команды! 🚫")
+        await msg.send(dedent`🔹 ${cmd.usage} - ${cmd.description}
+            ${cmd.aliases.length > 0 ? `🔹 Альтернативные варианты: ${cmd.aliases.join(", ")}` : ""}
+            🔸 Требуемый уровень доступа: ${cmd.access}
+            🔸 Минимальное количество аргументов: ${cmd.minArgs}
+            
+            ${cmd.fullHelp}`
+        )
     }
 }
 

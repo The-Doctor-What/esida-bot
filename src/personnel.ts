@@ -15,7 +15,7 @@ import moment from "moment";
 import dedent from "dedent-js";
 import {
     chatsActions,
-    commandSend,
+    messageSend,
     endMessage,
     genCode,
     getGender,
@@ -23,7 +23,7 @@ import {
     sendMessage,
     startMessage
 } from "./others/utils";
-import {works} from "./commands/commandProject";
+import {works} from "./commands/projectCommand";
 
 moment.locale('ru')
 
@@ -221,13 +221,13 @@ user.hear(/^Игровой ник: (.*)/i, async msg => {
                 console.log(`Logs » Новый руководитель успешно добавлен!`)
                 await msg.send('✅ | Удачи вам на посту руководителя! <3')
                 if (user.access >= 3 && user.access <= 4) {
-                    await commandSend(dedent`Ник нового лидера: ${nick}
+                    await messageSend(dedent`Ник нового лидера: ${nick}
                                         Какая фракция: ${await getFraction(user.fraction)}
                                         Возраст: ${age}
                                         Каким образом поставлен (обзвон / передача): ${type_add}
                                         Дата обзвона/передачи: ${moment().format('DD.MM.YYYY')}
                                         VK: @id${msg.senderId}`, 73)
-                    await commandSend(dedent`!addleader @id${msg.senderId} ${nick} ${await getFraction(user.fraction)}`, 81)
+                    await messageSend(dedent`!addleader @id${msg.senderId} ${nick} ${await getFraction(user.fraction)}`, 81)
                 }
                 if (user.access <= 4) await chatsActions(msg, user)
                 await startMessage(await getUserData(msg.senderId))
@@ -279,12 +279,12 @@ export async function promotion(msg, args, sender) {
     })
     if (data.access >= sender.access) return await msg.send("🚫 Вы не можете изменить должность этому человеку! 🚫")
     if (data.access >= 3 && data.access <= 4) {
-        await commandSend(dedent`Ник снимаемого лидера: ${data.nick}
+        await messageSend(dedent`Ник снимаемого лидера: ${data.nick}
 Какая фракция: ${await getFraction(data.frac)}
 За что снят: ${type}
 VK: @id${data.vk_id}
 Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
-        await commandSend(dedent`!remleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
+        await messageSend(dedent`!remleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
     }
     data.access = rank.access
     data.term = rank.term
@@ -308,13 +308,13 @@ VK: @id${data.vk_id}
         text += `\n🔸 Пользователь отправлен на проверку в технический отдел!`
     }
     if (data.access >= 3 && data.access <= 4) {
-        await commandSend(dedent`Ник нового лидера: ${data.nick}
+        await messageSend(dedent`Ник нового лидера: ${data.nick}
                                         Какая фракция: ${await getFraction(data.frac)}
                                         Возраст: ${data.age}
                                         Каким образом поставлен (обзвон / передача): ${data.type_add}
                                         Дата обзвона/передачи: ${moment().format('DD.MM.YYYY')}
                                         VK: @id${data.vk_id}`, 73)
-        await commandSend(dedent`!addleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
+        await messageSend(dedent`!addleader @id${data.vk_id} ${data.nick} ${await getFraction(data.frac)}`, 81)
     }
     await saveUser(data)
     await msg.send({message: text, disable_mentions: 1})
@@ -328,19 +328,19 @@ export async function uval(msg, args, sender) {
     if (!user) return
     if (user.access >= sender.access) return await msg.send("🚫 Вы не можете уволить этого человека! 🚫")
     if (user.access >= 3 && user.access <= 4) {
-        await commandSend(dedent`Ник снимаемого лидера: ${user.nick}
+        await messageSend(dedent`Ник снимаемого лидера: ${user.nick}
 Какая фракция: ${await getFraction(user.frac)}
 За что снят: ${reason}
 VK: @id${user.vk_id}
 Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
-        await commandSend(dedent`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
+        await messageSend(dedent`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
     }
     user.oldaccess = user.access
     user.reason = reason
     user.dateUval = new Date()
     user.uvalUser = msg.senderId
     user.access = 0
-    await commandSend(`!fkick @id${user.vk_id} Agos_0 Указано в беседе лидеров/замов 16`)
+    await messageSend(`!fkick @id${user.vk_id} Agos_0 Указано в беседе лидеров/замов 16`)
     await endMessage(user, sender, reason, visable)
     await saveUser(user)
     await msg.send({

@@ -1,6 +1,6 @@
-import {eventHelp} from "./eventHelp";
-import {eventForumAccept, eventForumDecline} from "./eventForum";
-import {eventShop, eventShopBuy} from "./eventShop";
+import {eventShop, eventShopBuy} from "./shopEvent";
+import {eventHelp} from "./helpEvent";
+import {eventForumAccept, eventForumDecline} from "./forumEvent";
 
 export class Event {
     public access: number;

@@ -1,8 +1,7 @@
 import {getID} from "../others/utils";
+import { helpCommand } from "./helpCommand";
 import {addText, form, fracs, promotion, recovery, removedCandidate, uval} from "../personnel";
-import {helpCommand} from "./commandHelp";
-import {stats} from "./commandStats";
-import {listUsers} from "./commandList";
+import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
 import {
     helpCongress,
     helpEsida,
@@ -13,19 +12,20 @@ import {
     helpMsg,
     helpSet
 } from "../others/helpTexts";
-import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./commandWarn";
-import {getHistory} from "./commandHistory";
-import {setRole} from "./commandSetRole";
-import {getOnlineUser} from "./commandOnline";
-import {setDataUser} from "./commandSet";
-import {msgCommand} from "./commandMsg";
-import {congressSetAccess} from "./commandCongress";
-import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./commandForum";
-import {changePassword} from "./commandPassword";
-import {commandShop} from "./commandShop";
+import {commandShop} from "./shopCommand";
+import {project} from "./projectCommand";
+import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./forumCommand";
+import {congressSetAccess} from "./congressCommand";
+import {getHistory} from "./historyCommand";
+import {stats} from "./statsCommand";
+import {setDataUser} from "./setCommand";
 import {justallCommand} from "../others/justall";
-import {project} from "./commandProject";
-import {commandAdminBlock, commandMakeAdmin} from "./commandMakeAdmin";
+import {getOnlineUser} from "./onlineCommand";
+import {changePassword} from "./passwordCommand";
+import {msgCommand} from "./msgCommand";
+import {commandAdminBlock, commandMakeAdmin} from "./makeAdminCommand";
+import {listUsers} from "./listCommand";
+import {setRole} from "./setRoleCommand";
 
 export class Command {
     public access: number;
@@ -56,7 +56,7 @@ export const commandsInfo: Command[] = [
     new Command("stats", 0, ["info", "find"], stats, "Статистика пользователя", "[user]"),
     new Command("list", 0, [], listUsers, "Список пользователей", "[group]", 0, helpList),
     new Command("history", 0, [], getHistory, "Просмотреть историю пользователя", "[user] [type]", 2, helpHistory),
-]
+];
 
 export const commandsData: Command[] = [
     new Command("warn", 5, ["setwarn"], setWarn, "Изменить предупреждения пользователю", "[user] +/-[Кол-во] [Причина]", 3),

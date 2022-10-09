@@ -1,5 +1,5 @@
-import {addHistory} from "../commands/commandHistory";
 import {saveUser, userid} from "../database";
+import {addHistory} from "../commands/historyCommand";
 import {show_snackbar} from "../events/eventSystem";
 
 export async function unpunishBuy(product, sender, price, event) {

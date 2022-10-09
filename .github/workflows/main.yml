@@ -16,6 +16,7 @@ jobs:
           password: ${{ secrets.deploy_password }}
           server-dir: /esida/
           dangerous-clean-slate: true
+          dry-run: true
 
       - name: 🏗️ Build and run node app
         uses: appleboy/ssh-action@master

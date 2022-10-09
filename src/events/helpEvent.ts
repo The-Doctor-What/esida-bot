@@ -7,8 +7,8 @@ import {
     commandsPost
 } from "../commands";
 import {vkGroup} from "../bots";
-import {helpGroup, helpMain} from "../commands/commandHelp";
 import {Keyboard} from "vk-io";
+import {helpGroup, helpMain} from "../commands/helpCommand";
 import {getHomeButton} from "./eventSystem";
 
 export async function eventHelp(event, args, sender) {

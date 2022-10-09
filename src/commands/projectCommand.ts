@@ -1,19 +1,18 @@
 import {loadFracs} from "../database";
 import {helpEsida} from "../others/helpTexts";
 import {vkGroup} from "../bots";
+import {messageSend, sleep} from "../others/utils";
 
 export let works = true
 
 export async function stopProject(msg, args, sender) {
+    if (works) {
+        await pauseProject(msg)
+        await sleep(20)
+    }
     await msg.send(`🚫 Все модули были выключены! 🚫`)
-    console.log(`Logs » Все модули были выключены`)
-    await vkGroup.api.messages.send(
-        {
-            chat_id: 3,
-            message: `${sender.rank} @id${sender.vk_id}(${sender.nick}) выключил все модули!`,
-            random_id: 0
-        }
-    )
+    console.log(`Logs » ${sender.rank} @id${sender.vk_id}(${sender.nick}) выключил все модули!`)
+    await messageSend(`${sender.rank} @id${sender.vk_id}(${sender.nick}) выключил все модули!`, 3, vkGroup)
     process.exit(0)
 }
 
@@ -26,12 +25,12 @@ export async function pauseProject(msg) {
 
 export async function reloadFractions(msg) {
     await loadFracs()
-    await msg.send(`✅ Фракции успешно перезагружены!`)
-    console.log(`Logs » Фракции успешно перезагружены`)
+    await msg.send(`✅ Данные успешно обновлены!`)
+    console.log(`Logs » Данные успешно обновлены`)
 }
 
 export async function statusProject(msg) {
-    await msg.send({message: `📊 Состояние модулей: ${works ? "✅ Включены" : "🚫 Выключены"}`, dont_parse_links: true})
+    await msg.send(`📊 Состояние модулей: ${works ? "✅ Включены" : "🚫 Выключены"}`)
 }
 export async function project(msg, args, sender) {
     let actions = {

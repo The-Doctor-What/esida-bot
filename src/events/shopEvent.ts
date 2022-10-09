@@ -1,10 +1,10 @@
-import {getShopMenu} from "../commands/commandShop";
-import {vkGroup} from "../bots";
-import {show_snackbar} from "./eventSystem";
-import {saveUser, userid} from "../database";
-import {checkData} from "../commands/commandWarn";
-import {addHistory} from "../commands/commandHistory";
 import {shopSystem} from "../shop/shopSystem";
+import {getShopMenu} from "../commands/shopCommand";
+import {checkData} from "../commands/warnCommand";
+import {vkGroup} from "../bots";
+import {saveUser, userid} from "../database";
+import {show_snackbar} from "./eventSystem";
+import {addHistory} from "../commands/historyCommand";
 
 export async function eventShop(event, args, sender) {
     const {text, keyboard} = await getShopMenu(sender, args[0])

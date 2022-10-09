@@ -1,6 +1,6 @@
 import {random} from "../others/utils";
-import {addHistory} from "../commands/commandHistory";
 import {saveUser, userid} from "../database";
+import {addHistory} from "../commands/historyCommand";
 
 export async function litrbolBuy(product, sender) {
     const count = await random(100, 200)

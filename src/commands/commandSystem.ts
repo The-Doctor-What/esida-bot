@@ -1,11 +1,11 @@
 import {group, user} from "../bots";
 import {chats, getUserData} from "../database";
 import {checkCooldown} from "../others/cooldowns";
-import {works} from "./commandProject";
 import commands, {commandsUser} from ".";
 import {paste} from "../others/aliensAPI";
 import moment from "moment";
 import {Keyboard} from "vk-io";
+import {works} from "./projectCommand";
 
 group.hear(/^\//i, async msg => {
     await commandSystem(msg)
@@ -21,19 +21,21 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
         let [command, ...args] = msg.text.split(" ");
         command = command.substring(1)
         args = args || []
-
-        const sender = await getUserData(msg.senderId)
-        const access = sender ? sender.access : 0
         if (!works && command != "esida") return
-        if (access < 5) {
+
+        const sender = await getUserData(msg.userId) || {vk_id: msg.senderId, access: 0}
+
+        if (sender.access < 5) {
             for (const chat of chats) {
                 if (chat.defaultChat === msg.chatId && group && chat.blackList) return
                 else if (chat.userChat === msg.chatId && !group && chat.blackList) return
             }
         }
-        let cmd = commandGroup.find(x => x.name == command || x.aliases.includes(command))
+
+        const cmd = commandGroup.find(x => x.name == command || x.aliases.includes(command))
         if (!cmd) return
-        if (cmd.access > access) return await msg.send(`🚫 У вас недостаточно прав для использования этой команды, необходимо иметь уровень доступа: ${cmd.access}`)
+
+        if (cmd.access > sender.access) return await msg.send(`🚫 У вас недостаточно прав для использования этой команды, необходимо иметь уровень доступа: ${cmd.access}`)
         if (cmd.minArgs > args.length) return await msg.send(`🚫 Недостаточно аргументов для использования команды! 🚫\nИспользование: ${cmd.usage}\n\n${cmd.fullHelp}`)
         await cmd.execute(msg, args, sender)
     } catch (error) {

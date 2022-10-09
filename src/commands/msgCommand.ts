@@ -1,6 +1,7 @@
 import {chats, getFullData} from "../database";
 import {vkGroup, vkUser} from "../bots";
 import {helpMsg} from "../others/helpTexts";
+import {messageSend} from "../others/utils";
 
 export async function msgCommand(msg, args, sender) {
     let frac = args[0]
@@ -27,12 +28,11 @@ export async function msgCommand(msg, args, sender) {
                     }
                 }
             }
-            await vkGroup.api.messages.send({
-                chat_id: chats[c].defaultChat,
-                message: `${message}\n\n🗣 @id${msg.senderId} (${sender.nick})\n\n${users}`,
-                dont_parse_links: true,
-                random_id: 0
-            })
+            await messageSend(
+                `${message}\n\n🗣 @id${msg.senderId} (${sender.nick})\n\n${users}`,
+                chats[c].defaultChat,
+                vkGroup
+            )
             error = false
             break
         }

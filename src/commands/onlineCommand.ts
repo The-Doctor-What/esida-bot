@@ -1,34 +1,36 @@
 import {getAccess} from "../database";
 import {getAdminInfo, getOnline} from "../others/aliensAPI";
 import moment from "moment";
+import dedent from "dedent-js";
 
 moment.locale('ru')
 
 export async function getOnlineUser(msg, args, sender) {
-    let nick: string
-    let server = 16
-    if (args[0]) nick = args[0]
-    else nick = sender.nick
-    if (args[1]) {
-        if (await getAccess(msg.senderId, 5)) server = args[1]
-        else return await msg.send({message: `🚫 У вас нет доступа к получению онлайна игрока с другого сервера`})
+    const nick = args[0] || sender.nick
+    const server = args[1] || 16
+
+    if (!await getAccess(msg.senderId, 5)) {
+        if (server != 16) return await msg.send({message: `🚫 | Вы не можете получить онлайн игрока с другого сервера`})
+        if (await getAdminInfo(nick)) return await msg.send(`🚫 | Вы не можете получить онлайн администратора`)
     }
-    let checkAdmin = await getAdminInfo(nick)
-    if (checkAdmin != undefined) {
-        if (!await getAccess(msg.senderId, 5)) return await msg.send(`🚫 | Вы не можете получить онлайн администратора`)
-    }
-    let online = await getOnline(nick, server)
+
+    const online = await getOnline(nick, server)
     if (online.error) return await msg.send(`🚫 | ${online.msg}`)
-    let text = `📊 Онлайн игрока ${nick}:`
-    text += `\n🔸 Сервер: ${server}\n\n`
-    let time = moment()
-    text += `\n\n🔸 Онлайн за последние 7 дней\n\n`
-    text += await getOnlineText(time, online)
-    time = moment().startOf('week').add(6, 'days')
-    text += `\n\n🔸 Онлайн за текущую неделю\n\n`
-    text += await getOnlineText(time, online, "dddd")
-    text += `\nИДЕТ ТЕСТИРОВАНИЕ ИСПРАВЛЕНИЕ ОНЛАЙНА ВЕРИТЬ ЕМУ ПОКА ЧТО НЕЛЬЗЯ`
-    await msg.send(text)
+
+    await msg.send(dedent`
+        📊 Онлайн игрока ${nick}:
+        🔸 Сервер: ${server}
+        
+        🔸 Онлайн за последние 7 дней
+    
+        ${await getOnlineText(moment(), online)}
+        
+        🔸 Онлайн за текущую неделю
+        
+        ${await getOnlineText(moment().startOf('week').add(6, 'days'), online, "dddd")}
+    
+        Бот может отображать общий онлайн некорректно, скоро будет исправлено`
+    )
 }
 
 export async function getOnlineText(time, online, format = "DD MMM") {

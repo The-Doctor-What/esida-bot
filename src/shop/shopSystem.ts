@@ -1,11 +1,11 @@
-import {works} from "../commands/commandProject";
-import {getError} from "../commands/commandSystem";
-import {vkGroup} from "../bots";
+import {messageSend} from "../others/utils";
 import {show_snackbar} from "../events/eventSystem";
 import {products} from "./products";
-import {purchase} from "../events/eventShop";
-import {getPrice} from "../commands/commandShop";
-import {commandSend} from "../others/utils";
+import {getError} from "../commands/commandSystem";
+import {works} from "../commands/projectCommand";
+import {purchase} from "../events/shopEvent";
+import {vkGroup} from "../bots";
+import {getPrice} from "../commands/shopCommand";
 
 export async function shopSystem(event, sender, name) {
     try {
@@ -23,7 +23,7 @@ export async function shopSystem(event, sender, name) {
     } catch (error) {
         try {
             const {keyboard} = await getError(error, "shopSystem")
-            await commandSend(`🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`, 41, vkGroup, keyboard)
+            await messageSend(`🚫 Произошла ошибка при выполнении события! 🚫\n\n${error}`, 41, vkGroup, keyboard)
         } catch {
             console.log(error)
         }

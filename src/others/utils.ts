@@ -8,7 +8,11 @@ export async function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function commandSend(cmd, id = 100, vk = vkUser, keyboard: any = undefined) {
+export async function sleep(second) {
+    return new Promise(resolve => setTimeout(resolve, second * 1000))
+}
+
+export async function messageSend(cmd, id = 100, vk = vkUser, keyboard: any = undefined) {
     if (keyboard == undefined) {
         await vk.api.messages.send({
             chat_id: id,
@@ -48,7 +52,7 @@ export async function chatsActions(msg, user, action = "add") {
     if (rank.chatTag) tag = rank.chatTag
     else if (action == "kick") tag = "Agos_0"
     else if (user.fraction > 0 && user.fraction < 30) tag = `leader_${user.fraction}`
-    await commandSend(`!f${action} @id${msg.senderId} ${tag} Указано в беседе лидеров/замов 16`)
+    await messageSend(`!f${action} @id${msg.senderId} ${tag} Указано в беседе лидеров/замов 16`)
 }
 
 export async function sendMessage(id, msg) {
@@ -87,19 +91,17 @@ export async function endMessage(user, sender, reason, visable = true) {
     text += `\nПричина: `
     if (visable) text += `${reason}`
     else text += `*Скрыто*`
-    await vkGroup.api.messages.send({
-        chat_id: await getFraction(100, "chat"),
-        message: text,
-        random_id: 0,
-        disable_mentions: 1
-    })
+    await messageSend(
+        text,
+        await getFraction(100, "chat"),
+        vkGroup
+    )
     if (user.oldaccess < 5) {
-        await vkGroup.api.messages.send({
-            chat_id: await getFraction(user.frac, "chat"),
-            message: text,
-            random_id: 0,
-            disable_mentions: 1
-        })
+        await messageSend(
+            text,
+            await getFraction(user.frac, "chat"),
+            vkGroup
+        )
     }
 }
 
@@ -117,18 +119,16 @@ export async function genCode() {
 export async function startMessage(user) {
     let text = `@id${user.vk_id} (${user.nick}) назначен${await getGender(user.vk_id)}\n`
     text += `На должность: ${user.rank} ${await getFraction(user.frac)}`
-    await vkGroup.api.messages.send({
-        chat_id: await getFraction(100, "chat"),
-        message: text,
-        random_id: 0,
-        disable_mentions: 1
-    })
+    await messageSend(
+        text,
+        await getFraction(100, "chat"),
+        vkGroup
+    )
     if (user.access < 5) {
-        await vkGroup.api.messages.send({
-            chat_id: await getFraction(user.frac, "chat"),
-            message: text,
-            random_id: 0,
-            disable_mentions: 1
-        })
+        await messageSend(
+            text,
+            await getFraction(user.frac, "chat"),
+            vkGroup
+        )
     }
 }

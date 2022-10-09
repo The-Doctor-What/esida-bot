@@ -22,21 +22,20 @@ export async function stats(msg, args, sender) {
         ${header}
         🔹 Выговоров: ${user.vigs}/${access >= 5 ? `5` : `3`}
         ${access <= 4 ? dedent`
-            🔹 Предупреждения: ${user.warns}/3
-            🔹 Федеральный выговоров: ${user.fwarns}/2
-            ${user.rpbio ? `🔹 РП-биография: ${user.rpbio}` : ''}
-            🔹 Структура: ${await getFraction(user.frac)}
-            ${user.congressAccess > 0 ? `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}` : ''}
-            ${await getScores(user)}
-            🔹 Тип постановления: ${user.type_add}
-        ` : ''}
-        🔹 Discord: ${user.discord}
+        🔹 Предупреждения: ${user.warns}/3
+        🔹 Федеральный выговоров: ${user.fwarns}/2
+        ${user.rpbio ? `🔹 РП-биография: ${user.rpbio}` : ''}
+        🔹 Структура: ${await getFraction(user.frac)}
+        ${user.congressAccess > 0 ? `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}` : ''}
+        ${await getScores(user)}
+        🔹 Тип постановления: ${user.type_add}
+        \n` : ''}🔹 Discord: ${user.discord}
         🔹 Дата назначения: ${postStart.format("DD MMM YYYY")}
         🔹 Отстоял${await getGender(user.vk_id)}: ${moment().diff(postStart, "days")} дней
         ${access >= 3 && access <= 4 ? dedent`
-            🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}
-            🔹 Осталось: ${postEnd.diff(moment(), "days")} дней
-            ${user.characteristic ? `🔹 Характеристика: ${user.characteristic}` : ''}
+        🔹 Дата срока: ${postEnd.format("DD MMMM YYYY")}
+        🔹 Осталось: ${postEnd.diff(moment(), "days")} дней
+        ${user.characteristic ? `🔹 Характеристика: ${user.characteristic}` : ''}
         ` : ''}
         
         ${user.access == 0 ? await archive(user) : ''}
@@ -121,11 +120,10 @@ async function getStatsHeader(user, access) {
         📊 Статистика пользователя: @id${user.vk_id} (${user.nick})
         
         🔹 Должность: ${user.rank} [D: ${
-            access <= 0 ? 
-                `0 (До снятия: ${user.oldaccess})` :
-                access < 69 ? access : 'DEV'
-        }]
-        ${info ? dedent`
+        access <= 0 ?
+            `0 (До снятия: ${user.oldaccess})` :
+            access < 69 ? access : 'DEV'
+    }]${info ? dedent`\n
             🔹 Уровень администратора: ${info.lvl}
             🔹 Префикс: ${info.prefix}
         ` : ''}

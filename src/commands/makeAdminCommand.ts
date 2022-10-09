@@ -1,6 +1,6 @@
 import {checkUser, saveUser} from "../database";
 import {vkGroup, vkUser} from "../bots";
-import {commandSend, getGender} from "../others/utils";
+import {messageSend, getGender} from "../others/utils";
 import dedent from "dedent-js";
 
 export async function commandMakeAdmin(msg, args, sender) {
@@ -27,10 +27,13 @@ export async function commandMakeAdmin(msg, args, sender) {
         dont_parse_links: 1,
         random_id: 0
     })
-    await commandSend(`!padm @id${user.vk_id}`)
-    await commandSend(dedent(`Logs:
-    ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!
-    `), 41, vkGroup)
+    await messageSend(`!padm @id${user.vk_id}`)
+    await messageSend(dedent(`
+        Logs:
+        ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!
+        `),
+        41,
+        vkGroup)
     user.adminInfo.userPost = sender.vk_id
     await saveUser(user)
     await msg.send(`🎉 Пользователь @id${user.vk_id} (${user.nick}) успешно стал кандидатом в администрацию! 🎉`)
@@ -38,11 +41,7 @@ export async function commandMakeAdmin(msg, args, sender) {
 
 export async function commandAdminBlock(msg, args, sender) {
     const user = await checkUser(msg, args[0], sender, false)
-    if (!user) return
-    let text = `Пользователю @id${user.vk_id} (${user.nick}) теперь `
-    text += user.adminInfo.block ? `разрешено ` : `запрещено `
-    text += `занимать пост администратора!`
-    await msg.send(`✅ ${text}`)
+    await msg.send(`✅ Пользователю @id${user.vk_id} (${user.nick}) теперь ${user.adminInfo.block ? `разрешено` : `запрещено`} занимать пост администратора!`)
     user.adminInfo.block = !user.adminInfo.block
     await saveUser(user)
 }

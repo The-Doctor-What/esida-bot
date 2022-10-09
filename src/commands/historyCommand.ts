@@ -1,4 +1,4 @@
-import {checkUser, saveUser, userid} from "../database";
+import {checkUser, userid} from "../database";
 import moment from "moment";
 import {getGender} from "../others/utils";
 
@@ -27,5 +27,4 @@ export async function addHistory(user, type, count, reason, action, sender = use
         count: count,
         reason: reason
     })
-    await saveUser(user)
 }

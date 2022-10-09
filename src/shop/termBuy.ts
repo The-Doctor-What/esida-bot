@@ -1,5 +1,5 @@
-import {checkBuy} from "../events/eventShop";
 import {saveUser} from "../database";
+import {checkBuy} from "../events/shopEvent";
 
 export async function termBuy(product, sender, price, event) {
     if (product.id == "term-1") {
