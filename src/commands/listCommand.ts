@@ -13,6 +13,7 @@ export async function listUsers(msg, args, sender) {
         "admins": [666, 9, 8, 7, 6, 5],
         "dev": [69, 666]
     }
+    if (!groups[group]) return await msg.send("🚫 Неверная группа! 🚫")
 
     let text = `📊 Список пользователей: 📊\n\n`
     if (group == "candidates" && sender.access > 4) {

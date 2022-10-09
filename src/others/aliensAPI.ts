@@ -12,6 +12,14 @@ export async function getAdminInfo(nick) {
     return info.response[0]
 }
 
+export async function getStats(nick, server = 16) {
+    return await request(`https://api.vprikol.dev/find?server=${server}&nick=${nick}&token=${process.env.VPRIKOL_TOKEN}`)
+}
+
+export async function getMembers(fraction_id, server = 16) {
+    return await request(`https://api.vprikol.dev/find?server=${server}&fraction_id=${fraction_id}&token=${process.env.VPRIKOL_TOKEN}`)
+}
+
 export async function paste(text, header) {
     const eo = "```"
     const client = new PrivateBinClient("https://privatebin.net/");

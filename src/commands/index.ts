@@ -1,5 +1,5 @@
 import {getID} from "../others/utils";
-import { helpCommand } from "./helpCommand";
+import {helpCommand} from "./helpCommand";
 import {addText, form, fracs, promotion, recovery, removedCandidate, uval} from "../personnel";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
 import {
@@ -26,6 +26,9 @@ import {msgCommand} from "./msgCommand";
 import {commandAdminBlock, commandMakeAdmin} from "./makeAdminCommand";
 import {listUsers} from "./listCommand";
 import {setRole} from "./setRoleCommand";
+import {membersCommand} from "./membersCommand";
+import {checkCommand} from "./checkCommand";
+import {aboutCommand} from "./aboutCommand";
 
 export class Command {
     public access: number;
@@ -56,6 +59,7 @@ export const commandsInfo: Command[] = [
     new Command("stats", 0, ["info", "find"], stats, "Статистика пользователя", "[user]"),
     new Command("list", 0, [], listUsers, "Список пользователей", "[group]", 0, helpList),
     new Command("history", 0, [], getHistory, "Просмотреть историю пользователя", "[user] [type]", 2, helpHistory),
+    new Command("about", 0, [], aboutCommand),
 ];
 
 export const commandsData: Command[] = [
@@ -98,6 +102,8 @@ export const commandsOthers: Command[] = [
     new Command("adminblock", 6, [], commandAdminBlock, "Разрешить или запретить пользователю занимать пост администратора", "[user]", 1),
     new Command("makeadmin", 7, [], commandMakeAdmin, "Сделать пользователя кандидатом на пост администратора", "[user]", 1),
     new Command("shop", 2, [], commandShop, "Обменник баллов"),
+    new Command("members", 0, [], membersCommand, "Получить список сотрудников в сети у организации", "[id фракции] [server]", 1),
+    new Command("check", 5, [], checkCommand, "Статистика игрока на сервере", "[Ник игрока] [server]", 1),
 ]
 
 export default [

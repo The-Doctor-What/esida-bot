@@ -23,7 +23,7 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
         args = args || []
         if (!works && command != "esida") return
 
-        const sender = await getUserData(msg.userId) || {vk_id: msg.senderId, access: 0}
+        const sender = await getUserData(msg.senderId)|| {vk_id: msg.senderId, access: 0}
 
         if (sender.access < 5) {
             for (const chat of chats) {
@@ -39,14 +39,12 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
         if (cmd.minArgs > args.length) return await msg.send(`🚫 Недостаточно аргументов для использования команды! 🚫\nИспользование: ${cmd.usage}\n\n${cmd.fullHelp}`)
         await cmd.execute(msg, args, sender)
     } catch (error) {
-        try {
-            const {link, keyboard} = await getError(error, "commandSystem")
-            if (group) await msg.send({message: `🚫 Произошла ошибка при выполнении команды! 🚫\n\n${error}`, keyboard: keyboard,})
-            else await msg.send(`🚫 Произошла ошибка при выполнении команды! 🚫\n\n${error}\n Подробнее: ${link}`,)
-        } catch {
-            console.log(error)
-            await msg.send(`🚫 Произошла ошибка при выполнении команды! 🚫\n\n${error}`)
-        }
+        const {link, keyboard} = await getError(error, "commandSystem")
+        if (group) await msg.send({
+            message: `🚫 Произошла ошибка при выполнении команды! 🚫\n\n${error}`,
+            keyboard: keyboard,
+        })
+        else await msg.send(`🚫 Произошла ошибка при выполнении команды! 🚫\n\n${error}\n Подробнее: ${link}`,)
     }
 }
 
