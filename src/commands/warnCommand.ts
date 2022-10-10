@@ -40,7 +40,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     if (args[1].startsWith("+")) [action, actionText] = ["+", "Выдал"]
     else if (args[1].startsWith("-")) [action, actionText] = ["-", "Снял"]
 
-    const count = parseInt(args[1].replace(/[^0-9]/g, ""))
+    const count = parseInt(args[1])
     if (isNaN(count)) return await msg.send("🚫 Неверное количество! 🚫")
 
     const reason = args.slice(2).join(" ")

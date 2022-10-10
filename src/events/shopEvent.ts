@@ -27,18 +27,15 @@ export async function eventShopBuy(event, args, sender) {
 }
 
 export async function purchase(event, sender, price) {
-    if (price == -1) {
-        await show_snackbar(event, "Этот товар нельзя купить!")
-        return false
-    } else if (sender.score < price) {
-        await show_snackbar(event, "У вас недостаточно средств для покупки!")
-        return false
-    } else {
+    if (price == -1) await show_snackbar(event, "Этот товар нельзя купить!")
+    else if (sender.score < price) await show_snackbar(event, "У вас недостаточно средств для покупки!")
+    else {
         sender.score -= price
         await addHistory(sender, `score`, price, `Покупка в магазине`, `-`, userid)
         await saveUser(sender)
         return true
     }
+    return false
 }
 
 export async function checkBuy(event, sender, price, limit, value) {

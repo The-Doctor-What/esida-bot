@@ -35,8 +35,8 @@ export async function commandMakeAdmin(msg, args, sender) {
     await messageSend(`!padm @id${user.vk_id}`)
     await messageSend(dedent(`
         Logs:
-        ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!
-        `),
+        ${sender.rank} @id${sender.vk_id} (${sender.nick}) назначил${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick}) кандидатом на пост администратора!`
+        ),
         41,
         vkGroup)
 

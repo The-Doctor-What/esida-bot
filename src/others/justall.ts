@@ -16,11 +16,10 @@ export async function justallReload() {
 }
 
 export async function justallCommand(msg) {
-    if (msg.text.split(' ').length < 2) {
-        return await msg.send({message: helpJustall, dont_parse_links: true})}
-    let command = msg.text.split(' ')[1]
-    let args = msg.text.split(' ').slice(2)
-    let checkCommand = {
+    if (msg.text.split(' ').length < 2) return await msg.send({message: helpJustall, dont_parse_links: true})
+    const command = msg.text.split(' ')[1]
+    const args = msg.text.split(' ').slice(2)
+    const checkCommand = {
         "reload": justallReloadCommand,
         "add": justallAdd,
         "delete": justallDelete,
@@ -29,12 +28,8 @@ export async function justallCommand(msg) {
         "tags" : justallTags,
         "projects" : justallProjects,
     }
-    if (checkCommand[command]) {
-        await checkCommand[command](msg, args)
-    }
-    else {
-        await msg.send({message: helpJustall, dont_parse_links: true})
-    }
+    if (checkCommand[command]) await checkCommand[command](msg, args)
+    else await msg.send({message: helpJustall, dont_parse_links: true})
 }
 
 async function justallDelete(msg, args) {
