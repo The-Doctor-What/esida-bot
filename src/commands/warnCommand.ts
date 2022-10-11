@@ -40,7 +40,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     if (args[1].startsWith("+")) [action, actionText] = ["+", "Выдал"]
     else if (args[1].startsWith("-")) [action, actionText] = ["-", "Снял"]
 
-    const count = parseInt(args[1])
+    const count = Math.abs(parseInt(args[1]))
     if (isNaN(count)) return await msg.send("🚫 Неверное количество! 🚫")
 
     const reason = args.slice(2).join(" ")
@@ -49,7 +49,6 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
     const user = await checkUser(msg, args[0], sender, false)
     if (!user) return
     if (user.access >= sender.access) return await msg.send(`🚫 Вы не можете использовать это на пользователя с таким же или большим уровнем доступа! 🚫`)
-
     if (action == "set") user[type.tag] = count
     else if (action == "+") user[type.tag] += count
     else if (action == "-") user[type.tag] -= count

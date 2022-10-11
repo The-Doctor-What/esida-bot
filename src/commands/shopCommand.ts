@@ -70,6 +70,7 @@ export async function getShopMenu(sender, menu) {
         2. 10.000.000$ - ${await getPrice("money-2", sender, true)} баллов
         3. 20.000.000$ - ${await getPrice("money-3", sender, true)} баллов`)
         if (sender.access != 2) text += `\n4. 40.000.000$ - ${await getPrice("money-4", sender, true)} баллов`
+        text += `\n\nПосле покупки данные отправляются в систему выплат и выдаются вам по вторникам`
         keyboard = Keyboard
             .keyboard([
                     [
