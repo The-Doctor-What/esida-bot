@@ -9,7 +9,7 @@ import {
     helpHistory,
     helpJustall,
     helpList,
-    helpMsg,
+    helpMsg, helpPermissions,
     helpSet
 } from "../others/helpTexts";
 import {commandShop} from "./shopCommand";
@@ -29,6 +29,7 @@ import {setRole} from "./setRoleCommand";
 import {membersCommand} from "./membersCommand";
 import {checkCommand} from "./checkCommand";
 import {aboutCommand} from "./aboutCommand";
+import {permissionCommand} from "./permissionCommand";
 
 export class Command {
     public access: number;
@@ -82,6 +83,7 @@ export const commandsForum: Command[] = [
 ]
 
 export const commandsDev: Command[] = [
+    new Command("permissions", 69, ["perms", "pex"], permissionCommand, "Permissions", "", 1, helpPermissions),
     new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),

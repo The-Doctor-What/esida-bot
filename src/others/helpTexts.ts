@@ -93,3 +93,8 @@ export const helpForum = dedent`
         - pin (Закрепить тему)
         - unpin (Открепить тему)
         `
+
+export const helpPermissions = dedent`
+        Доступные варианты:
+        user - Информация о пользователе
+        `
