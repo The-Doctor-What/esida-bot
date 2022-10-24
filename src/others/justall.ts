@@ -15,10 +15,9 @@ export async function justallReload() {
     })
 }
 
-export async function justallCommand(msg) {
-    if (msg.text.split(' ').length < 2) return await msg.send({message: helpJustall, dont_parse_links: true})
+export async function justallCommand(msg, args) {
     const command = msg.text.split(' ')[1]
-    const args = msg.text.split(' ').slice(2)
+
     const checkCommand = {
         "reload": justallReloadCommand,
         "add": justallAdd,
@@ -28,40 +27,46 @@ export async function justallCommand(msg) {
         "tags" : justallTags,
         "projects" : justallProjects,
     }
-    if (checkCommand[command]) await checkCommand[command](msg, args)
-    else await msg.send({message: helpJustall, dont_parse_links: true})
+
+    if (checkCommand[command]) return await checkCommand[command](msg, args)
+    await msg.send({message: helpJustall, dont_parse_links: true})
 }
 
 async function justallDelete(msg, args) {
-    let id = args[0].trim()
+    const id = args[0].trim()
+
     const {error} = await supabaseJA
         .from("projects")
         .delete()
         .match({id: id})
+
     if (error) {
         console.error(`Logs » Не удалось удалить проект с id ${id}!`)
         console.error(error)
         await msg.send(`🚫 Не удалось удалить проект с id ${id}!`)
     }
+
     else {
-        console.log(`Logs » Удаление проекта с id ${id} прошло успешно!`)
         await msg.send(`✅ Удаление проекта проекта с id ${id} прошло успешно!`)
         await justallReload()
     }
 }
 
 async function justallAdd(msg) {
-    let name = msg.text.split('Название: ')[1].split('\n')[0].trim()
+    const name = msg.text.split('Название: ')[1].split('\n')[0].trim()
     if (!name) return await msg.send('🚫 Введите корректное имя 🚫')
-    let link = msg.text.split('Ссылка: ')[1].split('\n')[0].trim()
+
+    const link = msg.text.split('Ссылка: ')[1].split('\n')[0].trim()
     if (!link) return await msg.send('🚫 Введите корректную ссылку 🚫')
-    let description = msg.text.split('Описание: ')[1].split('\n')[0].trim()
+
+    const description = msg.text.split('Описание: ')[1].split('\n')[0].trim()
     if (!description) return await msg.send('🚫 Введите корректное описание 🚫')
-    let icon = msg.text.split('Иконка: ')[1].split('\n')[0].trim()
+
+    const icon = msg.text.split('Иконка: ')[1].split('\n')[0].trim()
     if (!icon) return await msg.send('🚫 Введите корректную иконку 🚫')
-    let tags = msg.text.split('Теги: ')[1].split('\n')[0]
+
+    const tags = msg.text.split('Теги: ')[1].split('\n')[0].trim().split(',').map(t => Number(t.trim()))
     if (!tags) return await msg.send('🚫 Введите корректные теги 🚫')
-    tags = tags.trim().split(',').map(t => Number(t.trim()))
 
     const {error} = await supabaseJA
         .from("projects")
@@ -72,21 +77,22 @@ async function justallAdd(msg) {
             icon: icon,
             tags: tags
         })
+
     if (error) {
         console.error(`Logs » Не удалось создать новый проект "${name}"!`)
         console.error(error)
         await msg.send(`🚫 Не удалось создать новый проект "${name}"!`)
     }
+
     else {
-        console.log(`Logs » Создание нового проекта "${name}" прошло успешно!`)
         await msg.send(`✅ Создание нового проекта "${name}" прошло успешно!`)
         await justallReload()
     }
 }
 
 async function justallConnect(msg, args) {
-    let icon = args[0]
-    let url = args[1]
+    const icon = args[0]
+    const url = args[1]
 
     const {error} = await supabaseJA
         .from("socials")
@@ -94,65 +100,59 @@ async function justallConnect(msg, args) {
             icon: icon,
             url: url
         })
+
     if (error) {
         console.error(`Logs » Не удалось привязать новую социальную сеть!`)
         console.error(error)
         await msg.send(`🚫 Не удалось привязать новую социальную сеть!`)
     }
+
     else {
-        console.log(`Logs » Подключение новой социальной сети прошло успешно!`)
         await msg.send(`✅ Подключение новой социальной сети прошло успешно!`)
         await justallReload()
     }
 }
 
 async function justallDisconnect(msg, args) {
-    let url = args[0]
+    const url = args[0]
 
     const {error} = await supabaseJA
         .from("socials")
         .delete()
         .match({url: url})
+
     if (error) {
         console.error(`Logs » Не удалось отключить социальную сеть!`)
         console.error(error)
         await msg.send(`🚫 Не удалось отключить социальную сеть!`)
     }
+
     else {
-        console.log(`Logs » Отключение социальной сети прошло успешно!`)
         await msg.send(`✅ Отключение социальной сети прошло успешно!`)
         await justallReload()
     }
 }
 
 async function justallTags(msg) {
-    await supabaseJA
-        .from("project_tags")
-        .select("*")
-        .then(({data, error}) => {
-            if (error) {
-                console.error(`Logs » Не удалось получить список тегов!`)
-                console.error(error)
-                msg.send(`🚫 Не удалось получить список тегов!`)
-            } else {
-                let tags = data.map(t => `ID: ${t.id} | Название: ${t.name}`).join('\n')
-                msg.send(`📋 Список тегов:\n${tags}`)
-            }
-        })
+    await getFullDataJA(msg, "project_tags")
 }
 
 async function justallProjects(msg) {
+    await getFullDataJA(msg, "projects")
+}
+
+async function getFullDataJA(msg, section) {
     await supabaseJA
-        .from("projects")
+        .from(section)
         .select("*")
         .then(({data, error}) => {
             if (error) {
-                console.error(`Logs » Не удалось получить список проектов!`)
+                console.error(`Logs » Не удалось получить список данных!`)
                 console.error(error)
-                msg.send(`🚫 Не удалось получить список проектов!`)
+                msg.send(`🚫 Не удалось получить список данных!`)
             } else {
                 let projects = data.map(p => `ID: ${p.id} | Название: ${p.title}`).join('\n')
-                msg.send(`📋 Список проектов:\n${projects}`)
+                msg.send(`📋 Список:\n${projects}`)
             }
         })
 }

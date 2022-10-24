@@ -3,8 +3,6 @@ import {vkGroup, vkUser} from "../bots";
 import dedent from "dedent-js";
 
 export async function random(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -38,7 +36,7 @@ export function isURL(str) {
 
 export async function getShortURL(url) {
     if (!isURL(url)) return false
-    let short = await vkUser.api.utils.getShortLink({url: url})
+    const short = await vkUser.api.utils.getShortLink({url: url})
     return `vk.cc/${short.key}`
 }
 
@@ -47,18 +45,15 @@ export async function getID(msg) {
 }
 
 export async function chatsActions(msg, user, action = "add") {
-    let tag: string
     const rank = await getRankData(user.rank)
-    if (rank.chatTag) tag = rank.chatTag
-    else if (action == "kick") tag = "Agos_0"
-    else if (user.fraction > 0 && user.fraction < 30) tag = `leader_${user.fraction}`
+    const tag = rank.chatTag ? rank.chatTag : `leader_${user.fraction}`
     await messageSend(`!f${action} @id${msg.senderId} ${tag} Указано в беседе лидеров/замов 16`)
 }
 
 export async function sendMessage(id, msg) {
     if (userid == id) return await msg.send('🚫 | Вы не можете отправить сообщение боту!')
 
-    let message = dedent`
+    const message = dedent`
         Приветик я Эвелина, давай сразу на ты! Я рада за тебя так как ты возможно будущий руководитель гос. организации, но если ты видишь, это сообщение, значит ты был одобрен.
         Сначала тебе надо будет добавить меня в друзья,
         Потом просто заполни форму - /form`

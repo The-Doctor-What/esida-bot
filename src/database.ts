@@ -12,15 +12,14 @@ export async function getFraction(id: number, type: string = "name") {
     for (const frac of fractions) {
         if (frac.id == id)
             if (type == "name") return `${frac.name} [${id}]`
-            else if (type == "tag") return frac.tag
             else if (type == "chat") {
                 for (const chat of chats) {
                     frac.tag
                     if (chat.name == frac.group) return chat.defaultChat
                 }
-            }
+            } else return frac[type]
     }
-    return id
+    return undefined
 }
 
 export async function loadFracs() {
@@ -37,7 +36,7 @@ export async function getVkId(data) {
     if (!id) {
         const username = (data.match(nickUrlRegex) || [])[1]
         if (!username) return undefined
-        let user = await vkUser.api.users.get({
+        const user = await vkUser.api.users.get({
             user_ids: [username]
         })
         return user[0].id
@@ -117,26 +116,17 @@ export async function getRankData(rank) {
     }
 }
 
-export async function checkUser(msg, user, sender, archive = true) {
-    let id = await getVkId(user.toString())
-    if (!id) id = user
-    let access = 0
-    if (sender) access = sender.access
-    let data = await getUserData(id)
-    if (!data) {
+export async function checkUser(msg, data, sender, archive = true) {
+    const user = await getUserData(await getVkId(data.toString()) || data)
+
+    if (!user)
         await msg.send({
             message: `🚫 Пользователь не найден, если вы уверены, что он зарегистрирован, обратитесь к @id${devId} (разработчику)! 🚫`,
             disable_mentions: 1
         })
-        return undefined
-    } else if (data.access == 0 && access < 5) {
-        await msg.send({message: `🚫 У вас нет доступа к архивным пользователям! 🚫`, disable_mentions: 1})
-        return undefined
-    } else if (data.access == 0 && !archive) {
-        await msg.send({
-            message: `🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`,
-            disable_mentions: 1
-        })
-        return undefined
-    } else return data
+    else if (user.access == 0 && sender.access < 5) await msg.send(`🚫 У вас нет доступа к архивным пользователям! 🚫`)
+    else if (user.access == 0 && !archive) await msg.send(`🚫 Пользователь архивный, вы не можете с ним взаимодействовать! 🚫`)
+
+    else return user
+    return undefined
 }

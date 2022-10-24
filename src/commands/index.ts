@@ -1,15 +1,15 @@
 import {getID} from "../others/utils";
 import {helpCommand} from "./helpCommand";
-import {addText, form, fracs, promotion, recovery, removedCandidate, uval} from "../personnel";
+import {form, fracs} from "../personnel";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
 import {
     helpCongress,
     helpEsida,
     helpForum,
-    helpHistory,
+    helpHistory, helpInvite,
     helpJustall,
     helpList,
-    helpMsg, helpPermissions,
+    helpMsg,
     helpSet
 } from "../others/helpTexts";
 import {commandShop} from "./shopCommand";
@@ -29,7 +29,9 @@ import {setRole} from "./setRoleCommand";
 import {membersCommand} from "./membersCommand";
 import {checkCommand} from "./checkCommand";
 import {aboutCommand} from "./aboutCommand";
-import {permissionCommand} from "./permissionCommand";
+import {inviteCommand, removedCandidate} from "./inviteCommand";
+import {recoveryCommand, unInviteCommand} from "./unInviteCommand";
+import {setRankCommand} from "./setRankCommand";
 
 export class Command {
     public access: number;
@@ -83,18 +85,17 @@ export const commandsForum: Command[] = [
 ]
 
 export const commandsDev: Command[] = [
-    new Command("permissions", 69, ["perms", "pex"], permissionCommand, "Permissions", "", 1, helpPermissions),
     new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
 ]
 
 export const commandsPost: Command[] = [
-    new Command("adduser", 4, ["user_add"], addText, "Как добавить пользователя в базу данных"),
-    new Command("noadd", 5, [], removedCandidate, "Снять пользователя с кандидатов", "[user]", 1),
-    new Command("uval", 5, [], uval, "Увольнение пользователя", "[user] [Причина]", 2),
-    new Command("recovery", 5, [], recovery, "Восстановление пользователя", "[user]", 1),
-    new Command("setrank", 5, [], promotion, "Изменить должность пользователя", "[user] [Должность] [Тип постановления]", 3),
+    new Command("invite", 4, ["user_add", "adduser"], inviteCommand, "Сделать пользователя кандидатом", "[user] [должность] [фракция]", 3, helpInvite),
+    new Command("uninvite", 5, ["noadd"], removedCandidate, "Снять пользователя с кандидатов", "[user]", 1),
+    new Command("uval", 5, [], unInviteCommand, "Увольнение пользователя", "[user] [Причина]", 2),
+    new Command("recovery", 5, [], recoveryCommand, "Восстановление пользователя", "[user]", 1),
+    new Command("setrank", 5, [], setRankCommand, "Изменить должность пользователя", "[user] [Должность] [Тип постановления]", 3),
     new Command("makecongress", 2, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
 ]
 
