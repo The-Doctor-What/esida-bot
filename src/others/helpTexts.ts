@@ -32,7 +32,7 @@ export const helpSet = dedent`
         - rpbio (РП биография)
         - harakter (характеристика)
         - age (возраст)
-        - frac (фракция)
+        - fraction (фракция)
         - type_add (тип постановления)
         - access (доступ) - доступно только для разработчиков
 `

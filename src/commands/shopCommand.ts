@@ -221,6 +221,6 @@ export async function getPrice(product, sender, find = false) {
     const leader = product.price[1]
     const minister = product.price[0]
     if (sender.access == 2) return deputy
-    else if (sender.access == 4 && sender.frac != 6) return minister
+    else if (sender.access == 4 && sender.fraction != 6) return minister
     else return leader
 }

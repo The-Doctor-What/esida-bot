@@ -1,6 +1,13 @@
 import {checkUser, saveUser} from "../database";
-import {congressRanks} from "../personnel";
 import {messageSend} from "../others/utils";
+
+export const congressRanks = {
+    "0": "Не состоит в конгрессе",
+    "1": "Заместитель конгрессмена",
+    "2": "Конгрессмен",
+    "3": "Вице Спикер",
+    "4": "Спикер",
+}
 
 export async function congressSetAccess(msg, args, sender) {
     if (sender.congressAccess < 4 && sender.access <= 4) return await msg.send("🚫 | Доступ к настройке доступа в конгрессе имеет только спикер конгресса! 🚫")

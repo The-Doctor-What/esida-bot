@@ -64,7 +64,7 @@ export async function sendMessage(id, msg) {
             user_id: id,
             text: message,
         })
-        await msg.send('🚫 | У пользователя закрыты личные сообщения, поэтому я отправила ему заявку в друзья!')
+        await msg.send('🚫 | У пользователя закрыты личные сообщения, поэтому Эвелина отправила ему заявку в друзья!')
         return
     } else {
         await vkUser.api.messages.send({
@@ -72,7 +72,7 @@ export async function sendMessage(id, msg) {
             message: message,
             random_id: 0
         })
-        await msg.send('✅ | Отправила форму на пост руководителя!')
+        await msg.send('✅ | Эвелина отправила форму на пост руководителя!')
     }
 }
 
@@ -86,12 +86,12 @@ export async function endMessage(user, sender, reason, visable = true) {
     const text = `
         ${sender.rank} @id${sender.vk_id} (${sender.nick}) снял${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick})
         C должности: ${user.rank}
-        ${user.oldaccess < 4 ? await getFraction(user.frac) : ""}
+        ${user.oldaccess < 4 ? await getFraction(user.fraction) : ""}
         Причина: ${visable ? reason : "Скрыта"}`
 
     await messageSend(text, await getFraction(100, "chat"), vkGroup)
     if (user.oldaccess < 5) {
-        await messageSend(text, await getFraction(user.frac, "chat"), vkGroup)
+        await messageSend(text, await getFraction(user.fraction, "chat"), vkGroup)
     }
 }
 
@@ -112,10 +112,10 @@ export async function genCode() {
 export async function startMessage(user) {
     const text = dedent`
         @id${user.vk_id} (${user.nick}) назначен${await getGender(user.vk_id)}
-        На должность: ${user.rank} ${await getFraction(user.frac)}`
+        На должность: ${user.rank} ${await getFraction(user.fraction)}`
 
     await messageSend(text, await getFraction(100, "chat"), vkGroup)
     if (user.access < 5) {
-        await messageSend(text, await getFraction(user.frac, "chat"), vkGroup)
+        await messageSend(text, await getFraction(user.fraction, "chat"), vkGroup)
     }
 }

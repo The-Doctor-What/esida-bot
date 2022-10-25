@@ -153,7 +153,7 @@ export async function formDelete(form, accept) {
         dedent`📝 Заявка на ${form.action} темы! 📝
         🔗 | Ссылка: ${form.url}
         ${accept ? `✅ | Принята!` : `🚫 | Отклонена!`}`,
-        await getFraction(user.frac, "chat"),
+        await getFraction(user.fraction, "chat"),
         vkGroup
     )
 }

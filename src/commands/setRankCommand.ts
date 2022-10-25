@@ -16,11 +16,11 @@ export async function setRankCommand(msg, args, sender) {
     if (user.access >= 3 && user.access <= 4) {
         await messageSend(dedent`
             Ник снимаемого лидера: ${user.nick}
-            Какая фракция: ${await getFraction(user.frac)}
+            Какая фракция: ${await getFraction(user.fraction)}
             За что снят: ${type}
             VK: @id${user.vk_id}
             Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
-        await messageSend(`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
+        await messageSend(`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.fraction)}`, 81)
     }
 
     user.access = rank.access
@@ -42,12 +42,12 @@ export async function setRankCommand(msg, args, sender) {
     if (user.access >= 3 && user.access <= 4) {
         await messageSend(dedent`
             Ник нового лидера: ${user.nick}
-            Какая фракция: ${await getFraction(user.frac)}
+            Какая фракция: ${await getFraction(user.fraction)}
             Возраст: ${user.age}
             Каким образом поставлен (обзвон / передача): ${user.type_add}
             Дата обзвона/передачи: ${moment().format('DD.MM.YYYY')}
             VK: @id${user.vk_id}`, 73)
-        await messageSend(`!addleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
+        await messageSend(`!addleader @id${user.vk_id} ${user.nick} ${await getFraction(user.fraction)}`, 81)
     }
 
     await saveUser(user)

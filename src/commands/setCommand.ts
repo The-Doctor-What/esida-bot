@@ -16,7 +16,7 @@ export async function setDataUser(msg, args, sender) {
         "rpbio": "rpbio",
         "harakter": "characteristic",
         "age": "age",
-        "frac": "frac",
+        "fraction": "fraction",
         "access": "access",
         "type_add": "type_add",
     }

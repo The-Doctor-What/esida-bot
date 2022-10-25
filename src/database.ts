@@ -9,15 +9,15 @@ export const userid = 573028398;
 export const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_TOKEN)
 
 export async function getFraction(id: number, type: string = "name") {
-    for (const frac of fractions) {
-        if (frac.id == id)
-            if (type == "name") return `${frac.name} [${id}]`
+    for (const fraction of fractions) {
+        if (fraction.id == id)
+            if (type == "name") return `${fraction.name} [${id}]`
             else if (type == "chat") {
                 for (const chat of chats) {
-                    frac.tag
-                    if (chat.name == frac.group) return chat.defaultChat
+                    fraction.tag
+                    if (chat.name == fraction.group) return chat.defaultChat
                 }
-            } else return frac[type]
+            } else return fraction[type]
     }
     return undefined
 }

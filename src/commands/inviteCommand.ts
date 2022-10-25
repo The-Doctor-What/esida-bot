@@ -2,19 +2,22 @@ import {deleteUser, getAccess, getFraction, getRankData, getUserData, getVkId, s
 import {genCode, sendMessage} from "../others/utils";
 
 export async function inviteCommand(msg, args, sender) {
-    const candidate = await getVkId(args[0])
-    if (!candidate) return await msg.send('🚫 Введите корректный id пользователя! 🚫')
+    const candidate: any = {}
+    candidate.vk_id = await getVkId(args[0])
+    if (!candidate.vk_id) return await msg.send('🚫 Введите корректный id пользователя! 🚫')
 
     const rank = await getRankData(args[1])
     if (!rank) return await msg.send('🚫 Такой должности не существует! 🚫')
     if (!await getAccess(sender.vk_id, rank.admAccess)) {
         return await msg.send(`🚫 | У вас нет доступа к назначению на данную должность!`)
     }
+    candidate.access = rank.access
+    candidate.rank = rank.id
 
-    const fraction = getFraction(args[2])
-    if (!fraction) return await msg.send('🚫 Такой фракции не существует! 🚫')
+    candidate.fraction = await getFraction(args[2], "id")
+    if (!candidate.fraction) return await msg.send('🚫 Такой фракции не существует! 🚫')
 
-    const user = await getUserData(candidate, "candidates") || await getUserData(candidate, "users")
+    const user = await getUserData(candidate.vk_id, "candidates") || await getUserData(candidate, "users")
     if (user) {
         if (user.access > 0) return await msg.send('🚫 Данный пользователь уже является руководителем! 🚫')
         else {
@@ -23,15 +26,11 @@ export async function inviteCommand(msg, args, sender) {
         }
     }
 
+    candidate.code = await genCode()
+
     const {error} = await supabase
         .from("candidates")
-        .insert({
-            vk_id: candidate,
-            access: rank.access,
-            fraction,
-            rank: rank.id,
-            code: genCode(),
-        })
+        .insert(candidate)
 
     if (error) {
         console.error(`Logs » Не удалось добавить пользователя в базу данных!`)
@@ -39,11 +38,11 @@ export async function inviteCommand(msg, args, sender) {
         return await msg.send(`🚫 Не удалось добавить пользователя в базу данных! 🚫`)
     }
 
-    await sendMessage(candidate, msg)
+    await sendMessage(candidate.vk_id, msg)
 }
 
 export async function removedCandidate(msg, args) {
-    const user = await getUserData(getVkId(args[0]) || args[0], "candidates")
+    const user = await getUserData(await getVkId(args[0]) || args[0], "candidates")
     if (!user) return await msg.send(`🚫 | Данный человек и так не имеет доступа к форме 💔`)
 
     const error = await deleteUser(user.vk_id, "candidates")

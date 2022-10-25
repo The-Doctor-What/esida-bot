@@ -66,7 +66,7 @@ export async function setData(msg, args, sender, type = {tag: "warns", name: "п
 
     await saveUser(user)
     await msg.send({message: text, disable_mentions: 1, dont_parse_links: 1})
-    const chat = await getFraction(user.frac, "chat")
+    const chat = await getFraction(user.fraction, "chat")
     if (user.access < 5 && chat != msg.chatId) await messageSend(text, chat, vkGroup)
 }
 
@@ -101,9 +101,9 @@ export async function checkData(user) {
             else if (user.fwarns >= 2) text += await checkWarns(user, 1, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (user.fwarns <= -1) text += await checkWarns(user, 2, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (user.vigs <= -1) text += await checkWarns(user, 2, 3, "выговоров", "предупреждения", "vigs", "warns")
-            else if (user.score > 70 && user.access == 1) text += await checkScores(user, 70)
-            else if (user.score > 140 && (user.access == 3 || (user.frac == 6 && user.access == 3))) text += await checkScores(user, 140)
-            else if (user.score > 160 && user.access == 4 && user.frac != 6) text += await checkScores(user, 160)
+            else if (user.score > 70 && user.access == 2) text += await checkScores(user, 70)
+            else if (user.score > 140 && (user.access == 3 || (user.fraction == 6 && user.access == 3))) text += await checkScores(user, 140)
+            else if (user.score > 160 && user.access == 4 && user.fraction != 6) text += await checkScores(user, 160)
             else break
         } else break
     }

@@ -1,12 +1,13 @@
 import {getID} from "../others/utils";
 import {helpCommand} from "./helpCommand";
-import {form, fracs} from "../personnel";
+import {form} from "../personnel";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
 import {
     helpCongress,
     helpEsida,
     helpForum,
-    helpHistory, helpInvite,
+    helpHistory,
+    helpInvite,
     helpJustall,
     helpList,
     helpMsg,
@@ -32,6 +33,8 @@ import {aboutCommand} from "./aboutCommand";
 import {inviteCommand, removedCandidate} from "./inviteCommand";
 import {recoveryCommand, unInviteCommand} from "./unInviteCommand";
 import {setRankCommand} from "./setRankCommand";
+import {fracs} from "./fractionsCommand";
+import {hideCommand} from "./hideCommand";
 
 export class Command {
     public access: number;
@@ -97,6 +100,7 @@ export const commandsPost: Command[] = [
     new Command("recovery", 5, [], recoveryCommand, "Восстановление пользователя", "[user]", 1),
     new Command("setrank", 5, [], setRankCommand, "Изменить должность пользователя", "[user] [Должность] [Тип постановления]", 3),
     new Command("makecongress", 2, [], congressSetAccess, "Установить доступ к конгрессу", "[user] [Доступ]", 2, helpCongress),
+    new Command("hide", 5, [], hideCommand, "Скрыть/рассекретить пользователя", "[user]", 1),
 ]
 
 export const commandsOthers: Command[] = [

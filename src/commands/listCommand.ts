@@ -10,7 +10,7 @@ export async function listUsers(msg, args, sender) {
         "others": [1],
         "zams": [2],
         "leaders": [3, 4],
-        "admins": [666, 9, 8, 7, 6, 5],
+        "admins": [666, 69, 9, 8, 7, 6, 5],
         "dev": [69, 666],
         "candidates": [0]
     }
@@ -27,16 +27,16 @@ export async function listUsers(msg, args, sender) {
             text += `\n`
         }
     } else {
-        const users = await getFullData("users", "frac")
+        const users = await getFullData("users", "fraction")
         if (!users) return await msg.send(`🚫 Не найдено ни одного пользователя! 🚫`)
 
         for (const user of users) {
-            if (((groups[group].includes(user.access) || groups[group][0] == -1) && (user.frac != -1 || group == "dev")) && (user.access != 0 || groups[group][0] == 0)) {
+            if (((groups[group].includes(user.access) || groups[group][0] == -1) && (!user.hide || group == "dev")) && (user.access != 0 || groups[group][0] == 0)) {
                 const postStart = moment(user.post)
                 const postEnd = moment(postStart).add(user.term, 'days')
 
                 text += `🔹 ${user.rank}`
-                if (user.access < 4) text += ` "${await getFraction(user.frac, "tag")}"`
+                if (user.access < 4) text += ` "${await getFraction(user.fraction, "tag")}"`
                 text += ` @id${user.vk_id} (${user.nick})`
                 if (user.access >= 3 && user.access <= 4) text += ` до срока осталось ${postEnd.diff(moment(), "days")} дней`
                 text += `\n`

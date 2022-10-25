@@ -23,7 +23,7 @@ async function commandSystem(msg, group = true, commandGroup = commands) {
         args = args || []
         if (!works && command != "esida") return
 
-        const sender = await getUserData(msg.senderId)|| {vk_id: msg.senderId, access: 0}
+        const sender = await getUserData(msg.senderId) || {vk_id: msg.senderId, access: 0}
 
         if (sender.access < 5) {
             for (const chat of chats) {

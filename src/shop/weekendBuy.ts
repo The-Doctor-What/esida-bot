@@ -5,7 +5,7 @@ import {getFraction} from "../database";
 import {checkBuy} from "../events/shopEvent";
 
 export async function weekendBuy(product, sender, price, event) {
-    const chat = await getFraction(sender.frac, "chat")
+    const chat = await getFraction(sender.fraction, "chat")
     if (product.id == "norm") {
         if (!await checkBuy(event, sender, price, 1, "norm")) return false
     }

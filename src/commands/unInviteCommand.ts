@@ -14,11 +14,11 @@ export async function unInviteCommand(msg, args, sender) {
     if (user.access >= 3 && user.access <= 4) {
         await messageSend(dedent`
             Ник снимаемого лидера: ${user.nick}
-            Какая фракция: ${await getFraction(user.frac)}
+            Какая фракция: ${await getFraction(user.fraction)}
             За что снят: ${reason}
             VK: @id${user.vk_id}
             Дата снятия: ${moment().format('DD.MM.YYYY')}`, 73)
-        await messageSend(`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.frac)}`, 81)
+        await messageSend(`!remleader @id${user.vk_id} ${user.nick} ${await getFraction(user.fraction)}`, 81)
     }
 
     user.oldaccess = user.access

@@ -4,12 +4,12 @@ import {helpMsg} from "../others/helpTexts";
 import {messageSend} from "../others/utils";
 
 export async function msgCommand(msg, args, sender) {
-    const frac = args[0].toLowerCase()
+    const fraction = args[0].toLowerCase()
     const message = msg.text.split(' ').slice(2).join(' ')
     let error = true
 
     for (const chat of chats) {
-        if (chat.name.toLowerCase() == frac) {
+        if (chat.name.toLowerCase() == fraction) {
             error = false
             if (chat.access > sender.access) return await msg.send("🚫 | У вас недостаточно прав для отправки сообщения в эту фракцию!")
 

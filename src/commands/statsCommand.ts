@@ -1,11 +1,10 @@
 import {checkUser, getFraction} from "../database";
 import moment from "moment";
 import {getAdminInfo} from "../others/aliensAPI";
-import {congressRanks} from "../personnel";
 import {getGender, isURL} from "../others/utils";
 import {Keyboard} from "vk-io";
 import dedent from "dedent-js";
-
+import {congressRanks} from "./congressCommand";
 moment.locale('ru')
 
 export async function stats(msg, args, sender) {
@@ -25,7 +24,7 @@ export async function stats(msg, args, sender) {
         🔹 Предупреждения: ${user.warns}/3
         🔹 Федеральный выговоров: ${user.fwarns}/2
         ${user.rpbio ? `🔹 РП-биография: ${user.rpbio}` : ''}
-        🔹 Структура: ${await getFraction(user.frac)}
+        🔹 Структура: ${await getFraction(user.fraction)}
         ${user.congressAccess > 0 ? `🔹 Должность в конгрессе: ${congressRanks[user.congressAccess]}` : ''}
         ${await getScores(user)}
         🔹 Тип постановления: ${user.type_add}
@@ -41,6 +40,7 @@ export async function stats(msg, args, sender) {
         ${user.access == 0 ? await archive(user) : ''}
         
         ${warning + (access <= 4 ? await getWarnings(user, access, postEnd) : '')}
+        ${user.hide ? '🔸 Данный пользователь скрыт от публичного просмотра' : ''}
     `
 
     const keyboard = await checkLinks(user)
@@ -132,7 +132,7 @@ async function getStatsHeader(user, access) {
 }
 
 async function getScores(user) {
-    if (user.frac == 30) return `🔹 Репутация: ${user.rep}`
+    if (user.fraction == 30) return `🔹 Репутация: ${user.rep}`
     return dedent`
         🔹 Баллов: ${user.score}
         🔹 Основных баллов: ${user.litrbol}
