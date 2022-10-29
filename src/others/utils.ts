@@ -1,6 +1,5 @@
-import {getFraction, getRankData, userid} from "../database";
+import {getFraction, userid} from "../database";
 import {vkGroup, vkUser} from "../bots";
-import dedent from "dedent-js";
 
 export async function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -44,19 +43,8 @@ export async function getID(msg) {
     await msg.send(`ID чата: ${msg.chatId}`)
 }
 
-export async function chatsActions(msg, user, action = "add") {
-    const rank = await getRankData(user.rank)
-    const tag = rank.chatTag ? rank.chatTag : `leader_${user.fraction}`
-    await messageSend(`!f${action} @id${msg.senderId} ${tag} Указано в беседе лидеров/замов 16`)
-}
-
-export async function sendMessage(id, msg) {
+export async function sendMessage(id, msg, message) {
     if (userid == id) return await msg.send('🚫 | Вы не можете отправить сообщение боту!')
-
-    const message = dedent`
-        Приветик я Эвелина, давай сразу на ты! Я рада за тебя так как ты возможно будущий руководитель гос. организации, но если ты видишь, это сообщение, значит ты был одобрен.
-        Сначала тебе надо будет добавить меня в друзья,
-        Потом просто заполни форму - /form`
 
     const friendCheck = await vkUser.api.friends.get({user_id: userid})
     if (!friendCheck.items.includes(Number(id))) {
@@ -72,7 +60,7 @@ export async function sendMessage(id, msg) {
             message: message,
             random_id: 0
         })
-        await msg.send('✅ | Эвелина отправила форму на пост руководителя!')
+        await msg.send('✅ | Эвелина отправила сообщение пользователю!')
     }
 }
 
@@ -82,7 +70,7 @@ export async function getGender(id, male = "", girl = "а") {
     else return male
 }
 
-export async function endMessage(user, sender, reason, visable = true) {
+export async function unInviteMessage(user, sender, reason, visable = true) {
     const text = `
         ${sender.rank} @id${sender.vk_id} (${sender.nick}) снял${await getGender(sender.vk_id)} @id${user.vk_id} (${user.nick})
         C должности: ${user.rank}
@@ -107,15 +95,4 @@ export async function genCode() {
     }
 
     return code
-}
-
-export async function startMessage(user) {
-    const text = dedent`
-        @id${user.vk_id} (${user.nick}) назначен${await getGender(user.vk_id)}
-        На должность: ${user.rank} ${await getFraction(user.fraction)}`
-
-    await messageSend(text, await getFraction(100, "chat"), vkGroup)
-    if (user.access < 5) {
-        await messageSend(text, await getFraction(user.fraction, "chat"), vkGroup)
-    }
 }

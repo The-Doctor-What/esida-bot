@@ -1,6 +1,5 @@
 import {getID} from "../others/utils";
 import {helpCommand} from "./helpCommand";
-import {form} from "../personnel";
 import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
 import {
     helpCongress,
@@ -35,6 +34,7 @@ import {recoveryCommand, unInviteCommand} from "./unInviteCommand";
 import {setRankCommand} from "./setRankCommand";
 import {fracs} from "./fractionsCommand";
 import {hideCommand} from "./hideCommand";
+import {formCommand} from "./formCommand";
 
 export class Command {
     public access: number;
@@ -111,6 +111,7 @@ export const commandsOthers: Command[] = [
     new Command("shop", 2, [], commandShop, "Обменник баллов"),
     new Command("members", 0, [], membersCommand, "Получить список сотрудников в сети у организации", "[id фракции] [server]", 1),
     new Command("check", 5, [], checkCommand, "Статистика игрока на сервере", "[Ник игрока] [server]", 1),
+    new Command("form", 3, [], formCommand),
 ]
 
 export default [
@@ -124,5 +125,4 @@ export default [
 
 export const commandsUser: Command[] = [
     new Command("id", 0, ["chat_id"], getID, "Получить ID беседы"),
-    new Command("form", 0, [], form, "Форма для второго этапа регистрации"),
 ]

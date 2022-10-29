@@ -6,8 +6,8 @@ export async function getOnline(nick, server = 16) {
     return await request(`https://admin-tools.ru/vkbot/handler_log.php?func=check_onl&p=${process.env.ADMIN_TOOLS_TOKEN}&server=${server}&name=${nick}`)
 }
 
-export async function getAdminInfo(nick) {
-    const info = await request(`https://seraphtech.site/api/v2/forum.getAdmins?nick=${nick}&id=&token=${process.env.SERAPH_TOKEN}`)
+export async function getAdminInfo(data, type = "nick") {
+    const info = await request(`https://seraphtech.site/api/v2/forum.getAdmins?${type}=${data}&id=&token=${process.env.SERAPH_TOKEN}`)
     if (!info.response[0]) return undefined
     return info.response[0]
 }

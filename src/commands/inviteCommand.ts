@@ -1,5 +1,6 @@
 import {deleteUser, getAccess, getFraction, getRankData, getUserData, getVkId, supabase} from "../database";
 import {genCode, sendMessage} from "../others/utils";
+import dedent from "dedent-js";
 
 export async function inviteCommand(msg, args, sender) {
     const candidate: any = {}
@@ -38,7 +39,12 @@ export async function inviteCommand(msg, args, sender) {
         return await msg.send(`🚫 Не удалось добавить пользователя в базу данных! 🚫`)
     }
 
-    await sendMessage(candidate.vk_id, msg)
+    const message = dedent`
+        Приветик я Эвелина, давай сразу на ты! Я рада за тебя так как ты возможно будущий руководитель гос. организации, но если ты видишь, это сообщение, значит ты был одобрен.
+        Сначала тебе надо будет добавить меня в друзья, а также добавить в друзья @id637477240(Алексея Бабенко).
+        Потом напиши в группу @esida команду - /form`
+
+    await sendMessage(candidate.vk_id, msg, message)
 }
 
 export async function removedCandidate(msg, args) {

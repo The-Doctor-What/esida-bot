@@ -1,6 +1,6 @@
 import {checkUser, saveUser} from "../database";
-import {vkGroup, vkUser} from "../bots";
-import {messageSend, getGender} from "../others/utils";
+import {vkGroup} from "../bots";
+import {messageSend, getGender, sendMessage} from "../others/utils";
 import dedent from "dedent-js";
 
 export async function commandMakeAdmin(msg, args, sender) {
@@ -25,13 +25,7 @@ export async function commandMakeAdmin(msg, args, sender) {
         Удачи, люблю 🎉❤`
     )
 
-    await vkUser.api.messages.send({
-        user_id: user.vk_id,
-        message: message,
-        dont_parse_links: 1,
-        random_id: 0
-    })
-
+    await sendMessage(user.vk_id, msg, message)
     await messageSend(`!padm @id${user.vk_id}`)
     await messageSend(dedent(`
         Logs:

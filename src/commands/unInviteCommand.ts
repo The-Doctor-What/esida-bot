@@ -1,5 +1,5 @@
 import {checkUser, getFraction, saveUser} from "../database";
-import {endMessage, getGender, messageSend} from "../others/utils";
+import {unInviteMessage, getGender, messageSend} from "../others/utils";
 import dedent from "dedent-js";
 import moment from "moment";
 
@@ -28,7 +28,7 @@ export async function unInviteCommand(msg, args, sender) {
     user.access = 0
 
     await messageSend(`!fkick @id${user.vk_id} Agos_0 Указано в беседе лидеров/замов 16`)
-    await endMessage(user, sender, reason, visable)
+    await unInviteMessage(user, sender, reason, visable)
     await saveUser(user)
 
     await msg.send({

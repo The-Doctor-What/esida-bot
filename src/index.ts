@@ -3,7 +3,6 @@ import {vkGroup, vkUser} from "./bots";
 import {loadFracs} from "./database";
 import "./events/eventSystem"
 import "./commands/commandSystem"
-import "./personnel"
 
 export const main = async () => {
     await loadFracs()
