@@ -2,7 +2,23 @@ import {getPasteUrl, PrivateBinClient} from "@agc93/privatebin";
 import request from 'prequest'
 import dedent from "dedent-js";
 
-export async function getOnline(nick, server = 16) {
+export type SuccessfulOnlineAPIResponse = {
+    success: true;
+    online: {
+        [date: string]: string;
+    };
+    report: {
+        [date: string]: number;
+    };
+    allonline: string;
+}
+
+export type OnlineAPIResponse = SuccessfulOnlineAPIResponse | {
+    error: true;
+    msg: string;
+};
+
+export async function getOnline(nick, server = 16): Promise<OnlineAPIResponse> {
     return await request(`https://admin-tools.ru/vkbot/handler_log.php?func=check_onl&p=${process.env.ADMIN_TOOLS_TOKEN}&server=${server}&name=${nick}`)
 }
 

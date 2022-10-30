@@ -1,10 +1,10 @@
-require('dotenv').config()
+import 'dotenv/config.js';
 import {vkGroup, vkUser} from "./bots";
 import {loadFracs} from "./database";
 import "./events/eventSystem"
 import "./commands/commandSystem"
 
-export const main = async () => {
+async function main() {
     await loadFracs()
     vkUser.updates.start().catch(console.error)
     vkGroup.updates.start().catch(console.error)

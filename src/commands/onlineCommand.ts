@@ -1,6 +1,6 @@
 import {getAccess} from "../database";
-import {getAdminInfo, getOnline} from "../others/aliensAPI";
-import moment from "moment";
+import {getAdminInfo, getOnline, SuccessfulOnlineAPIResponse} from "../others/aliensAPI";
+import moment, {Moment} from "moment";
 import dedent from "dedent-js";
 
 moment.locale('ru')
@@ -15,7 +15,8 @@ export async function getOnlineUser(msg, args, sender) {
     }
 
     const online = await getOnline(nick, server)
-    if (online.error) return await msg.send(`🚫 | ${online.msg}`)
+    console.log(online)
+    if ("error" in online) return await msg.send(`🚫 | ${online.msg}`)
 
     await msg.send(dedent`
         📊 Онлайн игрока ${nick}:
@@ -28,41 +29,26 @@ export async function getOnlineUser(msg, args, sender) {
         🔸 Онлайн за текущую неделю
         
         ${await getOnlineText(moment().startOf('week').add(6, 'days'), online, "dddd")}
-    
-        Бот может отображать общий онлайн некорректно, скоро будет исправлено`
-    )
+        
+        Онлайн работает!
+    `)
 }
 
-export async function getOnlineText(time, online, format = "DD MMM") {
-    let text = ``
-    let reports = 0
-    let onlineTime = moment("00:00:00", "HH:mm:SS")
+export async function getOnlineText(
+    date: Moment,
+    online: SuccessfulOnlineAPIResponse,
+    format: string = "DD MMMM"
+): Promise<string> {
+    let text = ""
+    let sumTime = moment.duration(0)
+    for (let i = 0; i < 7; i++) {
+        const dateText = date.format(format)
+        const onlineText = online.online[date.format("YYYY-MM-DD")] || "00:00:00"
+        sumTime.add(moment.duration(onlineText))
+        text += `🔹 ${dateText}: ${onlineText}\n`
 
-    for (let c = 0; c < 7; c++) {
-
-        if (!online.online[time.format("YYYY-MM-DD")]) {
-            text += `🔹 ${time.format(format)} 00:00:00\n`
-            time.subtract(1, "days")
-            continue
-        }
-
-        text += `🔹 ${time.format(format)} ${online.online[time.format("YYYY-MM-DD")]}`
-
-        if (online.report[time.format("YYYY-MM-DD")] > 0) {
-            text += ` [R: ${online.report[time.format("YYYY-MM-DD")]}]`
-            reports += online.report[time.format("YYYY-MM-DD")]
-        }
-
-        text += `\n`
-        time.subtract(1, "days")
-
-        let onl = moment(online.online[time.format("YYYY-MM-DD")], "HH:mm:SS")
-        onlineTime.add(Number(onl.format("HH")), "hours")
-        onlineTime.add(Number(onl.format("mm")), "minutes")
-        onlineTime.add(Number(onl.format("SS")), "seconds")
+        date.subtract(1, 'days')
     }
-
-    text += `🔸 Общее: ${onlineTime.format("LTS")}`
-    if (reports > 0) text += ` [R: ${reports}]`
+    text += `🔸 Всего: ${Math.floor(sumTime.asHours())}:${sumTime.minutes()}:${sumTime.seconds()}`
     return text
 }
