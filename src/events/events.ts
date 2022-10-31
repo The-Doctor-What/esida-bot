@@ -1,6 +1,7 @@
 import {eventShop, eventShopBuy} from "./shopEvent";
 import {eventHelp} from "./helpEvent";
 import {eventForumAccept, eventForumDecline} from "./forumEvent";
+import {deleteEventAccept, deleteEventDecline} from "./deleteEvent";
 
 export class Event {
     public access: number;
@@ -20,4 +21,6 @@ export const events: Event[] = [
     new Event("fdecline", 5, eventForumDecline),
     new Event("shop", 2, eventShop),
     new Event("buy", 2, eventShopBuy),
+    new Event("deleteaccept", 666, deleteEventAccept),
+    new Event("deletedecline", 666, deleteEventDecline),
 ]

@@ -35,6 +35,7 @@ import {setRankCommand} from "./setRankCommand";
 import {fracs} from "./fractionsCommand";
 import {hideCommand} from "./hideCommand";
 import {formCommand} from "./formCommand";
+import {deleteCommand} from "./deleteCommand";
 
 export class Command {
     public access: number;
@@ -91,6 +92,7 @@ export const commandsDev: Command[] = [
     new Command("changepassword", 69, ["changepass"], changePassword, "Сменить пароль на сайте Esida", "[Новый пароль]", 1),
     new Command("justall", 69, [], justallCommand, "Управление сайтом JustAll Studio", "[action]", 1, helpJustall),
     new Command("esida", 666, [], project, "Управление проектом Esida", "[action]", 1, helpEsida),
+    new Command("delete", 666, [], deleteCommand, "Удалить элемент из базы данных", "[table] [id]", 2),
 ]
 
 export const commandsPost: Command[] = [
@@ -111,7 +113,7 @@ export const commandsOthers: Command[] = [
     new Command("shop", 2, [], commandShop, "Обменник баллов"),
     new Command("members", 0, [], membersCommand, "Получить список сотрудников в сети у организации", "[id фракции] [server]", 1),
     new Command("check", 5, [], checkCommand, "Статистика игрока на сервере", "[Ник игрока] [server]", 1),
-    new Command("form", 3, [], formCommand),
+    new Command("form", 0, [], formCommand),
 ]
 
 export default [

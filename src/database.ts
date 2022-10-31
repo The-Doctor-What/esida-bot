@@ -91,11 +91,11 @@ export async function saveUser(user) {
     }
 }
 
-export async function deleteUser(user, table = "users") {
+export async function deleteElement(user, table = "users", id = "vk_id") {
     const {error} = await supabase
         .from(table)
         .delete()
-        .eq('vk_id', user)
+        .eq(id, user)
     if (error) {
         console.error(error)
     }

@@ -1,4 +1,4 @@
-import {deleteUser, getAccess, getFraction, getRankData, getUserData, getVkId, supabase} from "../database";
+import {deleteElement, getAccess, getFraction, getRankData, getUserData, getVkId, supabase} from "../database";
 import {genCode, sendMessage} from "../others/utils";
 import dedent from "dedent-js";
 
@@ -22,7 +22,7 @@ export async function inviteCommand(msg, args, sender) {
     if (user) {
         if (user.access > 0) return await msg.send('🚫 Данный пользователь уже является руководителем! 🚫')
         else {
-            await deleteUser(user.vk_id)
+            await deleteElement(user.vk_id)
             await msg.send(`✅ | Удален ранее составленный архив на пользователя!`)
         }
     }
@@ -41,7 +41,7 @@ export async function inviteCommand(msg, args, sender) {
 
     const message = dedent`
         Приветик я Эвелина, давай сразу на ты! Я рада за тебя так как ты возможно будущий руководитель гос. организации, но если ты видишь, это сообщение, значит ты был одобрен.
-        Сначала тебе надо будет добавить меня в друзья, а также добавить в друзья @id637477240(Алексея Бабенко).
+        Сначала тебе надо будет добавить меня в друзья, а также добавить в друзья @id637477240 (Алексея Бабенко).
         Потом напиши в группу @esida команду - /form`
 
     await sendMessage(candidate.vk_id, msg, message)
@@ -51,7 +51,7 @@ export async function removedCandidate(msg, args) {
     const user = await getUserData(await getVkId(args[0]) || args[0], "candidates")
     if (!user) return await msg.send(`🚫 | Данный человек и так не имеет доступа к форме 💔`)
 
-    const error = await deleteUser(user.vk_id, "candidates")
+    const error = await deleteElement(user.vk_id, "candidates")
     if (error) {
         console.error(`Logs » Не удалось удалить пользователя из базы данных!`)
         console.error(error)
