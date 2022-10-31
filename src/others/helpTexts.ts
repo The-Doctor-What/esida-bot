@@ -94,11 +94,6 @@ export const helpForum = dedent`
         - unpin (Открепить тему)
 `
 
-export const helpPermissions = dedent`
-        Доступные варианты:
-        user - Информация о пользователе
-`
-
 export const helpInvite = dedent`
         Должности:
         1. Судья

@@ -1,8 +1,8 @@
-import {moneyBuy} from "./moneyBuy";
-import {litrbolBuy} from "./litrbolBuy";
-import {weekendBuy} from "./weekendBuy";
-import {termBuy} from "./termBuy";
-import {unpunishBuy} from "./unpunishBuy";
+import {moneyBuy} from "./products/moneyBuy";
+import {litrbolBuy} from "./products/litrbolBuy";
+import {weekendBuy} from "./products/weekendBuy";
+import {termBuy} from "./products/termBuy";
+import {unpunishBuy} from "./products/unpunishBuy";
 
 class Products {
     public id: string;

@@ -1,7 +1,7 @@
-import {eventShop, eventShopBuy} from "./shopEvent";
-import {eventHelp} from "./helpEvent";
-import {eventForumAccept, eventForumDecline} from "./forumEvent";
-import {deleteEventAccept, deleteEventDecline} from "./deleteEvent";
+import {eventShop, eventShopBuy} from "./events/shopEvent";
+import {eventHelp} from "./events/helpEvent";
+import {eventForumAccept, eventForumDecline} from "./events/forumEvent";
+import {deleteEventAccept, deleteEventDecline} from "./events/deleteEvent";
 
 export class Event {
     public access: number;

@@ -1,6 +1,5 @@
-import {getID} from "../others/utils";
-import {helpCommand} from "./helpCommand";
-import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./warnCommand";
+import {helpCommand} from "./commands/helpCommand";
+import {setDays, setFWarn, setLitrbol, setRep, setScore, setVig, setWarn} from "./commands/warnCommand";
 import {
     helpCongress,
     helpEsida,
@@ -12,30 +11,31 @@ import {
     helpMsg,
     helpSet
 } from "../others/helpTexts";
-import {commandShop} from "./shopCommand";
-import {project} from "./projectCommand";
-import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./forumCommand";
-import {congressSetAccess} from "./congressCommand";
-import {getHistory} from "./historyCommand";
-import {stats} from "./statsCommand";
-import {setDataUser} from "./setCommand";
+import {commandShop} from "./commands/shopCommand";
+import {project} from "./commands/projectCommand";
+import {commandForum, commandForumAccept, commandForumDecline, getFullForum} from "./commands/forumCommand";
+import {congressSetAccess} from "./commands/congressCommand";
+import {getHistory} from "./commands/historyCommand";
+import {stats} from "./commands/statsCommand";
+import {setDataUser} from "./commands/setCommand";
 import {justallCommand} from "../others/justall";
-import {getOnlineUser} from "./onlineCommand";
-import {changePassword} from "./passwordCommand";
-import {msgCommand} from "./msgCommand";
-import {commandAdminBlock, commandMakeAdmin} from "./makeAdminCommand";
-import {listUsers} from "./listCommand";
-import {setRole} from "./setRoleCommand";
-import {membersCommand} from "./membersCommand";
-import {checkCommand} from "./checkCommand";
-import {aboutCommand} from "./aboutCommand";
-import {inviteCommand, removedCandidate} from "./inviteCommand";
-import {recoveryCommand, unInviteCommand} from "./unInviteCommand";
-import {setRankCommand} from "./setRankCommand";
-import {fracs} from "./fractionsCommand";
-import {hideCommand} from "./hideCommand";
-import {formCommand} from "./formCommand";
-import {deleteCommand} from "./deleteCommand";
+import {getOnlineUser} from "./commands/onlineCommand";
+import {changePassword} from "./commands/passwordCommand";
+import {msgCommand} from "./commands/msgCommand";
+import {commandAdminBlock, commandMakeAdmin} from "./commands/makeAdminCommand";
+import {listUsers} from "./commands/listCommand";
+import {setRole} from "./commands/setRoleCommand";
+import {membersCommand} from "./commands/membersCommand";
+import {checkCommand} from "./commands/checkCommand";
+import {aboutCommand} from "./commands/aboutCommand";
+import {inviteCommand, removedCandidate} from "./commands/inviteCommand";
+import {recoveryCommand, unInviteCommand} from "./commands/unInviteCommand";
+import {setRankCommand} from "./commands/setRankCommand";
+import {fracs} from "./commands/fractionsCommand";
+import {hideCommand} from "./commands/hideCommand";
+import {formCommand} from "./commands/formCommand";
+import {deleteCommand} from "./commands/deleteCommand";
+import {getID} from "../utils/vk";
 
 export class Command {
     public access: number;

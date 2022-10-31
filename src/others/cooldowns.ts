@@ -1,4 +1,4 @@
-import {devId, userid} from "../database";
+import {devId, userid} from "../database/database";
 
 const cooldowns: {user: number, start: number}[] = [];
 const cooldownTime = 3000;

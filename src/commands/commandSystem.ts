@@ -1,11 +1,12 @@
-import {group, user} from "../bots";
-import {chats, getUserData} from "../database";
+import {group, user} from "../database/bots";
+import {chats} from "../database/database";
 import {checkCooldown} from "../others/cooldowns";
 import commands, {commandsUser} from ".";
 import {paste} from "../others/aliensAPI";
 import moment from "moment";
 import {Keyboard} from "vk-io";
-import {works} from "./projectCommand";
+import {works} from "./commands/projectCommand";
+import {getUserData} from "../database/user";
 
 group.hear(/^\//i, async msg => {
     await commandSystem(msg)

@@ -1,11 +1,11 @@
-import {messageSend} from "../others/utils";
 import {show_snackbar} from "../events/eventSystem";
 import {products} from "./products";
 import {getError} from "../commands/commandSystem";
-import {works} from "../commands/projectCommand";
-import {purchase} from "../events/shopEvent";
-import {vkGroup} from "../bots";
-import {getPrice} from "../commands/shopCommand";
+import {works} from "../commands/commands/projectCommand";
+import {purchase} from "../events/events/shopEvent";
+import {vkGroup} from "../database/bots";
+import {getPrice} from "../commands/commands/shopCommand";
+import {messageSend} from "../utils/messanges";
 
 export async function shopSystem(event, sender, name) {
     try {

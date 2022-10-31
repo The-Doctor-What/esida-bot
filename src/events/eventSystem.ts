@@ -1,10 +1,10 @@
-import {getUserData} from "../database";
 import {events} from "./events";
-import {vkGroup} from "../bots";
+import {vkGroup} from "../database/bots";
 import {Keyboard} from "vk-io";
-import {works} from "../commands/projectCommand";
+import {works} from "../commands/commands/projectCommand";
 import {getError} from "../commands/commandSystem";
-import {messageSend} from "../others/utils";
+import {messageSend} from "../utils/messanges";
+import {getUserData} from "../database/user";
 
 vkGroup.updates.on('message_event', async msg => await eventSystem(msg))
 
