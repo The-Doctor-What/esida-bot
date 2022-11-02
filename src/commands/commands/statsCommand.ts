@@ -19,7 +19,7 @@ export async function stats(msg, args, sender) {
     const postStart = moment(user.post)
     const postEnd = moment(postStart).add(user.term, 'days')
 
-    const {text: header, warning} = await getStatsHeader(user, access)
+    const {text: header, warning} = await getStatsHeader(user, access, sender)
     const text = dedent`
         ${header}
         🔹 Выговоров: ${user.vigs}/${access >= 5 ? `5` : `3`}
@@ -115,13 +115,13 @@ async function archive(user) {
     `
 }
 
-async function getStatsHeader(user, access) {
+async function getStatsHeader(user, access, sender) {
     const info = user.access >= 5 && await getAdminInfo(user.nick)
 
     const warning = !info && user.access >= 5 ? '🔸 Пользователь не найден в базе администраторов!\n' : ''
     const text = dedent`
         📊 Статистика пользователя: @id${user.vk_id} (${user.nick})
-        
+        ${sender.access >= 69 ? dedent`ID пользователя в БД: ${user.id}\n` : '\n'}
         🔹 Должность: ${user.rank} [D: ${
         access <= 0 ?
             `0 (До снятия: ${user.oldaccess})` :
