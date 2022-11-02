@@ -78,7 +78,7 @@ export const commandsData: Command[] = [
     new Command("fwarn", 4, ["setfwarn"], setFWarn, "Изменить федеральные выговоры пользователю", "[user] +/-[Кол-во] [Причина]", 3),
     new Command("setday", 5, [], setDays, "Установить количество дней до срока", "[user] +/-[Кол-во] [Причина]", 3),
     new Command("setrole", 5, [], setRole, "Изменить роль пользователя", "[user] [Роль]", 2),
-    new Command("set", 5, [], setDataUser, "Изменить данные пользователя", "[user] [type] [value]", 3, helpSet),
+    new Command("set", 5, ["setdata"], setDataUser, "Изменить данные пользователя", "[user] [type] [value]", 3, helpSet),
 ]
 
 export const commandsForum: Command[] = [

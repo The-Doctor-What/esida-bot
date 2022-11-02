@@ -103,9 +103,9 @@ export async function checkData(user) {
             else if (user.fwarns >= 2) text += await checkWarns(user, 1, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (user.fwarns <= -1) text += await checkWarns(user, 2, 2, "федеральных выговоров", "предупреждения", "fwarns", "warns")
             else if (user.vigs <= -1) text += await checkWarns(user, 2, 3, "выговоров", "предупреждения", "vigs", "warns")
-            else if (user.score > 70 && user.access == 2) text += await checkScores(user, 70)
-            else if (user.score > 140 && (user.access == 3 || (user.fraction == 6 && user.access == 3))) text += await checkScores(user, 140)
-            else if (user.score > 160 && user.access == 4 && user.fraction != 6) text += await checkScores(user, 160)
+            else if (user.score > 100 && user.access == 2) text += await checkScores(user, 100)
+            else if (user.score > 200 && (user.access == 3 || (user.fraction == 6 && user.access == 3))) text += await checkScores(user, 200)
+            else if (user.score > 220 && user.access == 4 && user.fraction != 6) text += await checkScores(user, 220)
             else break
         } else break
     }

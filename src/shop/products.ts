@@ -18,10 +18,10 @@ class Products {
 }
 
 export const products: Products[] = [
-    new Products("money-1", "5.000.000$", [20, 20, 20], moneyBuy),
-    new Products("money-2", "10.000.000$", [40, 35, 35], moneyBuy),
-    new Products("money-3", "20.000.000$", [80, 70, 70], moneyBuy),
-    new Products("money-4", "40.000.000$", [160, 140, -1], moneyBuy),
+    new Products("money-1", "5.000.000$", [35, 35, 35], moneyBuy),
+    new Products("money-2", "10.000.000$", [55, 50, 50], moneyBuy),
+    new Products("money-3", "20.000.000$", [110, 100, 100], moneyBuy),
+    new Products("money-4", "40.000.000$", [220, 200, -1], moneyBuy),
     new Products("litrbol", "Рандомно количество основных баллов", [160, 140, -1], litrbolBuy),
     new Products("weekend", "2 выходных дня", [-1, 140, 70], weekendBuy),
     new Products("norm", "-3 часа к норме", [70, 60, -1], weekendBuy),
